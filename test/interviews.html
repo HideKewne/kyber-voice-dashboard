@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyber - Interviews</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+/* ========================================
+   Kyber Dashboard - Interviews Page
+   Based on v8 design system
+   ======================================== */
+
+/* ========================================
+   LIGHT THEME (Default) - White/Blue
+   ======================================== */
+:root {
+    /* Primary Colors - Blue */
+    --primary-500: #3B82F6;
+    --primary-600: #2563EB;
+    --primary-400: #60A5FA;
+    --primary-100: #DBEAFE;
+
+    /* Neutral Colors */
+    --gray-50: #FAFAFA;
+    --gray-100: #F4F4F5;
+    --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8;
+    --gray-400: #A1A1AA;
+    --gray-500: #71717A;
+    --gray-600: #52525B;
+    --gray-700: #3F3F46;
+    --gray-800: #27272A;
+    --gray-900: #18181B;
+    --white: #FFFFFF;
+
+    /* Semantic Colors */
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #3B82F6;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg-strong: rgba(255, 255, 255, 0.88);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.7);
+    --glass-blur: 24px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.1);
+
+    /* Theme-specific */
+    --bg-gradient: linear-gradient(145deg, #E8EEF4 0%, #F0F4F8 50%, #EBF0F6 100%);
+    --bg-blobs:
+        radial-gradient(ellipse 700px 500px at 8% 15%, rgba(147, 197, 253, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 600px 450px at 92% 85%, rgba(191, 219, 254, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 550px 400px at 85% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 450px 350px at 45% 55%, rgba(219, 234, 254, 0.3) 0%, transparent 55%);
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-600);
+    --text-muted: var(--gray-500);
+    --border-color: var(--gray-200);
+    --card-bg: var(--white);
+    --input-bg: var(--white);
+    --sidebar-border: var(--gray-200);
+    --activity-hover: rgba(255, 255, 255, 0.6);
+    --activity-icon-bg: var(--gray-100);
+    --activity-icon-color: var(--gray-600);
+    --sparkline-color: #3B82F6;
+    --ring-bg: var(--gray-200);
+    --logo-bg: var(--primary-500);
+    --logo-text: var(--gray-900);
+    --nav-active-bg: var(--white);
+    --nav-hover-bg: rgba(255, 255, 255, 0.8);
+    --focus-ring: rgba(59, 130, 246, 0.12);
+    --action-hover-shadow: rgba(59, 130, 246, 0.25);
+    --notification-border: white;
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Spacing */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    /* Sidebar */
+    --sidebar-width: 280px;
+
+    /* Transition */
+    --theme-transition: 0.3s ease;
+}
+
+/* ========================================
+   DARK THEME - Black/Gold (Brand)
+   ======================================== */
+[data-theme="dark"] {
+    /* Primary Colors - Gold */
+    --primary-500: #D4AF37;
+    --primary-600: #B8952D;
+    --primary-400: #E5C466;
+    --primary-100: rgba(212, 175, 55, 0.2);
+
+    /* Neutral Colors - Dark */
+    --gray-50: #1A1A1A;
+    --gray-100: #F5F5F5;
+    --gray-200: #2D2D2D;
+    --gray-300: #404040;
+    --gray-400: #737373;
+    --gray-500: #525252;
+    --gray-600: #A3A3A3;
+    --gray-700: #D4D4D4;
+    --gray-800: #1A1A1A;
+    --gray-900: #FFFFFF;
+    --white: #0D0D0D;
+
+    /* Glassmorphism - Dark */
+    --glass-bg: rgba(20, 20, 20, 0.6);
+    --glass-bg-strong: rgba(20, 20, 20, 0.72);
+    --glass-border: 1px solid rgba(212, 175, 55, 0.25);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.05);
+    --glass-shadow-hover: 0 12px 40px rgba(212, 175, 55, 0.2), 0 0 80px rgba(212, 175, 55, 0.08);
+
+    /* Theme-specific - Dark with Gold-Glass Background */
+    --bg-gradient: linear-gradient(145deg, #0A0A0A 0%, #141414 50%, #0D0D0D 100%);
+    --bg-blobs:
+        radial-gradient(ellipse 800px 600px at 5% 10%, rgba(212, 175, 55, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 700px 500px at 95% 90%, rgba(212, 175, 55, 0.3) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 450px at 90% 5%, rgba(184, 149, 45, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse 500px 400px at 50% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 400px 300px at 20% 80%, rgba(229, 196, 102, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 350px 250px at 75% 40%, rgba(212, 175, 55, 0.18) 0%, transparent 55%);
+    --text-primary: #FFFFFF;
+    --text-secondary: #A3A3A3;
+    --text-muted: #737373;
+    --border-color: rgba(212, 175, 55, 0.2);
+    --card-bg: #1A1A1A;
+    --input-bg: #1A1A1A;
+    --sidebar-border: rgba(212, 175, 55, 0.2);
+    --activity-hover: rgba(212, 175, 55, 0.08);
+    --activity-icon-bg: rgba(212, 175, 55, 0.1);
+    --activity-icon-color: var(--primary-500);
+    --sparkline-color: #D4AF37;
+    --ring-bg: #2D2D2D;
+    --logo-bg: transparent;
+    --logo-text: #FFFFFF;
+    --nav-active-bg: rgba(212, 175, 55, 0.15);
+    --nav-hover-bg: rgba(212, 175, 55, 0.1);
+    --focus-ring: rgba(212, 175, 55, 0.2);
+    --action-hover-shadow: rgba(212, 175, 55, 0.3);
+    --notification-border: #1A1A1A;
+}
+
+/* Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base Styles */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+    position: relative;
+    transition: background var(--theme-transition), color var(--theme-transition);
+}
+
+/* Background Blobs */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-blobs);
+    z-index: 0;
+    pointer-events: none;
+    transition: background var(--theme-transition);
+}
+
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    position: fixed;
+    margin: 24px 0 24px 24px;
+    height: calc(100vh - 48px);
+    z-index: 100;
+    transition: background var(--theme-transition), border var(--theme-transition), box-shadow var(--theme-transition);
+}
+
+.sidebar-header {
+    padding: 0 8px 12px;
+    border-bottom: 1px solid var(--sidebar-border);
+    margin-bottom: 24px;
+    transition: border-color var(--theme-transition);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    color: var(--primary-500);
+    transition: color var(--theme-transition);
+}
+
+.logo-text {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--primary-500);
+    transition: color var(--theme-transition);
+}
+
+/* Navigation */
+.sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background: var(--nav-hover-bg);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: var(--nav-active-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    color: var(--primary-500);
+}
+
+[data-theme="dark"] .nav-item.active {
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+}
+
+.nav-icon {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.5;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding-top: 24px;
+    border-top: 1px solid var(--sidebar-border);
+    margin-top: auto;
+    transition: border-color var(--theme-transition);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: background var(--theme-transition), border-color var(--theme-transition);
+}
+
+[data-theme="dark"] .user-profile {
+    background: var(--glass-bg);
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 15px;
+    transition: color var(--theme-transition);
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--primary-500);
+    border-radius: var(--radius-md);
+    color: var(--primary-500);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+.logout-btn:hover {
+    background: var(--primary-500);
+    color: var(--white);
+}
+
+[data-theme="dark"] .logout-btn:hover {
+    color: #0D0D0D;
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+.main-content {
+    flex: 1;
+    margin-left: calc(var(--sidebar-width) + 48px);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 24px 24px 32px 0;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 16px 32px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 32px;
+    transition: background var(--theme-transition), border var(--theme-transition), box-shadow var(--theme-transition);
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.breadcrumb .current {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    width: 16px;
+    height: 16px;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 10px 16px;
+    min-width: 320px;
+    transition: border-color 0.2s, box-shadow 0.2s, background var(--theme-transition);
+}
+
+.search-bar:focus-within {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 14px;
+    width: 100%;
+    font-family: var(--font-family);
+}
+
+.search-bar input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-bar .dropdown {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.search-bar .dropdown-toggle {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+}
+
+.search-bar .dropdown-toggle:hover {
+    color: var(--primary-500);
+}
+
+.search-bar .dropdown-toggle svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 8px;
+    min-width: 160px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+    z-index: 100;
+    box-shadow: var(--glass-shadow);
+}
+
+[data-theme="dark"] .dropdown-menu {
+    background: #1A1A1A;
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background: var(--nav-hover-bg);
+    color: var(--primary-500);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.theme-toggle:hover {
+    background: var(--nav-hover-bg);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.theme-toggle .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.theme-toggle .icon-moon {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+/* Header Buttons */
+.header-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.header-btn:hover {
+    background: var(--nav-hover-bg);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+.header-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 9px;
+    height: 9px;
+    background: var(--primary-500);
+    border-radius: 50%;
+    border: 2px solid var(--notification-border);
+}
+
+.header-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.header-avatar:hover {
+    border-color: var(--primary-500);
+}
+
+/* ========================================
+   PAGE CONTENT
+   ======================================== */
+.page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color var(--theme-transition);
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--nav-active-bg);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+.filter-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.filter-count {
+    background: var(--primary-100);
+    color: var(--primary-500);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* ========================================
+   INTERVIEW CARDS GRID
+   ======================================== */
+.interviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+}
+
+.interview-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--glass-shadow);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.interview-card:hover {
+    box-shadow: var(--glass-shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .interview-card:hover {
+    border-color: var(--primary-500);
+}
+
+.interview-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.interview-card-title {
+    flex: 1;
+}
+
+.interview-company {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.interview-client {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge.complete {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22C55E;
+}
+
+.status-badge.scheduled {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+
+.status-badge.failed {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+
+.status-badge.cancelled {
+    background: rgba(113, 113, 122, 0.15);
+    color: #71717A;
+}
+
+.status-badge.rescheduled {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3B82F6;
+}
+
+[data-theme="dark"] .status-badge.rescheduled {
+    background: rgba(212, 175, 55, 0.15);
+    color: #D4AF37;
+}
+
+.interview-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.meta-item svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Quality Score */
+.quality-score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quality-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.quality-stars .star {
+    color: var(--ring-bg);
+    font-size: 14px;
+}
+
+.quality-stars .star.filled {
+    color: var(--primary-500);
+}
+
+.quality-label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Interview Card Footer */
+.interview-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.questions-answered {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.questions-answered span {
+    font-weight: 600;
+    color: var(--primary-500);
+}
+
+.view-details-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-500);
+    font-size: 14px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-family);
+    transition: gap 0.2s;
+}
+
+.view-details-btn:hover {
+    gap: 10px;
+}
+
+.view-details-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========================================
+   EXPANDED INTERVIEW VIEW
+   ======================================== */
+.expanded-view {
+    display: none;
+}
+
+.expanded-view.active {
+    display: block;
+}
+
+.card-grid.hidden {
+    display: none;
+}
+
+/* Back Button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+.back-btn:hover {
+    background: var(--nav-hover-bg);
+    color: var(--text-primary);
+}
+
+.back-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Client Header Card */
+.client-header-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 24px;
+}
+
+.client-header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.client-header-info {
+    flex: 1;
+}
+
+.client-header-company {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.client-header-name {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.client-header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.header-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.header-meta-item svg {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-500);
+}
+
+.header-meta-item a {
+    color: var(--primary-500);
+    text-decoration: none;
+}
+
+.header-meta-item a:hover {
+    text-decoration: underline;
+}
+
+/* Header Actions */
+.client-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--primary-500);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+[data-theme="dark"] .action-btn-primary {
+    color: #0D0D0D;
+}
+
+.action-btn-primary:hover {
+    background: var(--primary-600);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--action-hover-shadow);
+}
+
+.action-btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+.action-btn-secondary:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-500);
+}
+
+.action-btn-secondary svg,
+.action-btn-primary svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* AI Summary Card */
+.ai-summary-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 24px;
+}
+
+.ai-summary-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.ai-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-100);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-500);
+}
+
+.ai-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.ai-summary-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ai-summary-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ai-summary-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.ai-summary-list li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--primary-500);
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+}
+
+/* Content Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+}
+
+/* Q&A Section */
+.qa-section {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--glass-shadow);
+}
+
+.qa-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+/* Accordion */
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.accordion-item {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.accordion-item:hover {
+    border-color: var(--primary-400);
+}
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: var(--glass-bg);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.accordion-header:hover {
+    background: var(--activity-hover);
+}
+
+.accordion-question {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.question-number {
+    width: 28px;
+    height: 28px;
+    background: var(--primary-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-500);
+    flex-shrink: 0;
+}
+
+.question-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.accordion-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+}
+
+.accordion-item.open .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    display: none;
+    padding: 16px;
+    background: var(--card-bg);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    border-top: 1px solid var(--border-color);
+}
+
+.accordion-item.open .accordion-content {
+    display: block;
+}
+
+.no-answer {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Pain Points Card */
+.pain-points-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--glass-shadow);
+}
+
+.pain-points-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.pain-point-item {
+    padding: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+}
+
+.pain-point-item:last-child {
+    margin-bottom: 0;
+}
+
+.pain-point-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.pain-point-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.severity-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.severity-badge.high {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+
+.severity-badge.medium {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+
+.severity-badge.low {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22C55E;
+}
+
+.pain-point-cause {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Topics Card */
+.topics-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--glass-shadow);
+}
+
+.topics-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.topic-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--primary-100);
+    color: var(--primary-500);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.topic-tag svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Audio Player Card */
+.audio-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--glass-shadow);
+}
+
+.audio-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.audio-player {
+    width: 100%;
+}
+
+.audio-player audio {
+    width: 100%;
+    height: 48px;
+    border-radius: var(--radius-md);
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--activity-icon-bg);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.empty-state-icon svg {
+    width: 40px;
+    height: 40px;
+    color: var(--text-muted);
+}
+
+.empty-state-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.empty-state-text {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 360px;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1400px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .right-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .right-sidebar > * {
+        flex: 1;
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .interviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .search-bar {
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        margin: 16px;
+        height: calc(100vh - 32px);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 16px;
+    }
+
+    .interviews-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: var(--radius-md);
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .search-bar {
+        min-width: auto;
+        flex: 1;
+    }
+
+    .page-content {
+        padding: 0;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .filter-bar {
+        flex-wrap: wrap;
+    }
+
+    .client-header-top {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .client-header-actions {
+        width: 100%;
+    }
+
+    .client-header-actions button {
+        flex: 1;
+    }
+
+    .right-sidebar {
+        flex-direction: column;
+    }
+
+    .right-sidebar > * {
+        min-width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 26 24" fill="currentColor">
+                        <rect x="1" y="9.5" width="2.5" height="5" rx="1.25"/>
+                        <rect x="5" y="7" width="2.5" height="10" rx="1.25"/>
+                        <rect x="9" y="2" width="2.5" height="20" rx="1.25"/>
+                        <rect x="13" y="9" width="2.5" height="6" rx="1.25"/>
+                        <rect x="17" y="7" width="2.5" height="10" rx="1.25"/>
+                        <rect x="21" y="10" width="2.5" height="4" rx="1.25"/>
+                    </svg>
+                    <span class="logo-text">Kyber</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="white-v9.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>Overview</span>
+                </a>
+                <a href="clients.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Clients</span>
+                </a>
+                <a href="interviews.html" class="nav-item active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    <span>Interviews</span>
+                </a>
+                <a href="knowledge-base.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    <span>Knowledge Base</span>
+                </a>
+                <a href="export-hub.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span>Export Hub</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Jay&background=3B82F6&color=ffffff&size=42" alt="Jay" class="user-avatar" id="sidebarAvatar">
+                    <div class="user-info">
+                        <span class="user-name">Jay</span>
+                    </div>
+                </div>
+                <button class="logout-btn">Log Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="breadcrumb">
+                    <span>Dashboard</span>
+                    <svg class="breadcrumb-separator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                    <span class="current">Interviews</span>
+                </div>
+
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" placeholder="Search & Ask..." id="searchInput">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">Search All</a>
+                                <a href="#" class="dropdown-item">Clients Only</a>
+                                <a href="#" class="dropdown-item">Knowledge Base</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dark Mode Toggle -->
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+
+                    <button class="header-btn notification-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+
+                    <img src="https://ui-avatars.com/api/?name=Jay&background=3B82F6&color=ffffff&size=42" alt="User" class="header-avatar" id="headerAvatar">
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Card Grid View -->
+                <div class="card-grid" id="cardGridView">
+                    <div class="page-header">
+                        <h1 class="page-title">Interviews</h1>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="filter-bar">
+                        <button class="filter-btn active" data-filter="all">
+                            All
+                            <span class="filter-count" id="countAll">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="completed">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            Complete
+                            <span class="filter-count" id="countComplete">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="scheduled">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Scheduled
+                            <span class="filter-count" id="countScheduled">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="failed">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            Failed
+                            <span class="filter-count" id="countFailed">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="cancelled">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                            </svg>
+                            Cancelled
+                            <span class="filter-count" id="countCancelled">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="loading-spinner" id="loadingState">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <div class="empty-state-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                <line x1="12" y1="19" x2="12" y2="23"/>
+                                <line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
+                        </div>
+                        <h3 class="empty-state-title">No interviews yet</h3>
+                        <p class="empty-state-text">Interviews will appear here once clients complete their onboarding calls.</p>
+                    </div>
+
+                    <!-- Interviews Grid -->
+                    <div class="interviews-grid" id="interviewsGrid">
+                        <!-- Cards will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Expanded Interview View -->
+                <div class="expanded-view" id="expandedView">
+                    <!-- Will be populated by JavaScript when a card is clicked -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION
+        // ========================================
+        const SUPABASE_URL = 'https://dpdtxmhxyosunfryocqn.supabase.co';
+        // Note: Using service role key for internal admin dashboard. In production, configure RLS policies and use anon key.
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZHR4bWh4eW9zdW5mcnlvY3FuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDI2NTA0NywiZXhwIjoyMDY5ODQxMDQ3fQ.p_YULPZ0tCCjpDFwqRbkpf1tber8_5Q5kuP7l44ggjw';
+
+        // ========================================
+        // STATE
+        // ========================================
+        let interviews = [];
+        let filteredInterviews = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // ========================================
+        // THEME TOGGLE
+        // ========================================
+        const themeToggle = document.getElementById('themeToggle');
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        const headerAvatar = document.getElementById('headerAvatar');
+
+        const savedTheme = localStorage.getItem('kyber-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateAvatars(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('kyber-theme', newTheme);
+            updateAvatars(newTheme);
+        });
+
+        function updateAvatars(theme) {
+            const bgColor = theme === 'dark' ? 'D4AF37' : '3B82F6';
+            const avatarUrl = `https://ui-avatars.com/api/?name=Jay&background=${bgColor}&color=ffffff&size=42`;
+            sidebarAvatar.src = avatarUrl;
+            headerAvatar.src = avatarUrl;
+        }
+
+        // ========================================
+        // DATA FETCHING
+        // ========================================
+        async function fetchInterviews() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/interviews?select=*&order=scheduled_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch interviews');
+                }
+
+                interviews = await response.json();
+                updateFilterCounts();
+                applyFilters();
+                document.getElementById('loadingState').style.display = 'none';
+
+                if (interviews.length === 0) {
+                    document.getElementById('emptyState').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Error fetching interviews:', error);
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'flex';
+                document.querySelector('.empty-state-title').textContent = 'Error loading interviews';
+                document.querySelector('.empty-state-text').textContent = 'Please check your connection and try again.';
+            }
+        }
+
+        // ========================================
+        // FILTERING & SEARCH
+        // ========================================
+        function updateFilterCounts() {
+            document.getElementById('countAll').textContent = interviews.length;
+            document.getElementById('countComplete').textContent = interviews.filter(i => i.status === 'completed').length;
+            document.getElementById('countScheduled').textContent = interviews.filter(i => i.status === 'scheduled').length;
+            document.getElementById('countFailed').textContent = interviews.filter(i => i.status === 'failed').length;
+            document.getElementById('countCancelled').textContent = interviews.filter(i => i.status === 'cancelled' || i.status === 'rescheduled').length;
+        }
+
+        function applyFilters() {
+            filteredInterviews = interviews.filter(interview => {
+                // Status filter
+                let statusMatch = true;
+                if (currentFilter === 'completed') {
+                    statusMatch = interview.status === 'completed';
+                } else if (currentFilter === 'scheduled') {
+                    statusMatch = interview.status === 'scheduled';
+                } else if (currentFilter === 'failed') {
+                    statusMatch = interview.status === 'failed';
+                } else if (currentFilter === 'cancelled') {
+                    statusMatch = interview.status === 'cancelled' || interview.status === 'rescheduled';
+                }
+
+                // Search filter
+                let searchMatch = true;
+                if (searchQuery) {
+                    const query = searchQuery.toLowerCase();
+                    const companyName = (interview.company_name || '').toLowerCase();
+                    const clientName = (interview.client_name || '').toLowerCase();
+                    const clientEmail = (interview.client_email || '').toLowerCase();
+                    searchMatch = companyName.includes(query) || clientName.includes(query) || clientEmail.includes(query);
+                }
+
+                return statusMatch && searchMatch;
+            });
+
+            renderInterviewCards();
+        }
+
+        // Filter button handlers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                applyFilters();
+            });
+        });
+
+        // Search handler
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            applyFilters();
+        });
+
+        // ========================================
+        // RENDERING
+        // ========================================
+        function getStatusBadge(status) {
+            const statusMap = {
+                'completed': { class: 'complete', icon: '&#10003;', text: 'Complete' },
+                'scheduled': { class: 'scheduled', icon: '&#9679;', text: 'Scheduled' },
+                'failed': { class: 'failed', icon: '&#10005;', text: 'Failed' },
+                'cancelled': { class: 'cancelled', icon: '&#8856;', text: 'Cancelled' },
+                'rescheduled': { class: 'rescheduled', icon: '&#8635;', text: 'Rescheduled' }
+            };
+            const s = statusMap[status] || statusMap['scheduled'];
+            return `<span class="status-badge ${s.class}">${s.icon} ${s.text}</span>`;
+        }
+
+        function calculateQualityScore(interview) {
+            let answeredCount = 0;
+            const questionFields = [
+                'q1_primary_avatar', 'q2_customer_need', 'q3_biggest_mistake',
+                'q5_trigger_to_seek', 'q7_cost_of_inaction', 'q8_complaints_to_friends',
+                'q9_roles_responsibilities', 'q10_biggest_headache', 'q11_reports_to',
+                'q12_decision_influencers', 'q13_success_story', 'q14_why_couldnt_solve_alone',
+                'q15_what_already_tried', 'q16_initial_findings', 'q17_recommended_solution',
+                'q18_results_achieved'
+            ];
+
+            questionFields.forEach(field => {
+                if (interview[field] && interview[field].trim() !== '') {
+                    answeredCount++;
+                }
+            });
+
+            // Check Q4 pain points
+            if (interview.q4_pain_point_1) answeredCount++;
+            if (interview.q4_pain_point_2) answeredCount++;
+            if (interview.q4_pain_point_3) answeredCount++;
+
+            // Check Q6 topics
+            if (interview.q6_topic_1) answeredCount++;
+            if (interview.q6_topic_2) answeredCount++;
+            if (interview.q6_topic_3) answeredCount++;
+
+            const totalPossible = 22; // 16 main + 3 pain points + 3 topics
+            const percentage = (answeredCount / totalPossible) * 100;
+            return {
+                answered: answeredCount,
+                total: totalPossible,
+                stars: Math.round((percentage / 100) * 5)
+            };
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds) return 'N/A';
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function renderStars(count) {
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                html += `<span class="star ${i < count ? 'filled' : ''}">&#9733;</span>`;
+            }
+            return html;
+        }
+
+        function renderInterviewCards() {
+            const grid = document.getElementById('interviewsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filteredInterviews.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'flex';
+                if (searchQuery || currentFilter !== 'all') {
+                    document.querySelector('.empty-state-title').textContent = 'No matching interviews';
+                    document.querySelector('.empty-state-text').textContent = 'Try adjusting your search or filter criteria.';
+                }
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            grid.innerHTML = filteredInterviews.map(interview => {
+                const quality = calculateQualityScore(interview);
+                return `
+                    <div class="interview-card" data-id="${interview.id}" onclick="openInterview('${interview.id}')">
+                        <div class="interview-card-header">
+                            <div class="interview-card-title">
+                                <div class="interview-company">${interview.company_name || 'Unknown Company'}</div>
+                                <div class="interview-client">${interview.client_name || 'Unknown Client'}</div>
+                            </div>
+                            ${getStatusBadge(interview.status)}
+                        </div>
+                        <div class="interview-card-meta">
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                ${formatDate(interview.scheduled_at)}
+                            </div>
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                ${formatDuration(interview.call_duration_seconds)}
+                            </div>
+                        </div>
+                        <div class="quality-score">
+                            <div class="quality-stars">${renderStars(quality.stars)}</div>
+                            <span class="quality-label">${quality.answered}/${quality.total} answered</span>
+                        </div>
+                        <div class="interview-card-footer">
+                            <span class="questions-answered">
+                                <span>${quality.answered}</span> questions answered
+                            </span>
+                            <button class="view-details-btn">
+                                View Details
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========================================
+        // EXPANDED VIEW
+        // ========================================
+        function openInterview(id) {
+            const interview = interviews.find(i => i.id === id);
+            if (!interview) return;
+
+            const quality = calculateQualityScore(interview);
+            const cardGrid = document.getElementById('cardGridView');
+            const expandedView = document.getElementById('expandedView');
+
+            cardGrid.classList.add('hidden');
+            expandedView.classList.add('active');
+
+            // Build pain points HTML
+            const painPoints = [];
+            if (interview.q4_pain_point_1) {
+                painPoints.push({
+                    name: interview.q4_pain_point_1,
+                    severity: interview.q4_severity_1,
+                    cause: interview.q4_root_cause_1
+                });
+            }
+            if (interview.q4_pain_point_2) {
+                painPoints.push({
+                    name: interview.q4_pain_point_2,
+                    severity: interview.q4_severity_2,
+                    cause: interview.q4_root_cause_2
+                });
+            }
+            if (interview.q4_pain_point_3) {
+                painPoints.push({
+                    name: interview.q4_pain_point_3,
+                    severity: interview.q4_severity_3,
+                    cause: interview.q4_root_cause_3
+                });
+            }
+
+            // Build topics HTML
+            const topics = [];
+            if (interview.q6_topic_1) topics.push({ name: interview.q6_topic_1, reason: interview.q6_reason_1 });
+            if (interview.q6_topic_2) topics.push({ name: interview.q6_topic_2, reason: interview.q6_reason_2 });
+            if (interview.q6_topic_3) topics.push({ name: interview.q6_topic_3, reason: interview.q6_reason_3 });
+
+            // Generate AI Summary (simplified - in production this would come from backend)
+            const aiSummary = generateAISummary(interview);
+
+            expandedView.innerHTML = `
+                <button class="back-btn" onclick="closeInterview()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    Back to Interviews
+                </button>
+
+                <!-- Client Header Card -->
+                <div class="client-header-card">
+                    <div class="client-header-top">
+                        <div class="client-header-info">
+                            <h1 class="client-header-company">${interview.company_name || 'Unknown Company'}</h1>
+                            <p class="client-header-name">${interview.client_name || 'Unknown Client'}</p>
+                            <div class="client-header-meta">
+                                <div class="header-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                    ${formatDate(interview.scheduled_at)}
+                                </div>
+                                <div class="header-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                    ${formatDuration(interview.call_duration_seconds)}
+                                </div>
+                                ${interview.client_phone ? `
+                                    <div class="header-meta-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                        </svg>
+                                        ${interview.client_phone}
+                                    </div>
+                                ` : ''}
+                                ${interview.client_email ? `
+                                    <div class="header-meta-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                            <polyline points="22,6 12,13 2,6"/>
+                                        </svg>
+                                        <a href="mailto:${interview.client_email}">${interview.client_email}</a>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div class="client-header-actions">
+                            <button class="action-btn-primary" onclick="exportPDF('${interview.id}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export PDF
+                            </button>
+                            <button class="action-btn-secondary" onclick="copyToClipboard('${interview.id}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                Copy Summary
+                            </button>
+                        </div>
+                    </div>
+                    ${getStatusBadge(interview.status)}
+                </div>
+
+                <!-- AI Summary Card -->
+                <div class="ai-summary-card">
+                    <div class="ai-summary-header">
+                        <div class="ai-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A1.5 1.5 0 0 0 6 14.5 1.5 1.5 0 0 0 7.5 16 1.5 1.5 0 0 0 9 14.5 1.5 1.5 0 0 0 7.5 13m9 0a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5"/>
+                            </svg>
+                        </div>
+                        <h2 class="ai-summary-title">AI Summary</h2>
+                    </div>
+                    <ul class="ai-summary-list">
+                        ${aiSummary.map(point => `<li>${point}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="content-grid">
+                    <!-- Q&A Section -->
+                    <div class="qa-section">
+                        <h2 class="qa-section-title">Interview Questions & Answers</h2>
+                        <div class="accordion">
+                            ${renderAccordionItem(1, 'Who is your primary avatar?', interview.q1_primary_avatar)}
+                            ${renderAccordionItem(2, 'What is the primary need of your customers?', interview.q2_customer_need)}
+                            ${renderAccordionItem(3, 'What is the biggest mistake your customer is making?', interview.q3_biggest_mistake)}
+                            ${renderAccordionItem(4, 'What are the main pain points?', painPoints.length > 0 ? painPoints.map(p => `<strong>${p.name}</strong>: ${p.cause || 'No root cause specified'}`).join('<br><br>') : null, true)}
+                            ${renderAccordionItem(5, 'What causes customers to seek your services?', interview.q5_trigger_to_seek)}
+                            ${renderAccordionItem(6, 'What topics would they discuss with friends?', topics.length > 0 ? topics.map(t => `<strong>${t.name}</strong>: ${t.reason || ''}`).join('<br><br>') : null, true)}
+                            ${renderAccordionItem(7, 'What is the cost of inaction?', interview.q7_cost_of_inaction)}
+                            ${renderAccordionItem(8, 'What do they complain about to friends?', interview.q8_complaints_to_friends)}
+                            ${renderAccordionItem(9, 'What are their roles and responsibilities?', interview.q9_roles_responsibilities)}
+                            ${renderAccordionItem(10, 'What is their biggest headache?', interview.q10_biggest_headache)}
+                            ${renderAccordionItem(11, 'Who do they report to?', interview.q11_reports_to)}
+                            ${renderAccordionItem(12, 'Who influences their decisions?', interview.q12_decision_influencers)}
+                            ${renderAccordionItem(13, 'What is your greatest success story?', interview.q13_success_story)}
+                            ${renderAccordionItem(14, 'Why couldn\'t they solve it alone?', interview.q14_why_couldnt_solve_alone)}
+                            ${renderAccordionItem(15, 'What had they already tried?', interview.q15_what_already_tried)}
+                            ${renderAccordionItem(16, 'What were your initial findings?', interview.q16_initial_findings)}
+                            ${renderAccordionItem(17, 'What solution did you recommend?', interview.q17_recommended_solution)}
+                            ${renderAccordionItem(18, 'What results did they achieve?', interview.q18_results_achieved)}
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="right-sidebar">
+                        <!-- Pain Points Card -->
+                        ${painPoints.length > 0 ? `
+                            <div class="pain-points-card">
+                                <h3 class="pain-points-title">Pain Points</h3>
+                                ${painPoints.map(p => `
+                                    <div class="pain-point-item">
+                                        <div class="pain-point-header">
+                                            <span class="pain-point-name">${p.name}</span>
+                                            ${p.severity ? `<span class="severity-badge ${getSeverityClass(p.severity)}">${p.severity}</span>` : ''}
+                                        </div>
+                                        ${p.cause ? `<p class="pain-point-cause">${p.cause}</p>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+
+                        <!-- Topics Card -->
+                        ${topics.length > 0 ? `
+                            <div class="topics-card">
+                                <h3 class="topics-title">Content Topics</h3>
+                                <div class="topics-list">
+                                    ${topics.map(t => `
+                                        <span class="topic-tag" title="${t.reason || ''}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                                <line x1="7" y1="7" x2="7.01" y2="7"/>
+                                            </svg>
+                                            ${t.name}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Audio Player Card -->
+                        ${interview.audio_url ? `
+                            <div class="audio-card">
+                                <h3 class="audio-title">Interview Recording</h3>
+                                <div class="audio-player">
+                                    <audio controls>
+                                        <source src="${interview.audio_url}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            // Initialize accordion functionality
+            initAccordion();
+        }
+
+        function closeInterview() {
+            const cardGrid = document.getElementById('cardGridView');
+            const expandedView = document.getElementById('expandedView');
+
+            cardGrid.classList.remove('hidden');
+            expandedView.classList.remove('active');
+            expandedView.innerHTML = '';
+        }
+
+        function renderAccordionItem(number, question, answer, isHTML = false) {
+            const hasAnswer = answer && (typeof answer === 'string' ? answer.trim() !== '' : true);
+            return `
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="accordion-question">
+                            <span class="question-number">Q${number}</span>
+                            <span class="question-text">${question}</span>
+                        </div>
+                        <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="accordion-content">
+                        ${hasAnswer ? (isHTML ? answer : escapeHTML(answer)) : '<span class="no-answer">No answer provided</span>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            item.classList.toggle('open');
+        }
+
+        function initAccordion() {
+            // Open first item by default
+            const firstItem = document.querySelector('.accordion-item');
+            if (firstItem) {
+                firstItem.classList.add('open');
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, (match) => {
+                const escape = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                };
+                return escape[match];
+            });
+        }
+
+        function getSeverityClass(severity) {
+            if (!severity) return 'medium';
+            const lower = severity.toLowerCase();
+            if (lower.includes('high') || lower.includes('severe') || lower.includes('critical')) return 'high';
+            if (lower.includes('low') || lower.includes('minor')) return 'low';
+            return 'medium';
+        }
+
+        function generateAISummary(interview) {
+            const points = [];
+
+            if (interview.q1_primary_avatar) {
+                points.push(`Target audience: ${interview.q1_primary_avatar.substring(0, 100)}${interview.q1_primary_avatar.length > 100 ? '...' : ''}`);
+            }
+
+            if (interview.q2_customer_need) {
+                points.push(`Primary customer need: ${interview.q2_customer_need.substring(0, 100)}${interview.q2_customer_need.length > 100 ? '...' : ''}`);
+            }
+
+            if (interview.q4_pain_point_1) {
+                points.push(`Key pain point: ${interview.q4_pain_point_1}`);
+            }
+
+            if (interview.q7_cost_of_inaction) {
+                points.push(`Cost of inaction: ${interview.q7_cost_of_inaction.substring(0, 100)}${interview.q7_cost_of_inaction.length > 100 ? '...' : ''}`);
+            }
+
+            if (interview.q18_results_achieved) {
+                points.push(`Results achieved: ${interview.q18_results_achieved.substring(0, 100)}${interview.q18_results_achieved.length > 100 ? '...' : ''}`);
+            }
+
+            if (points.length === 0) {
+                points.push('Interview data is being processed. Summary will be available soon.');
+            }
+
+            return points;
+        }
+
+        // ========================================
+        // ACTIONS
+        // ========================================
+        function exportPDF(interviewId) {
+            // In production, this would call the n8n webhook
+            alert('PDF export will be implemented via n8n webhook. Interview ID: ' + interviewId);
+        }
+
+        function copyToClipboard(interviewId) {
+            const interview = interviews.find(i => i.id === interviewId);
+            if (!interview) return;
+
+            const summary = generateAISummary(interview).join('\n- ');
+            const text = `Interview Summary: ${interview.company_name} - ${interview.client_name}\n\n- ${summary}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Summary copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        // ========================================
+        // INITIALIZE
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchInterviews();
+        });
+    </script>
+</body>
+</html>

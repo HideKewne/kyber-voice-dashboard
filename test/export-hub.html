@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyber - Export Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+/* ========================================
+   Kyber Dashboard - Export Hub Page
+   Based on v8 design system
+   ======================================== */
+
+/* ========================================
+   LIGHT THEME (Default) - White/Blue
+   ======================================== */
+:root {
+    --primary-500: #3B82F6;
+    --primary-600: #2563EB;
+    --primary-400: #60A5FA;
+    --primary-100: #DBEAFE;
+    --gray-50: #FAFAFA;
+    --gray-100: #F4F4F5;
+    --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8;
+    --gray-400: #A1A1AA;
+    --gray-500: #71717A;
+    --gray-600: #52525B;
+    --gray-700: #3F3F46;
+    --gray-800: #27272A;
+    --gray-900: #18181B;
+    --white: #FFFFFF;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg-strong: rgba(255, 255, 255, 0.88);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.7);
+    --glass-blur: 24px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.1);
+    --bg-gradient: linear-gradient(145deg, #E8EEF4 0%, #F0F4F8 50%, #EBF0F6 100%);
+    --bg-blobs: radial-gradient(ellipse 700px 500px at 8% 15%, rgba(147, 197, 253, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 600px 450px at 92% 85%, rgba(191, 219, 254, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 550px 400px at 85% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 450px 350px at 45% 55%, rgba(219, 234, 254, 0.3) 0%, transparent 55%);
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-600);
+    --text-muted: var(--gray-500);
+    --border-color: var(--gray-200);
+    --card-bg: var(--white);
+    --input-bg: var(--white);
+    --sidebar-border: var(--gray-200);
+    --activity-hover: rgba(255, 255, 255, 0.6);
+    --activity-icon-bg: var(--gray-100);
+    --nav-active-bg: var(--white);
+    --nav-hover-bg: rgba(255, 255, 255, 0.8);
+    --focus-ring: rgba(59, 130, 246, 0.12);
+    --action-hover-shadow: rgba(59, 130, 246, 0.25);
+    --notification-border: white;
+    --logo-bg: var(--primary-500);
+    --logo-text: var(--gray-900);
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --sidebar-width: 280px;
+    --theme-transition: 0.3s ease;
+}
+
+/* DARK THEME */
+[data-theme="dark"] {
+    --primary-500: #D4AF37;
+    --primary-600: #B8952D;
+    --primary-400: #E5C466;
+    --primary-100: rgba(212, 175, 55, 0.2);
+    --gray-50: #1A1A1A;
+    --gray-100: #F5F5F5;
+    --gray-200: #2D2D2D;
+    --gray-300: #404040;
+    --gray-400: #737373;
+    --gray-500: #525252;
+    --gray-600: #A3A3A3;
+    --gray-700: #D4D4D4;
+    --gray-800: #1A1A1A;
+    --gray-900: #FFFFFF;
+    --white: #0D0D0D;
+    --glass-bg: rgba(20, 20, 20, 0.6);
+    --glass-bg-strong: rgba(20, 20, 20, 0.72);
+    --glass-border: 1px solid rgba(212, 175, 55, 0.25);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.05);
+    --glass-shadow-hover: 0 12px 40px rgba(212, 175, 55, 0.2), 0 0 80px rgba(212, 175, 55, 0.08);
+    --bg-gradient: linear-gradient(145deg, #0A0A0A 0%, #141414 50%, #0D0D0D 100%);
+    --bg-blobs: radial-gradient(ellipse 800px 600px at 5% 10%, rgba(212, 175, 55, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 700px 500px at 95% 90%, rgba(212, 175, 55, 0.3) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 450px at 90% 5%, rgba(184, 149, 45, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse 500px 400px at 50% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 400px 300px at 20% 80%, rgba(229, 196, 102, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 350px 250px at 75% 40%, rgba(212, 175, 55, 0.18) 0%, transparent 55%);
+    --text-primary: #FFFFFF;
+    --text-secondary: #A3A3A3;
+    --text-muted: #737373;
+    --border-color: rgba(212, 175, 55, 0.2);
+    --card-bg: #1A1A1A;
+    --input-bg: #1A1A1A;
+    --sidebar-border: rgba(212, 175, 55, 0.2);
+    --activity-hover: rgba(212, 175, 55, 0.08);
+    --activity-icon-bg: rgba(212, 175, 55, 0.1);
+    --nav-active-bg: rgba(212, 175, 55, 0.15);
+    --nav-hover-bg: rgba(212, 175, 55, 0.1);
+    --focus-ring: rgba(212, 175, 55, 0.2);
+    --action-hover-shadow: rgba(212, 175, 55, 0.3);
+    --notification-border: #1A1A1A;
+    --logo-bg: transparent;
+    --logo-text: #FFFFFF;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    font-family: var(--font-family);
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+    position: relative;
+    transition: background var(--theme-transition), color var(--theme-transition);
+}
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-blobs);
+    z-index: 0;
+    pointer-events: none;
+}
+.dashboard { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    position: fixed;
+    margin: 24px 0 24px 24px;
+    height: calc(100vh - 48px);
+    z-index: 100;
+}
+.sidebar-header { padding: 0 8px 12px; border-bottom: 1px solid var(--sidebar-border); margin-bottom: 24px; transition: border-color var(--theme-transition); }
+.logo { display: flex; align-items: center; justify-content: center; gap: 2px; }
+.logo-icon {
+    width: 40px; height: 40px;
+    color: var(--primary-500);
+    transition: color var(--theme-transition);
+}
+.logo-text { font-size: 32px; font-weight: 600; color: var(--primary-500); transition: color var(--theme-transition); }
+.sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: var(--radius-md);
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 15px; font-weight: 500; transition: all 0.2s;
+}
+.nav-item:hover { background: var(--nav-hover-bg); color: var(--text-primary); }
+.nav-item.active { background: var(--nav-active-bg); box-shadow: 0 2px 8px rgba(0,0,0,0.06); color: var(--primary-500); }
+[data-theme="dark"] .nav-item.active { border: 1px solid var(--border-color); box-shadow: none; }
+.nav-icon { width: 22px; height: 22px; stroke-width: 1.5; }
+.sidebar-footer { padding-top: 24px; border-top: 1px solid var(--sidebar-border); margin-top: auto; }
+.user-profile {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px; background: var(--card-bg);
+    border: 1px solid var(--border-color); border-radius: var(--radius-md);
+    margin-bottom: 12px;
+}
+[data-theme="dark"] .user-profile { background: var(--glass-bg); }
+.user-avatar { width: 42px; height: 42px; border-radius: 50%; }
+.user-name { font-weight: 600; color: var(--text-primary); font-size: 15px; }
+.logout-btn {
+    width: 100%; padding: 12px;
+    background: var(--card-bg); border: 1px solid var(--primary-500);
+    border-radius: var(--radius-md); color: var(--primary-500);
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; font-family: var(--font-family);
+}
+.logout-btn:hover { background: var(--primary-500); color: var(--white); }
+[data-theme="dark"] .logout-btn:hover { color: #0D0D0D; }
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: calc(var(--sidebar-width) + 48px);
+    display: flex; flex-direction: column;
+    min-height: 100vh; padding: 24px 24px 32px 0;
+}
+
+/* Header */
+.header {
+    display: flex; align-items: center;
+    padding: 16px 32px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 32px;
+}
+.breadcrumb { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 14px; }
+.breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+.breadcrumb-separator { width: 16px; height: 16px; }
+.header-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 10px 16px;
+    min-width: 320px;
+    transition: border-color 0.2s, box-shadow 0.2s, background var(--theme-transition);
+}
+.search-bar:focus-within {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+.search-icon { width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0; }
+.search-bar input {
+    background: none; border: none; outline: none;
+    color: var(--text-primary); font-size: 14px;
+    width: 100%; font-family: var(--font-family);
+}
+.search-bar input::placeholder { color: var(--text-muted); }
+.search-bar .dropdown { margin-left: auto; flex-shrink: 0; }
+.search-bar .dropdown-toggle {
+    background: none; border: none; padding: 4px;
+    cursor: pointer; color: var(--text-muted);
+    display: flex; align-items: center;
+}
+.search-bar .dropdown-toggle:hover { color: var(--primary-500); }
+.search-bar .dropdown-toggle svg { width: 16px; height: 16px; }
+
+/* Dropdown */
+.dropdown { position: relative; }
+.dropdown-menu {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--card-bg); border: 1px solid var(--border-color);
+    border-radius: var(--radius-md); padding: 8px;
+    min-width: 160px; opacity: 0; visibility: hidden;
+    transform: translateY(-10px); transition: all 0.2s;
+    z-index: 100; box-shadow: var(--glass-shadow);
+}
+[data-theme="dark"] .dropdown-menu { background: #1A1A1A; }
+.dropdown:hover .dropdown-menu, .dropdown.open .dropdown-menu {
+    opacity: 1; visibility: visible; transform: translateY(0);
+}
+.dropdown-item {
+    display: block; padding: 10px 12px;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 14px; border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+.dropdown-item:hover { background: var(--nav-hover-bg); color: var(--primary-500); }
+
+.theme-toggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px;
+    background: var(--input-bg); border: 1px solid var(--border-color);
+    border-radius: var(--radius-md); color: var(--text-secondary);
+    cursor: pointer; transition: all 0.2s; position: relative;
+}
+.theme-toggle:hover { background: var(--nav-hover-bg); color: var(--primary-500); border-color: var(--primary-500); }
+.theme-toggle .icon-sun, .theme-toggle .icon-moon {
+    position: absolute; width: 20px; height: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg); }
+.theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg); }
+[data-theme="dark"] .theme-toggle .icon-sun { opacity: 0; transform: rotate(90deg); }
+[data-theme="dark"] .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg); }
+.header-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px;
+    background: var(--input-bg); border: 1px solid var(--border-color);
+    border-radius: var(--radius-md); color: var(--text-secondary);
+    cursor: pointer; transition: all 0.2s; position: relative;
+}
+.header-btn:hover { background: var(--nav-hover-bg); color: var(--primary-500); border-color: var(--primary-500); }
+.header-btn svg { width: 20px; height: 20px; }
+.notification-dot {
+    position: absolute; top: 6px; right: 8px;
+    width: 9px; height: 9px;
+    background: var(--primary-500); border-radius: 50%;
+    border: 2px solid var(--notification-border);
+}
+.header-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 2px solid var(--border-color); cursor: pointer;
+    transition: border-color 0.2s;
+}
+.header-avatar:hover { border-color: var(--primary-500); }
+
+/* Page Content */
+.page-content { flex: 1; display: flex; flex-direction: column; padding: 0 16px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.page-title { font-size: 32px; font-weight: 700; color: var(--text-primary); }
+
+/* Export Grid */
+.export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+/* Card Styles */
+.export-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+}
+.export-card:hover {
+    box-shadow: var(--glass-shadow-hover);
+}
+[data-theme="dark"] .export-card:hover {
+    border-color: var(--primary-500);
+}
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.card-icon {
+    width: 52px; height: 52px;
+    background: var(--primary-100);
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary-500);
+}
+.card-icon svg { width: 26px; height: 26px; }
+.card-title { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+.card-description { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+
+/* Interview Select */
+.interview-select-wrapper {
+    margin-bottom: 20px;
+}
+.interview-select-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.interview-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.interview-select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: var(--primary-500);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+    width: 100%;
+}
+[data-theme="dark"] .btn-primary { color: #0D0D0D; }
+.btn-primary:hover {
+    background: var(--primary-600);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--action-hover-shadow);
+}
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+.btn-primary svg { width: 18px; height: 18px; }
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+    width: 100%;
+}
+.btn-secondary:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-500);
+}
+.btn-secondary svg { width: 18px; height: 18px; }
+
+/* Templates Section */
+.templates-section {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 32px;
+}
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+.section-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+.template-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.template-card:hover {
+    border-color: var(--primary-500);
+    transform: translateY(-2px);
+}
+.template-card.active {
+    border-color: var(--primary-500);
+    background: var(--primary-100);
+}
+.template-icon {
+    width: 40px; height: 40px;
+    background: var(--activity-icon-bg);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    color: var(--primary-500);
+}
+.template-card.active .template-icon {
+    background: var(--primary-500);
+    color: #fff;
+}
+[data-theme="dark"] .template-card.active .template-icon { color: #0D0D0D; }
+.template-icon svg { width: 20px; height: 20px; }
+.template-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+.template-questions {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* White Label Section */
+.whitelabel-section {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--glass-shadow);
+}
+.whitelabel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.form-group {
+    margin-bottom: 0;
+}
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+    transition: border-color 0.2s;
+}
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+.form-input::placeholder { color: var(--text-muted); }
+.color-input-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.color-input {
+    width: 48px;
+    height: 48px;
+    padding: 4px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    background: var(--input-bg);
+}
+.color-input::-webkit-color-swatch-wrapper { padding: 0; }
+.color-input::-webkit-color-swatch { border: none; border-radius: 4px; }
+.color-hex {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+}
+
+/* Logo Upload */
+.logo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--glass-bg);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.logo-upload:hover {
+    border-color: var(--primary-500);
+    background: var(--activity-hover);
+}
+.logo-upload-icon {
+    width: 48px; height: 48px;
+    background: var(--activity-icon-bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    color: var(--text-muted);
+}
+.logo-upload-icon svg { width: 24px; height: 24px; }
+.logo-upload-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+.logo-upload-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.logo-upload input { display: none; }
+.logo-preview {
+    max-width: 200px;
+    max-height: 60px;
+    object-fit: contain;
+}
+
+/* Bulk Export */
+.bulk-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+.bulk-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+.bulk-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.bulk-select-all {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.checkbox {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--input-bg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.checkbox.checked {
+    background: var(--primary-500);
+    border-color: var(--primary-500);
+}
+.checkbox svg { width: 12px; height: 12px; color: #fff; }
+[data-theme="dark"] .checkbox svg { color: #0D0D0D; }
+.interviews-checklist {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+.interview-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.interview-checkbox:hover {
+    border-color: var(--primary-400);
+}
+.interview-checkbox.selected {
+    border-color: var(--primary-500);
+    background: var(--primary-100);
+}
+.interview-checkbox-info {
+    flex: 1;
+}
+.interview-checkbox-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.interview-checkbox-date {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Save Settings Bar */
+.save-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+.save-info {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+.save-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Loading Spinner */
+.spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+[data-theme="dark"] .spinner { border-color: rgba(13,13,13,0.3); border-top-color: #0D0D0D; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .export-grid { grid-template-columns: 1fr; }
+    .templates-grid { grid-template-columns: repeat(2, 1fr); }
+    .whitelabel-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); margin: 16px; height: calc(100vh - 32px); }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; padding: 16px; }
+    .header { padding: 16px; flex-wrap: wrap; gap: 12px; }
+    .header-actions { width: 100%; justify-content: space-between; }
+    .page-title { font-size: 24px; }
+    .templates-grid { grid-template-columns: 1fr; }
+    .whitelabel-grid { grid-template-columns: 1fr; }
+    .interviews-checklist { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 26 24" fill="currentColor">
+                        <rect x="1" y="9.5" width="2.5" height="5" rx="1.25"/>
+                        <rect x="5" y="7" width="2.5" height="10" rx="1.25"/>
+                        <rect x="9" y="2" width="2.5" height="20" rx="1.25"/>
+                        <rect x="13" y="9" width="2.5" height="6" rx="1.25"/>
+                        <rect x="17" y="7" width="2.5" height="10" rx="1.25"/>
+                        <rect x="21" y="10" width="2.5" height="4" rx="1.25"/>
+                    </svg>
+                    <span class="logo-text">Kyber</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="white-v9.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>Overview</span>
+                </a>
+                <a href="clients.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Clients</span>
+                </a>
+                <a href="interviews.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    <span>Interviews</span>
+                </a>
+                <a href="knowledge-base.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    <span>Knowledge Base</span>
+                </a>
+                <a href="export-hub.html" class="nav-item active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span>Export Hub</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Jay&background=3B82F6&color=ffffff&size=42" alt="Jay" class="user-avatar" id="sidebarAvatar">
+                    <div class="user-info"><span class="user-name">Jay</span></div>
+                </div>
+                <button class="logout-btn">Log Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="breadcrumb">
+                    <span>Dashboard</span>
+                    <svg class="breadcrumb-separator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                    <span class="current">Export Hub</span>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" placeholder="Search & Ask..." id="searchInput">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">Search All</a>
+                                <a href="#" class="dropdown-item">Clients Only</a>
+                                <a href="#" class="dropdown-item">Knowledge Base</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                    <button class="header-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <img src="https://ui-avatars.com/api/?name=Jay&background=3B82F6&color=ffffff&size=42" alt="User" class="header-avatar" id="headerAvatar">
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1 class="page-title">Export Hub</h1>
+                </div>
+
+                <!-- Export Grid -->
+                <div class="export-grid">
+                    <!-- PDF Generator -->
+                    <div class="export-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
+                            </div>
+                            <h2 class="card-title">PDF Report</h2>
+                        </div>
+                        <p class="card-description">Generate a professional PDF report with interview insights, pain points, and recommendations. Uses your white-label branding settings.</p>
+                        <div class="interview-select-wrapper">
+                            <label class="interview-select-label">Select Interview</label>
+                            <select class="interview-select" id="pdfInterviewSelect">
+                                <option value="">Loading interviews...</option>
+                            </select>
+                        </div>
+                        <div class="btn-group" style="display: flex; gap: 10px;">
+                            <button class="btn-primary" id="generatePdfBtn" disabled>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Download PDF
+                            </button>
+                            <button class="btn-secondary" id="viewReportBtn" disabled style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                View Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CSV Export -->
+                    <div class="export-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="8" y1="13" x2="16" y2="13"/>
+                                    <line x1="8" y1="17" x2="16" y2="17"/>
+                                    <line x1="8" y1="9" x2="10" y2="9"/>
+                                </svg>
+                            </div>
+                            <h2 class="card-title">CSV Export</h2>
+                        </div>
+                        <p class="card-description">Download all interview data as a CSV file. Perfect for importing into spreadsheets, CRM systems, or data analysis tools.</p>
+                        <div class="interview-select-wrapper">
+                            <label class="interview-select-label">Select Interview</label>
+                            <select class="interview-select" id="csvInterviewSelect">
+                                <option value="">Loading interviews...</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" id="exportCsvBtn" disabled>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Templates -->
+                <div class="templates-section">
+                    <h2 class="section-title">Report Templates</h2>
+                    <p class="section-description">Choose a pre-defined template to include specific questions in your reports.</p>
+                    <div class="templates-grid">
+                        <div class="template-card active" data-template="full">
+                            <div class="template-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="3" y1="9" x2="21" y2="9"/>
+                                    <line x1="9" y1="21" x2="9" y2="9"/>
+                                </svg>
+                            </div>
+                            <div class="template-name">Full Report</div>
+                            <div class="template-questions">All 18 Questions</div>
+                        </div>
+                        <div class="template-card" data-template="marketing">
+                            <div class="template-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                                </svg>
+                            </div>
+                            <div class="template-name">Marketing</div>
+                            <div class="template-questions">Q1, Q4, Q6, Q7</div>
+                        </div>
+                        <div class="template-card" data-template="sales">
+                            <div class="template-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                            </div>
+                            <div class="template-name">Sales</div>
+                            <div class="template-questions">Q1, Q4, Q5, Q7, Q13-18</div>
+                        </div>
+                        <div class="template-card" data-template="hr">
+                            <div class="template-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <div class="template-name">HR / Culture</div>
+                            <div class="template-questions">Q8, Q9, Q10, Q11, Q12</div>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Export -->
+                    <div class="bulk-section">
+                        <div class="bulk-header">
+                            <h3 class="bulk-title">Bulk Export</h3>
+                            <label class="bulk-select-all" id="selectAllBtn">
+                                <div class="checkbox" id="selectAllCheckbox">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:none;">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                                Select All
+                            </label>
+                        </div>
+                        <div class="interviews-checklist" id="interviewsChecklist">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        <div style="margin-top: 16px; display: flex; gap: 12px;">
+                            <button class="btn-secondary" id="bulkPdfBtn" disabled style="flex: 1;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export Selected as ZIP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- White Label Settings -->
+                <div class="whitelabel-section">
+                    <h2 class="section-title">White-Label Settings</h2>
+                    <p class="section-description">Customize the appearance of your exported reports with your own branding.</p>
+                    <div class="whitelabel-grid">
+                        <div class="form-group">
+                            <label class="form-label">Company Logo</label>
+                            <label class="logo-upload" id="logoUpload">
+                                <div class="logo-upload-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                </div>
+                                <span class="logo-upload-text" id="logoUploadText">Click to upload logo</span>
+                                <span class="logo-upload-hint">PNG, JPG up to 2MB (200x50px recommended)</span>
+                                <input type="file" accept="image/*" id="logoInput">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" class="form-input" id="companyName" placeholder="Your Company Name" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Footer Text</label>
+                            <input type="text" class="form-input" id="footerText" placeholder="Confidential - Internal Use Only" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Primary Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-input" id="primaryColor" value="#3B82F6">
+                                <input type="text" class="color-hex" id="primaryColorHex" value="#3B82F6">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Secondary Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-input" id="secondaryColor" value="#1E3A5F">
+                                <input type="text" class="color-hex" id="secondaryColorHex" value="#1E3A5F">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Report Title</label>
+                            <input type="text" class="form-input" id="reportTitle" placeholder="Interview Insights Report" value="Interview Insights Report">
+                        </div>
+                    </div>
+                    <div class="save-bar">
+                        <span class="save-info">White-label settings are saved locally and applied to all exports.</span>
+                        <div class="save-actions">
+                            <button class="btn-secondary" onclick="resetWhitelabel()" style="width: auto; padding: 12px 20px;">Reset to Default</button>
+                            <button class="btn-primary" onclick="saveWhitelabel()" style="width: auto; padding: 12px 20px;">Save Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION
+        // ========================================
+        const SUPABASE_URL = 'https://dpdtxmhxyosunfryocqn.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZHR4bWh4eW9zdW5mcnlvY3FuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDI2NTA0NywiZXhwIjoyMDY5ODQxMDQ3fQ.p_YULPZ0tCCjpDFwqRbkpf1tber8_5Q5kuP7l44ggjw';
+
+        let interviews = [];
+        let selectedTemplate = 'full';
+        let selectedInterviews = new Set();
+
+        // ========================================
+        // THEME TOGGLE
+        // ========================================
+        const themeToggle = document.getElementById('themeToggle');
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        const headerAvatar = document.getElementById('headerAvatar');
+
+        const savedTheme = localStorage.getItem('kyber-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateAvatars(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('kyber-theme', newTheme);
+            updateAvatars(newTheme);
+        });
+
+        function updateAvatars(theme) {
+            const bgColor = theme === 'dark' ? 'D4AF37' : '3B82F6';
+            const avatarUrl = `https://ui-avatars.com/api/?name=Jay&background=${bgColor}&color=ffffff&size=42`;
+            sidebarAvatar.src = avatarUrl;
+            headerAvatar.src = avatarUrl;
+        }
+
+        // ========================================
+        // DATA FETCHING
+        // ========================================
+        async function fetchInterviews() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/interviews?select=id,client_name,company_name,scheduled_at,status&order=scheduled_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch');
+
+                interviews = await response.json();
+                populateSelects();
+                populateChecklist();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function populateSelects() {
+            const pdfSelect = document.getElementById('pdfInterviewSelect');
+            const csvSelect = document.getElementById('csvInterviewSelect');
+
+            const options = interviews.map(i => {
+                const date = new Date(i.scheduled_at).toLocaleDateString();
+                return `<option value="${i.id}">${i.company_name || 'Unknown'} - ${i.client_name || 'Unknown'} (${date})</option>`;
+            }).join('');
+
+            const defaultOption = '<option value="">Select an interview...</option>';
+            pdfSelect.innerHTML = defaultOption + options;
+            csvSelect.innerHTML = defaultOption + options;
+
+            document.getElementById('generatePdfBtn').disabled = false;
+            document.getElementById('viewReportBtn').disabled = false;
+            document.getElementById('exportCsvBtn').disabled = false;
+        }
+
+        function populateChecklist() {
+            const checklist = document.getElementById('interviewsChecklist');
+
+            if (interviews.length === 0) {
+                checklist.innerHTML = '<p style="color: var(--text-muted); padding: 20px; text-align: center;">No interviews found</p>';
+                return;
+            }
+
+            checklist.innerHTML = interviews.map(i => {
+                const date = new Date(i.scheduled_at).toLocaleDateString();
+                return `
+                    <div class="interview-checkbox" data-id="${i.id}" onclick="toggleInterviewSelection('${i.id}')">
+                        <div class="checkbox">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:none;">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div class="interview-checkbox-info">
+                            <div class="interview-checkbox-name">${i.company_name || 'Unknown'} - ${i.client_name || 'Unknown'}</div>
+                            <div class="interview-checkbox-date">${date}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========================================
+        // TEMPLATE SELECTION
+        // ========================================
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                selectedTemplate = card.dataset.template;
+            });
+        });
+
+        // ========================================
+        // INTERVIEW SELECTION
+        // ========================================
+        function toggleInterviewSelection(id) {
+            const checkbox = document.querySelector(`.interview-checkbox[data-id="${id}"]`);
+
+            if (selectedInterviews.has(id)) {
+                selectedInterviews.delete(id);
+                checkbox.classList.remove('selected');
+                checkbox.querySelector('.checkbox').classList.remove('checked');
+                checkbox.querySelector('svg').style.display = 'none';
+            } else {
+                selectedInterviews.add(id);
+                checkbox.classList.add('selected');
+                checkbox.querySelector('.checkbox').classList.add('checked');
+                checkbox.querySelector('svg').style.display = 'block';
+            }
+
+            updateBulkButton();
+            updateSelectAllCheckbox();
+        }
+
+        function updateBulkButton() {
+            document.getElementById('bulkPdfBtn').disabled = selectedInterviews.size === 0;
+        }
+
+        function updateSelectAllCheckbox() {
+            const allCheckbox = document.getElementById('selectAllCheckbox');
+            const isAllSelected = selectedInterviews.size === interviews.length && interviews.length > 0;
+
+            if (isAllSelected) {
+                allCheckbox.classList.add('checked');
+                allCheckbox.querySelector('svg').style.display = 'block';
+            } else {
+                allCheckbox.classList.remove('checked');
+                allCheckbox.querySelector('svg').style.display = 'none';
+            }
+        }
+
+        document.getElementById('selectAllBtn').addEventListener('click', () => {
+            const isAllSelected = selectedInterviews.size === interviews.length;
+
+            if (isAllSelected) {
+                selectedInterviews.clear();
+                document.querySelectorAll('.interview-checkbox').forEach(cb => {
+                    cb.classList.remove('selected');
+                    cb.querySelector('.checkbox').classList.remove('checked');
+                    cb.querySelector('svg').style.display = 'none';
+                });
+            } else {
+                interviews.forEach(i => selectedInterviews.add(i.id));
+                document.querySelectorAll('.interview-checkbox').forEach(cb => {
+                    cb.classList.add('selected');
+                    cb.querySelector('.checkbox').classList.add('checked');
+                    cb.querySelector('svg').style.display = 'block';
+                });
+            }
+
+            updateBulkButton();
+            updateSelectAllCheckbox();
+        });
+
+        // ========================================
+        // EXPORT FUNCTIONS
+        // ========================================
+        document.getElementById('generatePdfBtn').addEventListener('click', async () => {
+            const select = document.getElementById('pdfInterviewSelect');
+            if (!select.value) {
+                alert('Please select an interview');
+                return;
+            }
+
+            const btn = document.getElementById('generatePdfBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="spinner"></div> Generating...';
+            btn.disabled = true;
+
+            try {
+                // Fetch interview data
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/interviews?id=eq.${select.value}`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                const data = await response.json();
+                if (data.length === 0) {
+                    alert('Interview not found');
+                    return;
+                }
+
+                const interview = data[0];
+                await generatePDF(interview);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Failed to generate PDF: ' + error.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // View Report (opens n8n webhook HTML in new tab)
+        document.getElementById('viewReportBtn').addEventListener('click', () => {
+            const select = document.getElementById('pdfInterviewSelect');
+            if (!select.value) {
+                alert('Please select an interview');
+                return;
+            }
+
+            // Open the n8n webhook report in a new tab
+            const reportUrl = `https://www.n8n.fairintech.com/webhook/a1b2c3d4-pdf-gen-5678-90ab-cdef12345678?interview_id=${select.value}`;
+            window.open(reportUrl, '_blank');
+        });
+
+        // PDF Generation using jsPDF
+        async function generatePDF(interview) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Get white-label settings
+            const whitelabel = JSON.parse(localStorage.getItem('kyber-whitelabel') || '{}');
+            const companyName = whitelabel.companyName || 'Kyber';
+            const primaryColor = whitelabel.primaryColor || '#d4af37';
+            const footerText = whitelabel.footerText || 'Confidential - Internal Use Only';
+            const reportTitle = whitelabel.reportTitle || 'Interview Report';
+
+            // Convert hex to RGB
+            const hexToRgb = (hex) => {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : { r: 212, g: 175, b: 55 };
+            };
+            const rgb = hexToRgb(primaryColor);
+
+            let yPos = 20;
+            const margin = 20;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const contentWidth = pageWidth - (margin * 2);
+
+            // Helper functions
+            const addPageIfNeeded = (requiredSpace = 30) => {
+                if (yPos + requiredSpace > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                    return true;
+                }
+                return false;
+            };
+
+            const addSection = (title, content) => {
+                if (!content) return;
+                addPageIfNeeded(40);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(rgb.r, rgb.g, rgb.b);
+                doc.text(title, margin, yPos);
+                yPos += 6;
+
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(60, 60, 60);
+                doc.setFontSize(10);
+                const lines = doc.splitTextToSize(String(content), contentWidth);
+                lines.forEach(line => {
+                    addPageIfNeeded();
+                    doc.text(line, margin, yPos);
+                    yPos += 5;
+                });
+                yPos += 6;
+            };
+
+            // Header
+            doc.setFillColor(rgb.r, rgb.g, rgb.b);
+            doc.rect(0, 0, pageWidth, 45, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text(companyName, margin, 18);
+
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'normal');
+            doc.text(reportTitle, margin, 28);
+
+            doc.setFontSize(10);
+            doc.text(`Generated: ${new Date().toLocaleDateString()}`, margin, 38);
+
+            yPos = 55;
+
+            // Client Info Box
+            doc.setFillColor(245, 245, 245);
+            doc.rect(margin, yPos, contentWidth, 30, 'F');
+
+            doc.setTextColor(60, 60, 60);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Client Information', margin + 5, yPos + 8);
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Name: ${interview.client_name || 'N/A'}`, margin + 5, yPos + 16);
+            doc.text(`Company: ${interview.company_name || 'N/A'}`, margin + 5, yPos + 22);
+            doc.text(`Email: ${interview.client_email || 'N/A'}`, margin + 90, yPos + 16);
+            doc.text(`Date: ${interview.scheduled_at ? new Date(interview.scheduled_at).toLocaleDateString() : 'N/A'}`, margin + 90, yPos + 22);
+
+            yPos += 40;
+
+            // Template-based content
+            if (selectedTemplate === 'full' || selectedTemplate === 'marketing') {
+                // Section 1: Target Audience
+                doc.setFillColor(rgb.r, rgb.g, rgb.b);
+                doc.rect(margin, yPos, contentWidth, 8, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text('TARGET AUDIENCE', margin + 3, yPos + 6);
+                yPos += 15;
+
+                addSection('Q1: Primary Avatar', interview.q1_primary_avatar);
+                addSection('Q2: Customer Need', interview.q2_customer_need);
+                addSection('Q3: Biggest Mistake', interview.q3_biggest_mistake);
+
+                // Pain Points
+                if (interview.q4_pain_point_1) {
+                    addPageIfNeeded(50);
+                    doc.setFontSize(11);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(rgb.r, rgb.g, rgb.b);
+                    doc.text('Q4: Pain Points', margin, yPos);
+                    yPos += 8;
+
+                    [1, 2, 3].forEach(i => {
+                        const painPoint = interview[`q4_pain_point_${i}`];
+                        if (painPoint) {
+                            addPageIfNeeded(20);
+                            doc.setFillColor(250, 250, 250);
+                            doc.rect(margin, yPos - 3, contentWidth, 18, 'F');
+                            doc.setTextColor(60, 60, 60);
+                            doc.setFontSize(10);
+                            doc.setFont('helvetica', 'bold');
+                            doc.text(`Pain Point ${i}: `, margin + 3, yPos + 3);
+                            doc.setFont('helvetica', 'normal');
+                            const ppLines = doc.splitTextToSize(painPoint, contentWidth - 40);
+                            doc.text(ppLines[0], margin + 30, yPos + 3);
+                            doc.text(`Severity: ${interview[`q4_severity_${i}`] || 'N/A'}`, margin + 3, yPos + 10);
+                            yPos += 22;
+                        }
+                    });
+                    yPos += 5;
+                }
+            }
+
+            if (selectedTemplate === 'full' || selectedTemplate === 'marketing') {
+                // Section 2: Triggers & Content
+                addPageIfNeeded(20);
+                doc.setFillColor(rgb.r, rgb.g, rgb.b);
+                doc.rect(margin, yPos, contentWidth, 8, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text('TRIGGERS & CONTENT', margin + 3, yPos + 6);
+                yPos += 15;
+
+                addSection('Q5: Trigger to Seek', interview.q5_trigger_to_seek);
+
+                // Topics
+                if (interview.q6_topic_1) {
+                    addPageIfNeeded(30);
+                    doc.setFontSize(11);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(rgb.r, rgb.g, rgb.b);
+                    doc.text('Q6: Content Topics', margin, yPos);
+                    yPos += 8;
+
+                    [1, 2, 3].forEach(i => {
+                        const topic = interview[`q6_topic_${i}`];
+                        if (topic) {
+                            addPageIfNeeded(12);
+                            doc.setTextColor(60, 60, 60);
+                            doc.setFontSize(10);
+                            doc.setFont('helvetica', 'bold');
+                            doc.text(`Topic ${i}: `, margin, yPos);
+                            doc.setFont('helvetica', 'normal');
+                            doc.text(topic, margin + 22, yPos);
+                            yPos += 6;
+                        }
+                    });
+                    yPos += 5;
+                }
+
+                addSection('Q7: Cost of Inaction', interview.q7_cost_of_inaction);
+            }
+
+            if (selectedTemplate === 'full' || selectedTemplate === 'hr') {
+                // Section 3: Customer Psychology
+                addPageIfNeeded(20);
+                doc.setFillColor(rgb.r, rgb.g, rgb.b);
+                doc.rect(margin, yPos, contentWidth, 8, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text('CUSTOMER PSYCHOLOGY', margin + 3, yPos + 6);
+                yPos += 15;
+
+                addSection('Q8: Complaints to Friends', interview.q8_complaints_to_friends);
+                addSection('Q9: Roles & Responsibilities', interview.q9_roles_responsibilities);
+                addSection('Q10: Biggest Headache', interview.q10_biggest_headache);
+                addSection('Q11: Reports To', interview.q11_reports_to);
+                addSection('Q12: Decision Influencers', interview.q12_decision_influencers);
+            }
+
+            if (selectedTemplate === 'full' || selectedTemplate === 'sales') {
+                // Section 4: Success Story
+                addPageIfNeeded(20);
+                doc.setFillColor(rgb.r, rgb.g, rgb.b);
+                doc.rect(margin, yPos, contentWidth, 8, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text('SUCCESS STORY', margin + 3, yPos + 6);
+                yPos += 15;
+
+                addSection('Q13: Success Story', interview.q13_success_story);
+                addSection('Q14: Why Couldn\'t Solve Alone', interview.q14_why_couldnt_solve_alone);
+                addSection('Q15: What Already Tried', interview.q15_what_already_tried);
+                addSection('Q16: Initial Findings', interview.q16_initial_findings);
+                addSection('Q17: Recommended Solution', interview.q17_recommended_solution);
+                addSection('Q18: Results Achieved', interview.q18_results_achieved);
+            }
+
+            // Footer on all pages
+            const totalPages = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= totalPages; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text(footerText, margin, 290);
+                doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin - 20, 290);
+            }
+
+            // Save the PDF
+            const filename = `${companyName.replace(/\s+/g, '-')}-${interview.client_name || 'Interview'}-Report.pdf`;
+            doc.save(filename);
+        }
+
+        document.getElementById('exportCsvBtn').addEventListener('click', async () => {
+            const select = document.getElementById('csvInterviewSelect');
+            if (!select.value) {
+                alert('Please select an interview');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/interviews?id=eq.${select.value}`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                const data = await response.json();
+                if (data.length === 0) return;
+
+                const interview = data[0];
+                const csv = convertToCSV([interview]);
+                downloadCSV(csv, `interview-${interview.client_name || 'export'}.csv`);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to export CSV');
+            }
+        });
+
+        document.getElementById('bulkPdfBtn').addEventListener('click', async () => {
+            if (selectedInterviews.size === 0) return;
+
+            const btn = document.getElementById('bulkPdfBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="spinner"></div> Generating PDFs...';
+            btn.disabled = true;
+
+            try {
+                // Fetch all selected interviews
+                const ids = Array.from(selectedInterviews);
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/interviews?id=in.(${ids.join(',')})`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                const interviews = await response.json();
+
+                // Generate PDF for each interview
+                for (const interview of interviews) {
+                    await generatePDF(interview);
+                    // Small delay between downloads to prevent browser issues
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                alert(`Generated ${interviews.length} PDF reports!`);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate bulk PDFs: ' + error.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        function convertToCSV(data) {
+            if (data.length === 0) return '';
+
+            const headers = Object.keys(data[0]);
+            const rows = data.map(obj =>
+                headers.map(h => {
+                    let val = obj[h];
+                    if (val === null || val === undefined) val = '';
+                    if (typeof val === 'object') val = JSON.stringify(val);
+                    if (typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n'))) {
+                        val = '"' + val.replace(/"/g, '""') + '"';
+                    }
+                    return val;
+                }).join(',')
+            );
+
+            return headers.join(',') + '\n' + rows.join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        // ========================================
+        // WHITE-LABEL SETTINGS
+        // ========================================
+        function loadWhitelabel() {
+            const settings = JSON.parse(localStorage.getItem('kyber-whitelabel') || '{}');
+
+            if (settings.companyName) document.getElementById('companyName').value = settings.companyName;
+            if (settings.footerText) document.getElementById('footerText').value = settings.footerText;
+            if (settings.reportTitle) document.getElementById('reportTitle').value = settings.reportTitle;
+            if (settings.primaryColor) {
+                document.getElementById('primaryColor').value = settings.primaryColor;
+                document.getElementById('primaryColorHex').value = settings.primaryColor;
+            }
+            if (settings.secondaryColor) {
+                document.getElementById('secondaryColor').value = settings.secondaryColor;
+                document.getElementById('secondaryColorHex').value = settings.secondaryColor;
+            }
+        }
+
+        function saveWhitelabel() {
+            const settings = {
+                companyName: document.getElementById('companyName').value,
+                footerText: document.getElementById('footerText').value,
+                reportTitle: document.getElementById('reportTitle').value,
+                primaryColor: document.getElementById('primaryColor').value,
+                secondaryColor: document.getElementById('secondaryColor').value
+            };
+
+            localStorage.setItem('kyber-whitelabel', JSON.stringify(settings));
+            alert('White-label settings saved!');
+        }
+
+        function resetWhitelabel() {
+            localStorage.removeItem('kyber-whitelabel');
+            document.getElementById('companyName').value = '';
+            document.getElementById('footerText').value = '';
+            document.getElementById('reportTitle').value = 'Interview Insights Report';
+            document.getElementById('primaryColor').value = '#3B82F6';
+            document.getElementById('primaryColorHex').value = '#3B82F6';
+            document.getElementById('secondaryColor').value = '#1E3A5F';
+            document.getElementById('secondaryColorHex').value = '#1E3A5F';
+            alert('Settings reset to default!');
+        }
+
+        // Color input sync
+        document.getElementById('primaryColor').addEventListener('input', (e) => {
+            document.getElementById('primaryColorHex').value = e.target.value;
+        });
+        document.getElementById('primaryColorHex').addEventListener('input', (e) => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+                document.getElementById('primaryColor').value = e.target.value;
+            }
+        });
+        document.getElementById('secondaryColor').addEventListener('input', (e) => {
+            document.getElementById('secondaryColorHex').value = e.target.value;
+        });
+        document.getElementById('secondaryColorHex').addEventListener('input', (e) => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+                document.getElementById('secondaryColor').value = e.target.value;
+            }
+        });
+
+        // Logo upload
+        document.getElementById('logoInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File size must be less than 2MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const uploadArea = document.getElementById('logoUpload');
+                    uploadArea.innerHTML = `
+                        <img src="${e.target.result}" class="logo-preview" alt="Logo preview">
+                        <span class="logo-upload-text">Click to change logo</span>
+                        <input type="file" accept="image/*" id="logoInput">
+                    `;
+                    document.getElementById('logoInput').addEventListener('change', arguments.callee);
+
+                    // Save to localStorage
+                    const settings = JSON.parse(localStorage.getItem('kyber-whitelabel') || '{}');
+                    settings.logo = e.target.result;
+                    localStorage.setItem('kyber-whitelabel', JSON.stringify(settings));
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ========================================
+        // INITIALIZE
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchInterviews();
+            loadWhitelabel();
+        });
+    </script>
+</body>
+</html>
