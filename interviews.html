@@ -2864,9 +2864,16 @@ body::before {
         // ========================================
         // INITIALIZE
         // ========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchInterviews();
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchInterviews();
             window.NotifDropdown.init();
+
+            // Check if URL has an interview ID to open directly
+            const urlParams = new URLSearchParams(window.location.search);
+            const interviewId = urlParams.get('id');
+            if (interviewId && interviews.length > 0) {
+                openInterview(interviewId);
+            }
         });
     </script>
 
