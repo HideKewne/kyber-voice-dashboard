@@ -1496,46 +1496,32 @@ body::before {
     margin-bottom: 0;
 }
 
-.pain-point-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
 .pain-point-name {
+    display: block;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
+    margin-bottom: 8px;
 }
 
-.severity-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.severity-badge.high {
-    background: rgba(239, 68, 68, 0.15);
-    color: #EF4444;
-}
-
-.severity-badge.medium {
-    background: rgba(245, 158, 11, 0.15);
-    color: #F59E0B;
-}
-
-.severity-badge.low {
-    background: rgba(34, 197, 94, 0.15);
-    color: #22C55E;
+.pain-point-severity {
+    display: block;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid #F59E0B;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-style: italic;
 }
 
 .pain-point-cause {
     font-size: 13px;
     color: var(--text-secondary);
     line-height: 1.5;
+    padding-left: 2px;
 }
 
 /* Topics Card */
@@ -2508,11 +2494,9 @@ body::before {
                                 <h3 class="pain-points-title">Pain Points</h3>
                                 ${painPoints.map(p => `
                                     <div class="pain-point-item">
-                                        <div class="pain-point-header">
-                                            <span class="pain-point-name">${p.name}</span>
-                                            ${p.severity ? `<span class="severity-badge ${getSeverityClass(p.severity)}">${p.severity}</span>` : ''}
-                                        </div>
-                                        ${p.cause ? `<p class="pain-point-cause">${p.cause}</p>` : ''}
+                                        <span class="pain-point-name">${p.name}</span>
+                                        ${p.severity ? `<span class="pain-point-severity">"${p.severity}"</span>` : ''}
+                                        ${p.cause ? `<p class="pain-point-cause"><strong>Root Cause:</strong> ${p.cause}</p>` : ''}
                                     </div>
                                 `).join('')}
                             </div>
