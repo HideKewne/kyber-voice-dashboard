@@ -598,37 +598,126 @@ body::before {
 }
 
 /* Notification Dropdown */
-.notification-btn { position: relative; }
-.notification-dropdown {
-    display: none; position: absolute; top: calc(100% + 8px); right: 0;
-    width: 320px; max-height: 400px; background: var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--border-color);
-    border-radius: var(--radius-md); box-shadow: var(--glass-shadow); z-index: 200; overflow: hidden;
+.notification-btn {
+    position: relative;
 }
-.notification-dropdown.active { display: block; }
-.notification-header {
-    padding: 16px; border-bottom: 1px solid var(--border-color);
-    display: flex; justify-content: space-between; align-items: center;
+
+.notif-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 320px;
+    max-height: 400px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+    z-index: 1000;
+    overflow: hidden;
 }
-.notification-header h3 { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-.notification-header .mark-read {
-    font-size: 12px; color: var(--primary-500); cursor: pointer;
-    background: none; border: none; font-family: var(--font-family);
+
+.notif-dropdown.show {
+    display: block;
 }
-.notification-header .mark-read:hover { text-decoration: underline; }
-.notification-list { max-height: 300px; overflow-y: auto; }
-.notification-item {
-    padding: 12px 16px; border-bottom: 1px solid var(--border-color);
-    cursor: pointer; transition: background 0.2s;
+
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
 }
-.notification-item:hover { background: var(--nav-hover-bg); }
-.notification-item:last-child { border-bottom: none; }
-.notification-item.unread { background: var(--primary-100); }
-[data-theme="dark"] .notification-item.unread { background: rgba(212, 175, 55, 0.1); }
-.notification-item .notif-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
-.notification-item .notif-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-.notification-item .notif-time { font-size: 11px; color: var(--text-muted); }
-.notification-empty { padding: 40px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+.notif-header h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.notif-mark-read {
+    background: none;
+    border: none;
+    color: var(--primary-500);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.notif-mark-read:hover {
+    text-decoration: underline;
+}
+
+.notif-list {
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+.notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notif-item:hover {
+    background: var(--activity-hover);
+}
+
+.notif-item:last-child {
+    border-bottom: none;
+}
+
+.notif-item.unread {
+    background: var(--primary-100);
+}
+
+[data-theme="dark"] .notif-item.unread {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.notif-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--activity-icon-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notif-icon svg {
+    width: 18px;
+    height: 18px;
+    color: var(--activity-icon-color);
+}
+
+.notif-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-text {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.notif-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.notif-empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+}
 
 .header-avatar {
     width: 42px;
@@ -1431,19 +1520,19 @@ body::before {
                         </svg>
                     </button>
 
-                    <button class="header-btn notification-btn" id="notificationBtn" onclick="toggleNotifications(event)">
+                    <button class="header-btn notification-btn" onclick="window.NotifDropdown.toggle(event)">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                         </svg>
-                        <span class="notification-dot" id="notificationDot"></span>
-                        <div class="notification-dropdown" id="notificationDropdown">
-                            <div class="notification-header">
-                                <h3>Notifications</h3>
-                                <button class="mark-read" onclick="markAllRead(event)">Mark all read</button>
+                        <span class="notification-dot" id="notifDot"></span>
+                        <div class="notif-dropdown" id="notifDropdown" onclick="event.stopPropagation()">
+                            <div class="notif-header">
+                                <h4>Notifications</h4>
+                                <button class="notif-mark-read" onclick="window.NotifDropdown.markAllRead(event)">Mark all read</button>
                             </div>
-                            <div class="notification-list" id="notificationList">
-                                <div class="notification-empty">Loading...</div>
+                            <div class="notif-list" id="notifList">
+                                <div class="notif-empty">No notifications</div>
                             </div>
                         </div>
                     </button>
@@ -1663,62 +1752,6 @@ body::before {
             sidebarAvatar.src = avatarUrl;
             headerAvatar.src = avatarUrl;
         }
-
-        // ========================================
-        // NOTIFICATION FUNCTIONALITY
-        // ========================================
-        document.addEventListener('click', () => {
-            const notifDropdown = document.getElementById('notificationDropdown');
-            if (notifDropdown) notifDropdown.classList.remove('active');
-        });
-        function toggleNotifications(e) {
-            e.stopPropagation();
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.classList.toggle('active');
-            if (dropdown.classList.contains('active')) loadNotifications();
-        }
-        function markAllRead(e) {
-            e.stopPropagation();
-            document.querySelectorAll('.notification-item.unread').forEach(item => item.classList.remove('unread'));
-            const dot = document.getElementById('notificationDot');
-            if (dot) dot.style.display = 'none';
-            localStorage.setItem('kyber-notifs-read', Date.now());
-        }
-        async function loadNotifications() {
-            const list = document.getElementById('notificationList');
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/interviews?select=id,client_name,status,created_at&order=created_at.desc&limit=5`, {
-                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-                });
-                const interviews = await response.json();
-                if (interviews.length === 0) { list.innerHTML = '<div class="notification-empty">No notifications yet</div>'; return; }
-                const lastRead = localStorage.getItem('kyber-notifs-read') || 0;
-                let hasUnread = false;
-                list.innerHTML = interviews.map(interview => {
-                    const isUnread = new Date(interview.created_at).getTime() > lastRead;
-                    if (isUnread) hasUnread = true;
-                    const timeAgo = getTimeAgo(new Date(interview.created_at));
-                    const statusText = interview.status === 'completed' ? 'completed their interview' : interview.status === 'scheduled' ? 'scheduled an interview' : 'updated';
-                    return `<div class="notification-item ${isUnread ? 'unread' : ''}" onclick="window.location.href='interviews.html'">
-                        <div class="notif-title">${interview.client_name}</div>
-                        <div class="notif-desc">${statusText}</div>
-                        <div class="notif-time">${timeAgo}</div>
-                    </div>`;
-                }).join('');
-                const dot = document.getElementById('notificationDot');
-                if (dot) dot.style.display = hasUnread ? 'block' : 'none';
-            } catch (error) { list.innerHTML = '<div class="notification-empty">Failed to load</div>'; }
-        }
-        function getTimeAgo(date) {
-            const seconds = Math.floor((new Date() - date) / 1000);
-            if (seconds < 60) return 'Just now';
-            const minutes = Math.floor(seconds / 60);
-            if (minutes < 60) return `${minutes}m ago`;
-            const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `${hours}h ago`;
-            return `${Math.floor(hours / 24)}d ago`;
-        }
-        loadNotifications();
 
         // ========================================
         // DATA FETCHING
@@ -2048,6 +2081,161 @@ body::before {
         document.addEventListener('DOMContentLoaded', () => {
             fetchClients();
         });
+
+        // ========================================
+        // NOTIFICATION DROPDOWN (Isolated Module)
+        // ========================================
+        window.NotifDropdown = (function() {
+            const STORAGE_KEY = 'kyber_read_notifs';
+            var notifData = [];
+
+            function getReadIds() {
+                try {
+                    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                } catch(e) { return []; }
+            }
+
+            function saveReadIds(ids) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+                } catch(e) {}
+            }
+
+            function toggle(e) {
+                e.stopPropagation();
+                var dd = document.getElementById('notifDropdown');
+                if (dd) {
+                    dd.classList.toggle('show');
+                    if (dd.classList.contains('show')) {
+                        loadAndRender();
+                    }
+                }
+            }
+
+            function close() {
+                var dd = document.getElementById('notifDropdown');
+                if (dd) dd.classList.remove('show');
+            }
+
+            async function loadAndRender() {
+                try {
+                    var response = await fetch(SUPABASE_URL + '/rest/v1/interviews?select=id,client_name,company_name,status,scheduled_at&order=scheduled_at.desc&limit=5', {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+                    });
+                    if (response.ok) {
+                        notifData = await response.json();
+                        renderNotifications();
+                        updateDot();
+                    }
+                } catch(e) { console.log('Notif fetch error:', e); }
+            }
+
+            function markAllRead(e) {
+                e.stopPropagation();
+                var readIds = getReadIds();
+                notifData.forEach(function(i) {
+                    if (i.id && readIds.indexOf(i.id) === -1) readIds.push(i.id);
+                });
+                saveReadIds(readIds);
+                renderNotifications();
+                updateDot();
+            }
+
+            function renderNotifications() {
+                var list = document.getElementById('notifList');
+                if (!list) return;
+
+                if (notifData.length === 0) {
+                    list.innerHTML = '<div class="notif-empty">No notifications</div>';
+                    return;
+                }
+
+                var readIds = getReadIds();
+                var html = notifData.map(function(interview) {
+                    var isUnread = readIds.indexOf(interview.id) === -1;
+                    var name = interview.client_name || 'Unknown';
+                    var company = interview.company_name || '';
+                    var status = interview.status || 'scheduled';
+                    var date = interview.scheduled_at ? new Date(interview.scheduled_at) : new Date();
+                    var timeAgo = formatTimeAgo(date);
+
+                    var statusText = status === 'completed' ? 'completed their interview' :
+                                    status === 'scheduled' ? 'has an upcoming interview' :
+                                    status === 'in_progress' ? 'is currently in an interview' :
+                                    'interview ' + status;
+
+                    return '<div class="notif-item ' + (isUnread ? 'unread' : '') + '" onclick="window.NotifDropdown.markRead(\'' + interview.id + '\')">' +
+                        '<div class="notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>' +
+                        '<div class="notif-content">' +
+                        '<div class="notif-text"><strong>' + name + '</strong>' + (company ? ' (' + company + ')' : '') + ' ' + statusText + '</div>' +
+                        '<div class="notif-time">' + timeAgo + '</div>' +
+                        '</div></div>';
+                }).join('');
+
+                list.innerHTML = html || '<div class="notif-empty">No notifications</div>';
+            }
+
+            function markRead(id) {
+                var readIds = getReadIds();
+                if (readIds.indexOf(id) === -1) {
+                    readIds.push(id);
+                    saveReadIds(readIds);
+                    renderNotifications();
+                    updateDot();
+                }
+            }
+
+            function updateDot() {
+                var dot = document.getElementById('notifDot');
+                if (!dot) return;
+
+                if (notifData.length === 0) {
+                    dot.style.display = 'none';
+                    return;
+                }
+
+                var readIds = getReadIds();
+                var hasUnread = notifData.some(function(i) {
+                    return readIds.indexOf(i.id) === -1;
+                });
+
+                dot.style.display = hasUnread ? 'block' : 'none';
+            }
+
+            function formatTimeAgo(date) {
+                var now = new Date();
+                var diff = now - date;
+                var mins = Math.floor(diff / 60000);
+                var hours = Math.floor(mins / 60);
+                var days = Math.floor(hours / 24);
+
+                if (mins < 1) return 'Just now';
+                if (mins < 60) return mins + 'm ago';
+                if (hours < 24) return hours + 'h ago';
+                if (days < 7) return days + 'd ago';
+                return date.toLocaleDateString();
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                var dd = document.getElementById('notifDropdown');
+                var btn = document.querySelector('.notification-btn');
+                if (dd && btn && !btn.contains(e.target)) {
+                    dd.classList.remove('show');
+                }
+            });
+
+            // Initialize
+            setTimeout(function() { loadAndRender(); }, 1500);
+
+            return {
+                toggle: toggle,
+                close: close,
+                markAllRead: markAllRead,
+                markRead: markRead,
+                refresh: function() { loadAndRender(); }
+            };
+        })();
     </script>
 </body>
 </html>
