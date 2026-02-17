@@ -2703,20 +2703,40 @@ body::before {
 
         // Reset dropdown trigger texts to defaults
         function resetDropdownTexts() {
+            // Recalculate grouped counts from individual counts
+            const activeWorkflowTotal =
+                parseInt(document.getElementById('countActive').textContent || 0) +
+                parseInt(document.getElementById('countInProgress').textContent || 0) +
+                parseInt(document.getElementById('countAwaiting').textContent || 0) +
+                parseInt(document.getElementById('countInReview').textContent || 0) +
+                parseInt(document.getElementById('countInRevision').textContent || 0) +
+                parseInt(document.getElementById('countOverdue').textContent || 0);
+
+            const completedGroupTotal =
+                parseInt(document.getElementById('countComplete').textContent || 0) +
+                parseInt(document.getElementById('countDraft').textContent || 0) +
+                parseInt(document.getElementById('countArchived').textContent || 0);
+
             document.querySelectorAll('.filter-dropdown').forEach(dropdown => {
                 const defaultText = dropdown.dataset.defaultText;
-                const triggerText = dropdown.querySelector('.trigger-text');
+                const trigger = dropdown.querySelector('.dropdown-trigger');
+                const triggerText = trigger.querySelector('.trigger-text');
+                const triggerCount = trigger.querySelector('.filter-count');
+                const triggerIcon = trigger.querySelector('.trigger-icon');
+
+                // Reset text
                 if (triggerText && defaultText) {
                     triggerText.textContent = defaultText;
                 }
-                // Reset icon to default circle for Active Workflow
-                const trigger = dropdown.querySelector('.dropdown-trigger');
-                const triggerIcon = trigger.querySelector('.trigger-icon');
+
+                // Reset count and icon based on dropdown type
                 if (trigger.id === 'activeWorkflowBtn') {
+                    triggerCount.textContent = activeWorkflowTotal;
                     triggerIcon.innerHTML = '<circle cx="12" cy="12" r="6"/>';
                     triggerIcon.setAttribute('fill', 'currentColor');
                     triggerIcon.removeAttribute('stroke');
                 } else if (trigger.id === 'completedBtn') {
+                    triggerCount.textContent = completedGroupTotal;
                     triggerIcon.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
                     triggerIcon.setAttribute('fill', 'none');
                     triggerIcon.setAttribute('stroke', 'currentColor');
@@ -2746,10 +2766,12 @@ body::before {
                 const trigger = dropdown.querySelector('.dropdown-trigger');
                 const triggerText = trigger.querySelector('.trigger-text');
                 const triggerIcon = trigger.querySelector('.trigger-icon');
+                const triggerCount = trigger.querySelector('.filter-count');
 
                 // Get the selected item's text (excluding the count span)
                 const itemText = this.childNodes[2].textContent.trim();
                 const itemIcon = this.querySelector('svg').cloneNode(true);
+                const itemCount = this.querySelector('.filter-count').textContent;
 
                 // Clear all active states
                 clearAllActiveStates();
@@ -2757,10 +2779,11 @@ body::before {
                 // Mark this item as active
                 this.classList.add('active');
 
-                // Update trigger text and icon to show selected item
+                // Update trigger text, icon, and count to show selected item
                 triggerText.textContent = itemText;
                 triggerIcon.replaceWith(itemIcon);
                 itemIcon.classList.add('trigger-icon');
+                triggerCount.textContent = itemCount;
 
                 // Update trigger styling
                 if (this.classList.contains('danger')) {
