@@ -945,6 +945,114 @@ body::before {
     border-radius: 10px;
 }
 
+/* Filter Dropdown Styles */
+.filter-dropdown {
+    position: relative;
+}
+
+.dropdown-trigger {
+    position: relative;
+}
+
+.dropdown-trigger .dropdown-arrow {
+    width: 14px;
+    height: 14px;
+    margin-left: 4px;
+    transition: transform 0.2s;
+}
+
+.filter-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 220px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow-hover);
+    padding: 8px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+}
+
+.filter-dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-family);
+    text-align: left;
+}
+
+.dropdown-item:hover {
+    background: var(--nav-hover-bg);
+    color: var(--text-primary);
+}
+
+.dropdown-item.active {
+    background: var(--primary-100);
+    color: var(--primary-500);
+}
+
+.dropdown-item svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.dropdown-item .filter-count {
+    margin-left: auto;
+}
+
+.dropdown-item.danger {
+    color: #EF4444;
+}
+
+.dropdown-item.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.dropdown-item.danger .filter-count {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+
+/* Active state for dropdown triggers */
+.dropdown-trigger.has-active {
+    background: var(--nav-active-bg);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+.dropdown-trigger.has-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    border-color: #EF4444;
+}
+
 /* ========================================
    INTERVIEW CARDS GRID
    ======================================== */
@@ -2286,84 +2394,90 @@ body::before {
                         <h1 class="page-title">Interviews</h1>
                     </div>
 
-                    <!-- Filter Bar - Jay's 9 Official Status Labels -->
+                    <!-- Filter Bar - Grouped Dropdowns -->
                     <div class="filter-bar">
                         <button class="filter-btn active" data-filter="all">
                             All
                             <span class="filter-count" id="countAll">0</span>
                         </button>
-                        <button class="filter-btn" data-filter="active">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="6"/>
-                            </svg>
-                            Active
-                            <span class="filter-count" id="countActive">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="in_progress">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                            In Progress
-                            <span class="filter-count" id="countInProgress">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="awaiting_approval">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                            Awaiting Approval
-                            <span class="filter-count" id="countAwaiting">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="in_review">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3"/>
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            </svg>
-                            In Review
-                            <span class="filter-count" id="countInReview">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="in_revision">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="23 4 23 10 17 10"/>
-                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-                            </svg>
-                            In Revision
-                            <span class="filter-count" id="countInRevision">0</span>
-                        </button>
-                        <button class="filter-btn danger" data-filter="overdue">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                                <line x1="12" y1="9" x2="12" y2="13"/>
-                                <line x1="12" y1="17" x2="12.01" y2="17"/>
-                            </svg>
-                            Overdue
-                            <span class="filter-count" id="countOverdue">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="complete">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                <polyline points="22 4 12 14.01 9 11.01"/>
-                            </svg>
-                            Complete
-                            <span class="filter-count" id="countComplete">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="draft">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                            </svg>
-                            Draft
-                            <span class="filter-count" id="countDraft">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="archived">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="21 8 21 21 3 21 3 8"/>
-                                <rect x="1" y="3" width="22" height="5"/>
-                                <line x1="10" y1="12" x2="14" y2="12"/>
-                            </svg>
-                            Archived
-                            <span class="filter-count" id="countArchived">0</span>
-                        </button>
+
+                        <!-- Active Workflow Dropdown -->
+                        <div class="filter-dropdown">
+                            <button class="filter-btn dropdown-trigger" id="activeWorkflowBtn">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                    <circle cx="12" cy="12" r="6"/>
+                                </svg>
+                                Active Workflow
+                                <span class="filter-count" id="countActiveWorkflow">0</span>
+                                <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu" id="activeWorkflowMenu">
+                                <button class="dropdown-item" data-filter="active">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                                    Active
+                                    <span class="filter-count" id="countActive">0</span>
+                                </button>
+                                <button class="dropdown-item" data-filter="in_progress">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                    In Progress
+                                    <span class="filter-count" id="countInProgress">0</span>
+                                </button>
+                                <button class="dropdown-item" data-filter="awaiting_approval">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    Awaiting Approval
+                                    <span class="filter-count" id="countAwaiting">0</span>
+                                </button>
+                                <button class="dropdown-item" data-filter="in_review">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+                                    In Review
+                                    <span class="filter-count" id="countInReview">0</span>
+                                </button>
+                                <button class="dropdown-item" data-filter="in_revision">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                    In Revision
+                                    <span class="filter-count" id="countInRevision">0</span>
+                                </button>
+                                <button class="dropdown-item danger" data-filter="overdue">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                    Overdue
+                                    <span class="filter-count" id="countOverdue">0</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Completed Dropdown -->
+                        <div class="filter-dropdown">
+                            <button class="filter-btn dropdown-trigger" id="completedBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                Completed
+                                <span class="filter-count" id="countCompletedGroup">0</span>
+                                <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu" id="completedMenu">
+                                <button class="dropdown-item" data-filter="complete">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    Complete
+                                    <span class="filter-count" id="countComplete">0</span>
+                                </button>
+                                <button class="dropdown-item" data-filter="draft">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    Draft
+                                    <span class="filter-count" id="countDraft">0</span>
+                                </button>
+                                <button class="dropdown-item" data-filter="archived">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+                                    Archived
+                                    <span class="filter-count" id="countArchived">0</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Loading State -->
@@ -2521,8 +2635,14 @@ body::before {
                 }
             });
 
+            // Calculate grouped counts
+            const activeWorkflowCount = counts.active + counts.in_progress + counts.awaiting_approval + counts.in_review + counts.in_revision + counts.overdue;
+            const completedGroupCount = counts.complete + counts.draft + counts.archived;
+
             // Update all count elements
             document.getElementById('countAll').textContent = counts.all;
+            document.getElementById('countActiveWorkflow').textContent = activeWorkflowCount;
+            document.getElementById('countCompletedGroup').textContent = completedGroupCount;
             document.getElementById('countActive').textContent = counts.active;
             document.getElementById('countInProgress').textContent = counts.in_progress;
             document.getElementById('countAwaiting').textContent = counts.awaiting_approval;
@@ -2571,14 +2691,69 @@ body::before {
         }
 
         // Filter button handlers
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                applyFilters();
+        // Handle "All" button
+        document.querySelector('.filter-btn[data-filter="all"]').addEventListener('click', function() {
+            clearAllActiveStates();
+            this.classList.add('active');
+            currentFilter = 'all';
+            applyFilters();
+            closeAllDropdowns();
+        });
+
+        // Dropdown toggle handlers
+        document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dropdown = trigger.closest('.filter-dropdown');
+                const isOpen = dropdown.classList.contains('open');
+                closeAllDropdowns();
+                if (!isOpen) {
+                    dropdown.classList.add('open');
+                }
             });
         });
+
+        // Dropdown item handlers
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const filter = this.dataset.filter;
+                const dropdown = this.closest('.filter-dropdown');
+                const trigger = dropdown.querySelector('.dropdown-trigger');
+
+                // Clear all active states
+                clearAllActiveStates();
+
+                // Mark this item as active
+                this.classList.add('active');
+
+                // Update trigger styling
+                if (this.classList.contains('danger')) {
+                    trigger.classList.add('has-danger');
+                } else {
+                    trigger.classList.add('has-active');
+                }
+
+                // Apply filter
+                currentFilter = filter;
+                applyFilters();
+                closeAllDropdowns();
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', closeAllDropdowns);
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.remove('open'));
+        }
+
+        function clearAllActiveStates() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.dropdown-trigger').forEach(t => {
+                t.classList.remove('has-active', 'has-danger');
+            });
+        }
 
         // Search handler
         document.getElementById('searchInput').addEventListener('input', (e) => {
