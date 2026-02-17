@@ -404,6 +404,43 @@ body::before {
     height: 16px;
 }
 
+/* Client Filter Dropdown */
+.client-filter {
+    margin-left: 24px;
+}
+
+.client-filter select {
+    padding: 10px 36px 10px 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    min-width: 160px;
+    transition: all 0.2s;
+}
+
+.client-filter select:hover {
+    border-color: var(--primary-500);
+}
+
+.client-filter select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+[data-theme="dark"] .client-filter select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A3A3A3' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
 /* Header Actions */
 .header-actions {
     display: flex;
@@ -883,7 +920,7 @@ body::before {
    ======================================== */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     margin-bottom: 24px;
 }
@@ -897,6 +934,24 @@ body::before {
     padding: 24px;
     box-shadow: var(--glass-shadow);
     transition: all 0.3s ease;
+}
+
+/* Overdue Metric Card - Special Styling */
+.metric-card.overdue {
+    border-left: 4px solid var(--error);
+}
+
+.metric-card.overdue .metric-title {
+    color: var(--error);
+}
+
+.metric-card.overdue .value {
+    color: var(--error);
+}
+
+.metric-card.overdue .metric-badge {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
     display: flex;
     flex-direction: column;
 }
@@ -1416,6 +1471,13 @@ body::before {
                     <span class="current">Overview</span>
                 </div>
 
+                <!-- Client Filter Dropdown -->
+                <div class="client-filter">
+                    <select id="clientFilter" onchange="filterByClient()">
+                        <option value="all">All Clients</option>
+                    </select>
+                </div>
+
                 <div class="header-actions">
                     <div class="search-bar">
                         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1507,7 +1569,7 @@ body::before {
 
                     <div class="metric-card">
                         <div class="metric-header">
-                            <span class="metric-title">Scheduled</span>
+                            <span class="metric-title">Active</span>
                         </div>
                         <div class="metric-value">
                             <span class="value" id="pendingClients">--</span>
@@ -1515,6 +1577,21 @@ body::before {
                         <div class="metric-progress">
                             <div class="progress-bar">
                                 <div class="progress-fill" id="pendingProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card overdue">
+                        <div class="metric-header">
+                            <span class="metric-title">Overdue</span>
+                            <span class="metric-badge" id="overdueBadge">Needs Attention</span>
+                        </div>
+                        <div class="metric-value">
+                            <span class="value" id="overdueCount">0</span>
+                        </div>
+                        <div class="metric-progress">
+                            <div class="progress-bar" style="background: rgba(239, 68, 68, 0.2);">
+                                <div class="progress-fill" id="overdueProgress" style="width: 0%; background: #EF4444;"></div>
                             </div>
                         </div>
                     </div>
@@ -1650,6 +1727,8 @@ body::before {
         // ========================================
         // FETCH DASHBOARD DATA
         // ========================================
+        let allInterviews = []; // Store all interviews for filtering
+
         async function fetchDashboardData() {
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?select=*&order=scheduled_at.desc`, {
@@ -1662,16 +1741,41 @@ body::before {
                 if (!response.ok) throw new Error('Failed to fetch data');
                 const interviews = await response.json();
 
-                // Calculate metrics
-                const total = interviews.length;
-                const completed = interviews.filter(i => i.status === 'completed').length;
-                const scheduled = interviews.filter(i => i.status === 'scheduled').length;
+                // Store globally for filtering
+                allInterviews = interviews;
+
+                // Populate client filter dropdown (only on first load)
+                populateClientFilter(interviews);
+
+                // Apply client filter if one is selected
+                const selectedClient = document.getElementById('clientFilter').value;
+                const filteredInterviews = selectedClient === 'all'
+                    ? interviews
+                    : interviews.filter(i => i.company_name === selectedClient || i.client_name === selectedClient);
+
+                // Calculate metrics from filtered data
+                const displayInterviews = filteredInterviews;
+                const total = displayInterviews.length;
+                const completed = displayInterviews.filter(i => i.status === 'completed' || i.status === 'complete').length;
+
+                // Active interviews (scheduled, active, in_progress)
+                const activeStatuses = ['scheduled', 'active', 'in_progress'];
+                const active = displayInterviews.filter(i => activeStatuses.includes(i.status)).length;
+
+                // Overdue calculation - interviews past deadline in active statuses
+                const now = new Date();
+                const overdue = displayInterviews.filter(i => {
+                    const deadline = new Date(i.deadline_at || i.scheduled_at);
+                    const overdueStatuses = ['scheduled', 'active', 'in_progress', 'in_revision'];
+                    return overdueStatuses.includes(i.status) && deadline < now;
+                }).length;
+
                 const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
                 // Calculate quality score (based on answered questions)
                 let totalQuality = 0;
                 let qualityCount = 0;
-                interviews.filter(i => i.status === 'completed').forEach(interview => {
+                displayInterviews.filter(i => i.status === 'completed' || i.status === 'complete').forEach(interview => {
                     let answered = 0;
                     const questions = ['q1_primary_avatar', 'q2_customer_need', 'q3_biggest_mistake',
                         'q4_pain_point_1', 'q5_trigger_to_seek', 'q6_topic_1', 'q7_cost_of_inaction',
@@ -1688,8 +1792,23 @@ body::before {
                 // Update UI
                 document.getElementById('totalInterviews').textContent = total;
                 document.getElementById('interviewsTrendValue').textContent = completed;
-                document.getElementById('pendingClients').textContent = scheduled;
-                document.getElementById('pendingProgress').style.width = `${total > 0 ? (scheduled / total) * 100 : 0}%`;
+                document.getElementById('pendingClients').textContent = active;
+                document.getElementById('pendingProgress').style.width = `${total > 0 ? (active / total) * 100 : 0}%`;
+
+                // Update overdue metric
+                document.getElementById('overdueCount').textContent = overdue;
+                document.getElementById('overdueProgress').style.width = `${total > 0 ? (overdue / total) * 100 : 0}%`;
+                // Update overdue badge text based on count
+                const overdueBadge = document.getElementById('overdueBadge');
+                if (overdue === 0) {
+                    overdueBadge.textContent = 'All Good';
+                    overdueBadge.style.background = 'rgba(34, 197, 94, 0.15)';
+                    overdueBadge.style.color = '#22C55E';
+                } else {
+                    overdueBadge.textContent = 'Needs Attention';
+                    overdueBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+                    overdueBadge.style.color = '#EF4444';
+                }
                 document.getElementById('avgQuality').textContent = avgQuality;
                 document.getElementById('qualityBadge').textContent = avgQuality > 0 ? `${avgQuality}/10` : '--';
                 document.getElementById('completionRate').textContent = `${completionRate}%`;
@@ -1703,7 +1822,7 @@ body::before {
                 updateQualityStars(parseFloat(avgQuality));
 
                 // Update recent activity
-                updateRecentActivity(interviews.slice(0, 5));
+                updateRecentActivity(displayInterviews.slice(0, 5));
 
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -1782,6 +1901,27 @@ body::before {
             if (diff < 86400) return `${Math.floor(diff / 3600)} hour${Math.floor(diff / 3600) > 1 ? 's' : ''} ago`;
             if (diff < 604800) return `${Math.floor(diff / 86400)} day${Math.floor(diff / 86400) > 1 ? 's' : ''} ago`;
             return date.toLocaleDateString();
+        }
+
+        // Populate client filter dropdown
+        let clientFilterPopulated = false;
+        function populateClientFilter(interviews) {
+            if (clientFilterPopulated) return;
+            const select = document.getElementById('clientFilter');
+            const clients = [...new Set(interviews.map(i => i.company_name || i.client_name).filter(Boolean))];
+            clients.sort().forEach(client => {
+                const option = document.createElement('option');
+                option.value = client;
+                option.textContent = client;
+                select.appendChild(option);
+            });
+            clientFilterPopulated = true;
+        }
+
+        // Filter dashboard by selected client
+        function filterByClient() {
+            // Re-fetch and re-calculate metrics with filter applied
+            fetchDashboardData();
         }
 
         // Load data on page load

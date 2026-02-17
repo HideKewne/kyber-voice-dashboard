@@ -955,6 +955,22 @@ body::before {
     border-color: var(--primary-500);
 }
 
+.filter-btn.danger {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.filter-btn.danger:hover,
+.filter-btn.danger.active {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    border-color: #EF4444;
+}
+
+.filter-btn.danger .filter-count {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+
 .filter-btn svg {
     width: 16px;
     height: 16px;
@@ -1063,14 +1079,57 @@ body::before {
     white-space: nowrap;
 }
 
+/* Jay's 9 Official Status Labels */
+.status-badge.draft {
+    background: rgba(113, 113, 122, 0.15);
+    color: #71717A;
+}
+
+.status-badge.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3B82F6;
+}
+
+.status-badge.in-progress {
+    background: rgba(6, 182, 212, 0.15);
+    color: #06B6D4;
+}
+
+.status-badge.awaiting {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+
+.status-badge.in-review {
+    background: rgba(168, 85, 247, 0.15);
+    color: #A855F7;
+}
+
+.status-badge.in-revision {
+    background: rgba(249, 115, 22, 0.15);
+    color: #F97316;
+}
+
+.status-badge.overdue {
+    background: rgba(239, 68, 68, 0.2);
+    color: #EF4444;
+    font-weight: 700;
+}
+
 .status-badge.complete {
     background: rgba(34, 197, 94, 0.15);
     color: #22C55E;
 }
 
+.status-badge.archived {
+    background: rgba(75, 85, 99, 0.15);
+    color: #4B5563;
+}
+
+/* Legacy status support */
 .status-badge.scheduled {
-    background: rgba(245, 158, 11, 0.15);
-    color: #F59E0B;
+    background: rgba(59, 130, 246, 0.15);
+    color: #3B82F6;
 }
 
 .status-badge.failed {
@@ -1079,8 +1138,8 @@ body::before {
 }
 
 .status-badge.cancelled {
-    background: rgba(113, 113, 122, 0.15);
-    color: #71717A;
+    background: rgba(75, 85, 99, 0.15);
+    color: #4B5563;
 }
 
 .status-badge.rescheduled {
@@ -1088,7 +1147,8 @@ body::before {
     color: #3B82F6;
 }
 
-[data-theme="dark"] .status-badge.rescheduled {
+[data-theme="dark"] .status-badge.rescheduled,
+[data-theme="dark"] .status-badge.active {
     background: rgba(212, 175, 55, 0.15);
     color: #D4AF37;
 }
@@ -1720,41 +1780,52 @@ body::before {
                     </div>
                 </div>
 
-                <!-- Filter Bar -->
+                <!-- Filter Bar - Jay's 9 Status Labels -->
                 <div class="filter-bar">
                     <button class="filter-btn active" data-filter="all">
                         All
                         <span class="filter-count" id="countAll">0</span>
                     </button>
-                    <button class="filter-btn" data-filter="scheduled">
+                    <button class="filter-btn" data-filter="active">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="6"/>
+                        </svg>
+                        Active
+                    </button>
+                    <button class="filter-btn" data-filter="in_progress">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        In Progress
+                    </button>
+                    <button class="filter-btn" data-filter="awaiting_approval">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
                             <polyline points="12 6 12 12 16 14"/>
                         </svg>
-                        Scheduled
+                        Awaiting Approval
                     </button>
-                    <button class="filter-btn" data-filter="completed">
+                    <button class="filter-btn danger" data-filter="overdue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        Overdue
+                    </button>
+                    <button class="filter-btn" data-filter="complete">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                             <polyline points="22 4 12 14.01 9 11.01"/>
                         </svg>
                         Complete
                     </button>
-                    <button class="filter-btn" data-filter="failed">
+                    <button class="filter-btn" data-filter="archived">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="15" y1="9" x2="9" y2="15"/>
-                            <line x1="9" y1="9" x2="15" y2="15"/>
+                            <polyline points="21 8 21 21 3 21 3 8"/>
+                            <rect x="1" y="3" width="22" height="5"/>
                         </svg>
-                        Failed
-                    </button>
-                    <button class="filter-btn" data-filter="rescheduled">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M23 4v6h-6"/>
-                            <path d="M1 20v-6h6"/>
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                        </svg>
-                        Rescheduled
+                        Archived
                     </button>
                 </div>
 
@@ -1926,20 +1997,39 @@ body::before {
         }
 
         // ========================================
-        // FILTERING & SEARCH
+        // FILTERING & SEARCH (Jay's 9 Status Labels)
         // ========================================
+
+        // Get display status - Overdue takes priority
+        function getDisplayStatus(client) {
+            const now = new Date();
+            const deadline = new Date(client.deadline_at || client.scheduled_at);
+
+            // Overdue overrides active statuses if past deadline
+            if (deadline < now && ['active', 'in_progress', 'in_revision', 'scheduled'].includes(client.status)) {
+                return 'overdue';
+            }
+            return client.status;
+        }
+
         function applyFilters() {
             filteredClients = clients.filter(client => {
+                // Get display status (handles overdue override)
+                const displayStatus = getDisplayStatus(client);
+
+                // Map legacy statuses for filtering
+                const mappedStatus = {
+                    'completed': 'complete',
+                    'scheduled': 'active',
+                    'failed': 'overdue',
+                    'cancelled': 'archived',
+                    'rescheduled': 'active'
+                }[displayStatus] || displayStatus;
+
                 // Status filter
                 let statusMatch = true;
-                if (currentFilter === 'completed') {
-                    statusMatch = client.status === 'completed';
-                } else if (currentFilter === 'scheduled') {
-                    statusMatch = client.status === 'scheduled';
-                } else if (currentFilter === 'failed') {
-                    statusMatch = client.status === 'failed';
-                } else if (currentFilter === 'rescheduled') {
-                    statusMatch = client.status === 'rescheduled' || client.status === 'cancelled';
+                if (currentFilter !== 'all') {
+                    statusMatch = mappedStatus === currentFilter;
                 }
 
                 // Search filter
@@ -1975,17 +2065,29 @@ body::before {
         });
 
         // ========================================
-        // RENDERING
+        // RENDERING (Jay's 9 Status Labels)
         // ========================================
-        function getStatusBadge(status) {
-            const statusMap = {
-                'completed': { class: 'complete', icon: '&#10003;', text: 'Complete' },
-                'scheduled': { class: 'scheduled', icon: '&#9679;', text: 'Scheduled' },
-                'failed': { class: 'failed', icon: '&#10005;', text: 'Failed' },
-                'cancelled': { class: 'cancelled', icon: '&#8856;', text: 'Cancelled' },
-                'rescheduled': { class: 'rescheduled', icon: '&#8635;', text: 'Rescheduled' }
-            };
-            const s = statusMap[status] || statusMap['scheduled'];
+        const statusMap = {
+            'draft': { class: 'draft', icon: '&#9998;', text: 'Draft' },
+            'active': { class: 'active', icon: '&#9679;', text: 'Active' },
+            'in_progress': { class: 'in-progress', icon: '&#9654;', text: 'In Progress' },
+            'awaiting_approval': { class: 'awaiting', icon: '&#9203;', text: 'Awaiting Approval' },
+            'in_review': { class: 'in-review', icon: '&#128065;', text: 'In Review' },
+            'in_revision': { class: 'in-revision', icon: '&#8634;', text: 'In Revision' },
+            'overdue': { class: 'overdue', icon: '&#9888;', text: 'Overdue' },
+            'complete': { class: 'complete', icon: '&#10003;', text: 'Complete' },
+            'archived': { class: 'archived', icon: '&#128193;', text: 'Archived' },
+            // Legacy status mapping
+            'completed': { class: 'complete', icon: '&#10003;', text: 'Complete' },
+            'scheduled': { class: 'active', icon: '&#9679;', text: 'Active' },
+            'failed': { class: 'overdue', icon: '&#9888;', text: 'Overdue' },
+            'cancelled': { class: 'archived', icon: '&#128193;', text: 'Archived' },
+            'rescheduled': { class: 'active', icon: '&#9679;', text: 'Active' }
+        };
+
+        function getStatusBadge(status, client = null) {
+            const displayStatus = client ? getDisplayStatus(client) : status;
+            const s = statusMap[displayStatus] || statusMap['active'];
             return `<span class="status-badge ${s.class}">${s.icon} ${s.text}</span>`;
         }
 

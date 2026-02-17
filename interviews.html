@@ -915,6 +915,22 @@ body::before {
     border-color: var(--primary-500);
 }
 
+.filter-btn.danger {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.filter-btn.danger:hover,
+.filter-btn.danger.active {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    border-color: #EF4444;
+}
+
+.filter-btn.danger .filter-count {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+
 .filter-btn svg {
     width: 16px;
     height: 16px;
@@ -994,14 +1010,57 @@ body::before {
     white-space: nowrap;
 }
 
+/* Jay's 9 Official Status Labels */
+.status-badge.draft {
+    background: rgba(113, 113, 122, 0.15);
+    color: #71717A;
+}
+
+.status-badge.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3B82F6;
+}
+
+.status-badge.in-progress {
+    background: rgba(6, 182, 212, 0.15);
+    color: #06B6D4;
+}
+
+.status-badge.awaiting {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+
+.status-badge.in-review {
+    background: rgba(168, 85, 247, 0.15);
+    color: #A855F7;
+}
+
+.status-badge.in-revision {
+    background: rgba(249, 115, 22, 0.15);
+    color: #F97316;
+}
+
+.status-badge.overdue {
+    background: rgba(239, 68, 68, 0.2);
+    color: #EF4444;
+    font-weight: 700;
+}
+
 .status-badge.complete {
     background: rgba(34, 197, 94, 0.15);
     color: #22C55E;
 }
 
+.status-badge.archived {
+    background: rgba(75, 85, 99, 0.15);
+    color: #4B5563;
+}
+
+/* Legacy status support (for backward compatibility) */
 .status-badge.scheduled {
-    background: rgba(245, 158, 11, 0.15);
-    color: #F59E0B;
+    background: rgba(59, 130, 246, 0.15);
+    color: #3B82F6;
 }
 
 .status-badge.failed {
@@ -1010,8 +1069,8 @@ body::before {
 }
 
 .status-badge.cancelled {
-    background: rgba(113, 113, 122, 0.15);
-    color: #71717A;
+    background: rgba(75, 85, 99, 0.15);
+    color: #4B5563;
 }
 
 .status-badge.rescheduled {
@@ -1019,7 +1078,8 @@ body::before {
     color: #3B82F6;
 }
 
-[data-theme="dark"] .status-badge.rescheduled {
+[data-theme="dark"] .status-badge.rescheduled,
+[data-theme="dark"] .status-badge.active {
     background: rgba(212, 175, 55, 0.15);
     color: #D4AF37;
 }
@@ -1966,13 +2026,60 @@ body::before {
                         <h1 class="page-title">Interviews</h1>
                     </div>
 
-                    <!-- Filter Bar -->
+                    <!-- Filter Bar - Jay's 9 Official Status Labels -->
                     <div class="filter-bar">
                         <button class="filter-btn active" data-filter="all">
                             All
                             <span class="filter-count" id="countAll">0</span>
                         </button>
-                        <button class="filter-btn" data-filter="completed">
+                        <button class="filter-btn" data-filter="active">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="6"/>
+                            </svg>
+                            Active
+                            <span class="filter-count" id="countActive">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="in_progress">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            In Progress
+                            <span class="filter-count" id="countInProgress">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="awaiting_approval">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Awaiting Approval
+                            <span class="filter-count" id="countAwaiting">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="in_review">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            </svg>
+                            In Review
+                            <span class="filter-count" id="countInReview">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="in_revision">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                            </svg>
+                            In Revision
+                            <span class="filter-count" id="countInRevision">0</span>
+                        </button>
+                        <button class="filter-btn danger" data-filter="overdue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            Overdue
+                            <span class="filter-count" id="countOverdue">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="complete">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                                 <polyline points="22 4 12 14.01 9 11.01"/>
@@ -1980,30 +2087,22 @@ body::before {
                             Complete
                             <span class="filter-count" id="countComplete">0</span>
                         </button>
-                        <button class="filter-btn" data-filter="scheduled">
+                        <button class="filter-btn" data-filter="draft">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                             </svg>
-                            Scheduled
-                            <span class="filter-count" id="countScheduled">0</span>
+                            Draft
+                            <span class="filter-count" id="countDraft">0</span>
                         </button>
-                        <button class="filter-btn" data-filter="failed">
+                        <button class="filter-btn" data-filter="archived">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="15" y1="9" x2="9" y2="15"/>
-                                <line x1="9" y1="9" x2="15" y2="15"/>
+                                <polyline points="21 8 21 21 3 21 3 8"/>
+                                <rect x="1" y="3" width="22" height="5"/>
+                                <line x1="10" y1="12" x2="14" y2="12"/>
                             </svg>
-                            Failed
-                            <span class="filter-count" id="countFailed">0</span>
-                        </button>
-                        <button class="filter-btn" data-filter="cancelled">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-                            </svg>
-                            Cancelled
-                            <span class="filter-count" id="countCancelled">0</span>
+                            Archived
+                            <span class="filter-count" id="countArchived">0</span>
                         </button>
                     </div>
 
@@ -2126,28 +2225,73 @@ body::before {
         }
 
         // ========================================
-        // FILTERING & SEARCH
+        // FILTERING & SEARCH (Jay's 9 Status Labels)
         // ========================================
         function updateFilterCounts() {
-            document.getElementById('countAll').textContent = interviews.length;
-            document.getElementById('countComplete').textContent = interviews.filter(i => i.status === 'completed').length;
-            document.getElementById('countScheduled').textContent = interviews.filter(i => i.status === 'scheduled').length;
-            document.getElementById('countFailed').textContent = interviews.filter(i => i.status === 'failed').length;
-            document.getElementById('countCancelled').textContent = interviews.filter(i => i.status === 'cancelled' || i.status === 'rescheduled').length;
+            const now = new Date();
+
+            // Count with overdue override logic
+            const counts = {
+                all: interviews.length,
+                draft: 0,
+                active: 0,
+                in_progress: 0,
+                awaiting_approval: 0,
+                in_review: 0,
+                in_revision: 0,
+                overdue: 0,
+                complete: 0,
+                archived: 0
+            };
+
+            interviews.forEach(interview => {
+                const displayStatus = getDisplayStatus(interview);
+
+                // Map legacy statuses to new ones for counting
+                const mappedStatus = {
+                    'completed': 'complete',
+                    'scheduled': 'active',
+                    'failed': 'overdue',
+                    'cancelled': 'archived',
+                    'rescheduled': 'active'
+                }[displayStatus] || displayStatus;
+
+                if (counts.hasOwnProperty(mappedStatus)) {
+                    counts[mappedStatus]++;
+                }
+            });
+
+            // Update all count elements
+            document.getElementById('countAll').textContent = counts.all;
+            document.getElementById('countActive').textContent = counts.active;
+            document.getElementById('countInProgress').textContent = counts.in_progress;
+            document.getElementById('countAwaiting').textContent = counts.awaiting_approval;
+            document.getElementById('countInReview').textContent = counts.in_review;
+            document.getElementById('countInRevision').textContent = counts.in_revision;
+            document.getElementById('countOverdue').textContent = counts.overdue;
+            document.getElementById('countComplete').textContent = counts.complete;
+            document.getElementById('countDraft').textContent = counts.draft;
+            document.getElementById('countArchived').textContent = counts.archived;
         }
 
         function applyFilters() {
             filteredInterviews = interviews.filter(interview => {
+                // Get display status (handles overdue override)
+                const displayStatus = getDisplayStatus(interview);
+
+                // Map legacy statuses for filtering
+                const mappedStatus = {
+                    'completed': 'complete',
+                    'scheduled': 'active',
+                    'failed': 'overdue',
+                    'cancelled': 'archived',
+                    'rescheduled': 'active'
+                }[displayStatus] || displayStatus;
+
                 // Status filter
                 let statusMatch = true;
-                if (currentFilter === 'completed') {
-                    statusMatch = interview.status === 'completed';
-                } else if (currentFilter === 'scheduled') {
-                    statusMatch = interview.status === 'scheduled';
-                } else if (currentFilter === 'failed') {
-                    statusMatch = interview.status === 'failed';
-                } else if (currentFilter === 'cancelled') {
-                    statusMatch = interview.status === 'cancelled' || interview.status === 'rescheduled';
+                if (currentFilter !== 'all') {
+                    statusMatch = mappedStatus === currentFilter;
                 }
 
                 // Search filter
@@ -2185,15 +2329,41 @@ body::before {
         // ========================================
         // RENDERING
         // ========================================
-        function getStatusBadge(status) {
-            const statusMap = {
-                'completed': { class: 'complete', icon: '&#10003;', text: 'Complete' },
-                'scheduled': { class: 'scheduled', icon: '&#9679;', text: 'Scheduled' },
-                'failed': { class: 'failed', icon: '&#10005;', text: 'Failed' },
-                'cancelled': { class: 'cancelled', icon: '&#8856;', text: 'Cancelled' },
-                'rescheduled': { class: 'rescheduled', icon: '&#8635;', text: 'Rescheduled' }
-            };
-            const s = statusMap[status] || statusMap['scheduled'];
+        // Jay's 9 Official Status Labels
+        const statusMap = {
+            'draft': { class: 'draft', icon: '&#9998;', text: 'Draft' },
+            'active': { class: 'active', icon: '&#9679;', text: 'Active' },
+            'in_progress': { class: 'in-progress', icon: '&#9654;', text: 'In Progress' },
+            'awaiting_approval': { class: 'awaiting', icon: '&#9203;', text: 'Awaiting Approval' },
+            'in_review': { class: 'in-review', icon: '&#128065;', text: 'In Review' },
+            'in_revision': { class: 'in-revision', icon: '&#8634;', text: 'In Revision' },
+            'overdue': { class: 'overdue', icon: '&#9888;', text: 'Overdue' },
+            'complete': { class: 'complete', icon: '&#10003;', text: 'Complete' },
+            'archived': { class: 'archived', icon: '&#128193;', text: 'Archived' },
+            // Legacy status mapping for backward compatibility
+            'completed': { class: 'complete', icon: '&#10003;', text: 'Complete' },
+            'scheduled': { class: 'active', icon: '&#9679;', text: 'Active' },
+            'failed': { class: 'overdue', icon: '&#9888;', text: 'Overdue' },
+            'cancelled': { class: 'archived', icon: '&#128193;', text: 'Archived' },
+            'rescheduled': { class: 'active', icon: '&#9679;', text: 'Active' }
+        };
+
+        // Get display status - Overdue takes priority over other active statuses
+        function getDisplayStatus(interview) {
+            const now = new Date();
+            const deadline = new Date(interview.deadline_at || interview.scheduled_at);
+
+            // Overdue overrides active statuses if past deadline
+            if (deadline < now && ['active', 'in_progress', 'in_revision', 'scheduled'].includes(interview.status)) {
+                return 'overdue';
+            }
+            return interview.status;
+        }
+
+        function getStatusBadge(status, interview = null) {
+            // If interview provided, check for overdue override
+            const displayStatus = interview ? getDisplayStatus(interview) : status;
+            const s = statusMap[displayStatus] || statusMap['active'];
             return `<span class="status-badge ${s.class}">${s.icon} ${s.text}</span>`;
         }
 
@@ -2284,7 +2454,7 @@ body::before {
                                 <div class="interview-company">${interview.company_name || 'Unknown Company'}</div>
                                 <div class="interview-client">${interview.client_name || 'Unknown Client'}</div>
                             </div>
-                            ${getStatusBadge(interview.status)}
+                            ${getStatusBadge(interview.status, interview)}
                         </div>
                         <div class="interview-card-meta">
                             <div class="meta-item">
@@ -2441,7 +2611,7 @@ body::before {
                             </button>
                         </div>
                     </div>
-                    ${getStatusBadge(interview.status)}
+                    ${getStatusBadge(interview.status, interview)}
                 </div>
 
                 <!-- AI Summary Card -->
