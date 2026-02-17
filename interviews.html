@@ -1306,10 +1306,123 @@ body::before {
 .quality-bar-fill.depth { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
 .quality-bar-fill.completeness { background: linear-gradient(90deg, #22C55E, #4ADE80); }
 .quality-bar-fill.relevance { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+.quality-bar-fill.avatar { background: linear-gradient(90deg, #8B5CF6, #A78BFA); }
+.quality-bar-fill.problem { background: linear-gradient(90deg, #EC4899, #F472B6); }
+.quality-bar-fill.stakes { background: linear-gradient(90deg, #EF4444, #F87171); }
+.quality-bar-fill.proof { background: linear-gradient(90deg, #22C55E, #4ADE80); }
+.quality-bar-fill.specificity { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
 
 [data-theme="dark"] .quality-bar-fill.depth { background: linear-gradient(90deg, #D4AF37, #E5C466); }
 [data-theme="dark"] .quality-bar-fill.completeness { background: linear-gradient(90deg, #22C55E, #4ADE80); }
 [data-theme="dark"] .quality-bar-fill.relevance { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+[data-theme="dark"] .quality-bar-fill.avatar { background: linear-gradient(90deg, #D4AF37, #E5C466); }
+[data-theme="dark"] .quality-bar-fill.problem { background: linear-gradient(90deg, #EC4899, #F472B6); }
+[data-theme="dark"] .quality-bar-fill.stakes { background: linear-gradient(90deg, #EF4444, #F87171); }
+[data-theme="dark"] .quality-bar-fill.proof { background: linear-gradient(90deg, #22C55E, #4ADE80); }
+[data-theme="dark"] .quality-bar-fill.specificity { background: linear-gradient(90deg, #D4AF37, #E5C466); }
+
+/* AI Suggestions */
+.ai-suggestions {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--glass-bg);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--primary-500);
+}
+
+.ai-suggestions-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-500);
+    margin-bottom: 12px;
+}
+
+.ai-suggestions-title svg {
+    width: 16px;
+    height: 16px;
+}
+
+.ai-suggestion-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.ai-suggestion-item:last-child {
+    margin-bottom: 0;
+}
+
+.ai-suggestion-item::before {
+    content: "→";
+    color: var(--primary-500);
+    flex-shrink: 0;
+}
+
+.ai-feedback {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: rgba(59, 130, 246, 0.08);
+    border-radius: var(--radius-sm);
+}
+
+[data-theme="dark"] .ai-feedback {
+    background: rgba(212, 175, 55, 0.08);
+}
+
+.ai-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.ai-loading .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--primary-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.refresh-ai-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+}
+
+.refresh-ai-btn:hover {
+    background: var(--glass-bg);
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+.refresh-ai-btn svg {
+    width: 14px;
+    height: 14px;
+}
 
 .quality-score-total {
     display: flex;
@@ -2949,6 +3062,160 @@ body::before {
             };
         }
 
+        // AI Quality Scoring via Gemini 3 Flash
+        const AI_SCORE_WEBHOOK = 'https://www.n8n.fairintech.com/webhook/c41832c5-4824-46fd-923d-41fd6cfc053c';
+        const aiScoreCache = new Map(); // Cache AI scores by interview ID
+
+        async function fetchAIScore(interview) {
+            // Check cache first
+            if (aiScoreCache.has(interview.id)) {
+                return aiScoreCache.get(interview.id);
+            }
+
+            try {
+                const response = await fetch(AI_SCORE_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        interview: {
+                            q1_primary_avatar: interview.q1_primary_avatar,
+                            q2_customer_need: interview.q2_customer_need,
+                            q3_biggest_mistake: interview.q3_biggest_mistake,
+                            q4_pain_point_1: interview.q4_pain_point_1,
+                            q4_severity_1: interview.q4_severity_1,
+                            q4_root_cause_1: interview.q4_root_cause_1,
+                            q5_trigger_to_seek: interview.q5_trigger_to_seek,
+                            q7_cost_of_inaction: interview.q7_cost_of_inaction,
+                            q8_complaints_to_friends: interview.q8_complaints_to_friends,
+                            q9_roles_responsibilities: interview.q9_roles_responsibilities,
+                            q10_biggest_headache: interview.q10_biggest_headache,
+                            q11_reports_to: interview.q11_reports_to,
+                            q12_decision_influencers: interview.q12_decision_influencers,
+                            q13_success_story: interview.q13_success_story,
+                            q14_why_couldnt_solve_alone: interview.q14_why_couldnt_solve_alone,
+                            q15_what_already_tried: interview.q15_what_already_tried,
+                            q16_initial_findings: interview.q16_initial_findings,
+                            q17_recommended_solution: interview.q17_recommended_solution,
+                            q18_results_achieved: interview.q18_results_achieved
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    aiScoreCache.set(interview.id, data);
+                    return data;
+                }
+                return null;
+            } catch (error) {
+                console.error('AI Score fetch error:', error);
+                return null;
+            }
+        }
+
+        function renderAIQualityBreakdown(aiScore, interviewId) {
+            if (!aiScore || !aiScore.success) {
+                return `
+                    <div class="ai-loading">
+                        <div class="spinner"></div>
+                        Analyzing with Gemini 3 Flash...
+                    </div>
+                `;
+            }
+
+            const { scores, overall, feedback, suggestions } = aiScore;
+
+            return `
+                <div class="ai-feedback">${feedback}</div>
+                <div class="quality-metric">
+                    <div class="quality-metric-header">
+                        <span class="quality-metric-label">Avatar Clarity</span>
+                        <span class="quality-metric-value">${scores.avatar_clarity}%</span>
+                    </div>
+                    <div class="quality-bar">
+                        <div class="quality-bar-fill avatar" style="width: ${scores.avatar_clarity}%"></div>
+                    </div>
+                </div>
+                <div class="quality-metric">
+                    <div class="quality-metric-header">
+                        <span class="quality-metric-label">Problem Depth</span>
+                        <span class="quality-metric-value">${scores.problem_depth}%</span>
+                    </div>
+                    <div class="quality-bar">
+                        <div class="quality-bar-fill problem" style="width: ${scores.problem_depth}%"></div>
+                    </div>
+                </div>
+                <div class="quality-metric">
+                    <div class="quality-metric-header">
+                        <span class="quality-metric-label">Stakes Clarity</span>
+                        <span class="quality-metric-value">${scores.stakes_clarity}%</span>
+                    </div>
+                    <div class="quality-bar">
+                        <div class="quality-bar-fill stakes" style="width: ${scores.stakes_clarity}%"></div>
+                    </div>
+                </div>
+                <div class="quality-metric">
+                    <div class="quality-metric-header">
+                        <span class="quality-metric-label">Proof Quality</span>
+                        <span class="quality-metric-value">${scores.proof_quality}%</span>
+                    </div>
+                    <div class="quality-bar">
+                        <div class="quality-bar-fill proof" style="width: ${scores.proof_quality}%"></div>
+                    </div>
+                </div>
+                <div class="quality-metric">
+                    <div class="quality-metric-header">
+                        <span class="quality-metric-label">Specificity</span>
+                        <span class="quality-metric-value">${scores.specificity}%</span>
+                    </div>
+                    <div class="quality-bar">
+                        <div class="quality-bar-fill specificity" style="width: ${scores.specificity}%"></div>
+                    </div>
+                </div>
+                <div class="quality-score-total">
+                    <span class="quality-score-number">${(overall / 10).toFixed(1)}</span>
+                    <span class="quality-score-label">/ 10 AI Score</span>
+                </div>
+                ${suggestions && suggestions.length > 0 ? `
+                <div class="ai-suggestions">
+                    <div class="ai-suggestions-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        Suggestions to Improve Score
+                    </div>
+                    ${suggestions.map(s => `<div class="ai-suggestion-item">${s}</div>`).join('')}
+                </div>
+                ` : ''}
+                <button class="refresh-ai-btn" onclick="refreshAIScore('${interviewId}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Refresh AI Analysis
+                </button>
+            `;
+        }
+
+        async function refreshAIScore(interviewId) {
+            aiScoreCache.delete(interviewId);
+            const interview = interviews.find(i => i.id === interviewId);
+            if (interview) {
+                // Show loading state
+                const container = document.getElementById('aiQualityContainer');
+                if (container) {
+                    container.innerHTML = renderAIQualityBreakdown(null, interviewId);
+                }
+                // Fetch new score
+                const aiScore = await fetchAIScore(interview);
+                if (container) {
+                    container.innerHTML = renderAIQualityBreakdown(aiScore, interviewId);
+                }
+            }
+        }
+
         function formatDate(dateString) {
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
@@ -3044,7 +3311,7 @@ body::before {
         // ========================================
         // EXPANDED VIEW
         // ========================================
-        function openInterview(id) {
+        async function openInterview(id) {
             const interview = interviews.find(i => i.id === id);
             if (!interview) return;
 
@@ -3054,6 +3321,9 @@ body::before {
 
             cardGrid.classList.add('hidden');
             expandedView.classList.add('active');
+
+            // Store current interview ID for AI score refresh
+            window.currentInterviewId = id;
 
             // Build pain points HTML
             const painPoints = [];
@@ -3175,7 +3445,7 @@ body::before {
                     </ul>
                 </div>
 
-                <!-- AI Quality Breakdown -->
+                <!-- AI Quality Breakdown (Gemini 3 Flash) -->
                 <div class="quality-breakdown">
                     <div class="quality-breakdown-title">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -3184,37 +3454,13 @@ body::before {
                             <path d="M6 20v-4"/>
                         </svg>
                         AI Quality Analysis
+                        <span style="font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: auto;">Powered by Gemini 3 Flash</span>
                     </div>
-                    <div class="quality-metric">
-                        <div class="quality-metric-header">
-                            <span class="quality-metric-label">Depth (avg ${quality.avgWordCount} words/answer)</span>
-                            <span class="quality-metric-value">${quality.depthScore}%</span>
+                    <div id="aiQualityContainer">
+                        <div class="ai-loading">
+                            <div class="spinner"></div>
+                            Analyzing with Gemini 3 Flash...
                         </div>
-                        <div class="quality-bar">
-                            <div class="quality-bar-fill depth" style="width: ${quality.depthScore}%"></div>
-                        </div>
-                    </div>
-                    <div class="quality-metric">
-                        <div class="quality-metric-header">
-                            <span class="quality-metric-label">Completeness (substantive answers)</span>
-                            <span class="quality-metric-value">${quality.completenessScore}%</span>
-                        </div>
-                        <div class="quality-bar">
-                            <div class="quality-bar-fill completeness" style="width: ${quality.completenessScore}%"></div>
-                        </div>
-                    </div>
-                    <div class="quality-metric">
-                        <div class="quality-metric-header">
-                            <span class="quality-metric-label">Relevance (keyword matching)</span>
-                            <span class="quality-metric-value">${quality.relevanceScore}%</span>
-                        </div>
-                        <div class="quality-bar">
-                            <div class="quality-bar-fill relevance" style="width: ${quality.relevanceScore}%"></div>
-                        </div>
-                    </div>
-                    <div class="quality-score-total">
-                        <span class="quality-score-number">${quality.aiScore}</span>
-                        <span class="quality-score-label">/ 10 AI Score</span>
                     </div>
 
                     <!-- Review Actions (only show for awaiting_approval, in_review statuses) -->
@@ -3323,6 +3569,14 @@ body::before {
 
             // Initialize accordion functionality
             initAccordion();
+
+            // Fetch and display AI Quality Score (async)
+            fetchAIScore(interview).then(aiScore => {
+                const container = document.getElementById('aiQualityContainer');
+                if (container) {
+                    container.innerHTML = renderAIQualityBreakdown(aiScore, interview.id);
+                }
+            });
         }
 
         function closeInterview() {
