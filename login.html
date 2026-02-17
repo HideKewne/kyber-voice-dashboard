@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyber - Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary-500: #3B82F6;
+    --primary-600: #2563EB;
+    --primary-400: #60A5FA;
+    --primary-100: #DBEAFE;
+    --gray-50: #FAFAFA;
+    --gray-100: #F4F4F5;
+    --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8;
+    --gray-400: #A1A1AA;
+    --gray-500: #71717A;
+    --gray-600: #52525B;
+    --gray-700: #3F3F46;
+    --gray-800: #27272A;
+    --gray-900: #18181B;
+    --white: #FFFFFF;
+    --success: #22C55E;
+    --error: #EF4444;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg-strong: rgba(255, 255, 255, 0.92);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.7);
+    --glass-blur: 24px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --bg-gradient: linear-gradient(145deg, #E8EEF4 0%, #F0F4F8 50%, #EBF0F6 100%);
+    --bg-blobs: radial-gradient(ellipse 700px 500px at 8% 15%, rgba(147, 197, 253, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 600px 450px at 92% 85%, rgba(191, 219, 254, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 550px 400px at 85% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-600);
+    --text-muted: var(--gray-500);
+    --border-color: var(--gray-200);
+    --card-bg: var(--white);
+    --input-bg: var(--white);
+    --focus-ring: rgba(59, 130, 246, 0.15);
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --theme-transition: 0.3s ease;
+}
+
+[data-theme="dark"] {
+    --primary-500: #D4AF37;
+    --primary-600: #B8952D;
+    --primary-400: #E5C466;
+    --primary-100: rgba(212, 175, 55, 0.2);
+    --gray-50: #1A1A1A;
+    --gray-200: #2D2D2D;
+    --gray-900: #FFFFFF;
+    --white: #0D0D0D;
+    --glass-bg: rgba(20, 20, 20, 0.6);
+    --glass-bg-strong: rgba(20, 20, 20, 0.85);
+    --glass-border: 1px solid rgba(212, 175, 55, 0.25);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.08);
+    --bg-gradient: linear-gradient(145deg, #0A0A0A 0%, #141414 50%, #0D0D0D 100%);
+    --bg-blobs: radial-gradient(ellipse 800px 600px at 5% 10%, rgba(212, 175, 55, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 700px 500px at 95% 90%, rgba(212, 175, 55, 0.3) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 450px at 90% 5%, rgba(184, 149, 45, 0.25) 0%, transparent 50%);
+    --text-primary: #FFFFFF;
+    --text-secondary: #A3A3A3;
+    --text-muted: #737373;
+    --border-color: rgba(212, 175, 55, 0.2);
+    --card-bg: #1A1A1A;
+    --input-bg: #1A1A1A;
+    --focus-ring: rgba(212, 175, 55, 0.2);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+    font-family: var(--font-family);
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    transition: background var(--theme-transition), color var(--theme-transition);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-blobs);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+}
+
+.login-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    padding: 48px 40px;
+    transition: all var(--theme-transition);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.logo-icon {
+    width: 48px; height: 48px;
+    color: var(--primary-500);
+    transition: color var(--theme-transition);
+}
+
+.logo-text {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--primary-500);
+    transition: color var(--theme-transition);
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 15px;
+    font-family: var(--font-family);
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.password-toggle:hover {
+    color: var(--primary-500);
+}
+
+.password-toggle svg {
+    width: 20px; height: 20px;
+}
+
+.form-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.remember-me input {
+    width: 18px; height: 18px;
+    accent-color: var(--primary-500);
+    cursor: pointer;
+}
+
+.remember-me span {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.forgot-link {
+    font-size: 14px;
+    color: var(--primary-500);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--primary-600);
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-500);
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.login-btn:hover {
+    background: var(--primary-600);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+[data-theme="dark"] .login-btn {
+    color: #0D0D0D;
+}
+
+[data-theme="dark"] .login-btn:hover {
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.login-btn .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+[data-theme="dark"] .login-btn .spinner {
+    border-color: rgba(0,0,0,0.2);
+    border-top-color: #0D0D0D;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 28px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.divider span {
+    padding: 0 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.role-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.role-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    background: var(--glass-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.role-btn:hover {
+    border-color: var(--primary-400);
+    background: var(--primary-100);
+}
+
+.role-btn.active {
+    border-color: var(--primary-500);
+    background: var(--primary-100);
+}
+
+.role-btn svg {
+    width: 32px; height: 32px;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.role-btn.active svg {
+    color: var(--primary-500);
+}
+
+.role-btn span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.role-btn.active span {
+    color: var(--primary-500);
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.signup-link a {
+    color: var(--primary-500);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #EF4444;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    background: var(--glass-bg-strong);
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.theme-toggle:hover {
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    position: absolute;
+    width: 22px; height: 22px;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg); }
+.theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg); }
+
+[data-theme="dark"] .theme-toggle .icon-sun { opacity: 0; transform: rotate(90deg); }
+[data-theme="dark"] .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg); }
+
+/* Demo Credentials */
+.demo-credentials {
+    background: var(--primary-100);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.demo-credentials-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-500);
+    margin-bottom: 8px;
+}
+
+.demo-credentials-item {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.demo-credentials-item strong {
+    color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 32px 24px;
+    }
+    .logo-text {
+        font-size: 32px;
+    }
+    .role-selector {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2"/>
+                        <path d="M20 4V36M4 12L36 28M36 12L4 28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="logo-text">Kyber</span>
+                </div>
+                <h1 class="login-title">Welcome back</h1>
+                <p class="login-subtitle">Sign in to access your dashboard</p>
+            </div>
+
+            <!-- Demo Credentials for Testing -->
+            <div class="demo-credentials">
+                <div class="demo-credentials-title">Demo Credentials</div>
+                <div class="demo-credentials-item"><strong>Agency:</strong> agency@kyber.io / demo123</div>
+                <div class="demo-credentials-item"><strong>Client:</strong> client@kyber.io / demo123</div>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="divider"><span>Select Role</span></div>
+
+                <div class="role-selector">
+                    <button type="button" class="role-btn active" data-role="agency" onclick="selectRole('agency')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 21h18"/>
+                            <path d="M5 21V7l8-4v18"/>
+                            <path d="M19 21V11l-6-4"/>
+                            <path d="M9 9v.01"/>
+                            <path d="M9 12v.01"/>
+                            <path d="M9 15v.01"/>
+                            <path d="M9 18v.01"/>
+                        </svg>
+                        <span>Agency</span>
+                    </button>
+                    <button type="button" class="role-btn" data-role="client" onclick="selectRole('client')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span>Client</span>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" class="form-input" id="email" placeholder="Enter your email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="password" placeholder="Enter your password" required autocomplete="current-password" style="padding-right: 48px;">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg id="eyeClosed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link" onclick="handleForgotPassword(event)">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span id="btnText">Sign In</span>
+                    <div class="spinner" id="btnSpinner" style="display: none;"></div>
+                </button>
+            </form>
+
+            <div class="signup-link">
+                Don't have an account? <a href="#" onclick="handleSignup(event)">Contact your agency</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION
+        // ========================================
+        const SUPABASE_URL = 'https://dpdtxmhxyosunfryocqn.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZHR4bWh4eW9zdW5mcnlvY3FuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDI2NTA0NywiZXhwIjoyMDY5ODQxMDQ3fQ.p_YULPZ0tCCjpDFwqRbkpf1tber8_5Q5kuP7l44ggjw';
+
+        // Demo users for testing (in production, this would be in Supabase)
+        const DEMO_USERS = {
+            'agency@kyber.io': { password: 'demo123', role: 'agency', name: 'Jay Mitchell', companyId: null },
+            'client@kyber.io': { password: 'demo123', role: 'client', name: 'Sarah Johnson', companyId: 'demo-company-1' }
+        };
+
+        // ========================================
+        // STATE
+        // ========================================
+        let selectedRole = 'agency';
+
+        // ========================================
+        // THEME TOGGLE
+        // ========================================
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('kyber-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('kyber-theme', newTheme);
+        });
+
+        // ========================================
+        // ROLE SELECTOR
+        // ========================================
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.role === role);
+            });
+        }
+
+        // ========================================
+        // PASSWORD TOGGLE
+        // ========================================
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const eyeOpen = document.getElementById('eyeOpen');
+            const eyeClosed = document.getElementById('eyeClosed');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            } else {
+                input.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            }
+        }
+
+        // ========================================
+        // LOGIN HANDLER
+        // ========================================
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const errorDiv = document.getElementById('errorMessage');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Hide previous errors
+            errorDiv.classList.remove('show');
+            errorDiv.textContent = '';
+
+            // Show loading state
+            loginBtn.disabled = true;
+            btnText.textContent = 'Signing in...';
+            btnSpinner.style.display = 'block';
+
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Check demo users first (for testing)
+                const demoUser = DEMO_USERS[email];
+                if (demoUser) {
+                    if (demoUser.password !== password) {
+                        throw new Error('Invalid password. Use "demo123" for demo accounts.');
+                    }
+                    if (demoUser.role !== selectedRole) {
+                        throw new Error(`This account is a ${demoUser.role} account. Please select the correct role.`);
+                    }
+
+                    // Successful demo login
+                    storeUserSession({
+                        email,
+                        role: demoUser.role,
+                        name: demoUser.name,
+                        companyId: demoUser.companyId
+                    }, rememberMe);
+
+                    // Redirect based on role
+                    redirectToPortal(demoUser.role);
+                    return;
+                }
+
+                // In production, authenticate with Supabase Auth
+                // For now, show error for non-demo users
+                throw new Error('Account not found. Please use the demo credentials above.');
+
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.add('show');
+            } finally {
+                loginBtn.disabled = false;
+                btnText.textContent = 'Sign In';
+                btnSpinner.style.display = 'none';
+            }
+        }
+
+        // ========================================
+        // SESSION MANAGEMENT
+        // ========================================
+        function storeUserSession(user, remember) {
+            const storage = remember ? localStorage : sessionStorage;
+            storage.setItem('kyber-user', JSON.stringify(user));
+            localStorage.setItem('kyber-user-role', user.role);
+            if (user.companyId) {
+                localStorage.setItem('kyber-company-id', user.companyId);
+            } else {
+                localStorage.removeItem('kyber-company-id');
+            }
+        }
+
+        function redirectToPortal(role) {
+            if (role === 'client') {
+                window.location.href = 'client-portal.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ========================================
+        // OTHER HANDLERS
+        // ========================================
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            alert('Password reset functionality will be implemented with Supabase Auth. For demo accounts, use "demo123".');
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            alert('New accounts are created by agency administrators. Please contact your agency to get access.');
+        }
+
+        // ========================================
+        // CHECK EXISTING SESSION
+        // ========================================
+        function checkExistingSession() {
+            const user = localStorage.getItem('kyber-user') || sessionStorage.getItem('kyber-user');
+            if (user) {
+                const userData = JSON.parse(user);
+                redirectToPortal(userData.role);
+            }
+        }
+
+        // Check on page load
+        document.addEventListener('DOMContentLoaded', checkExistingSession);
+    </script>
+</body>
+</html>

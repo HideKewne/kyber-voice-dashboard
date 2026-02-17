@@ -1130,6 +1130,266 @@ body::before {
     color: var(--text-muted);
 }
 
+/* AI Quality Breakdown */
+.quality-breakdown {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.quality-breakdown-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quality-breakdown-title svg {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-500);
+}
+
+.quality-metric {
+    margin-bottom: 16px;
+}
+
+.quality-metric:last-child {
+    margin-bottom: 0;
+}
+
+.quality-metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.quality-metric-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.quality-metric-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-500);
+}
+
+.quality-bar {
+    height: 8px;
+    background: var(--ring-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quality-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.quality-bar-fill.depth { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+.quality-bar-fill.completeness { background: linear-gradient(90deg, #22C55E, #4ADE80); }
+.quality-bar-fill.relevance { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+
+[data-theme="dark"] .quality-bar-fill.depth { background: linear-gradient(90deg, #D4AF37, #E5C466); }
+[data-theme="dark"] .quality-bar-fill.completeness { background: linear-gradient(90deg, #22C55E, #4ADE80); }
+[data-theme="dark"] .quality-bar-fill.relevance { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+
+.quality-score-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--nav-active-bg);
+    border-radius: var(--radius-md);
+    margin-top: 16px;
+}
+
+.quality-score-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-500);
+}
+
+.quality-score-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* Review Actions */
+.review-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.review-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+    border: none;
+}
+
+.review-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.review-btn.approve {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22C55E;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.review-btn.approve:hover {
+    background: #22C55E;
+    color: white;
+}
+
+.review-btn.revision {
+    background: rgba(249, 115, 22, 0.15);
+    color: #F97316;
+    border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.review-btn.revision:hover {
+    background: #F97316;
+    color: white;
+}
+
+.review-btn.reject {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.review-btn.reject:hover {
+    background: #EF4444;
+    color: white;
+}
+
+/* Revision Comment Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    transform: translateY(-20px);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.modal-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+    resize: vertical;
+    margin-bottom: 20px;
+}
+
+.modal-textarea:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+.modal-btn.cancel {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.modal-btn.cancel:hover {
+    background: var(--nav-hover-bg);
+    color: var(--text-primary);
+}
+
+.modal-btn.submit {
+    background: var(--primary-500);
+    border: none;
+    color: white;
+}
+
+[data-theme="dark"] .modal-btn.submit {
+    color: #0D0D0D;
+}
+}
+
 /* Interview Card Footer */
 .interview-card-footer {
     display: flex;
@@ -2378,9 +2638,16 @@ body::before {
                 'q18_results_achieved'
             ];
 
+            // Word counts for depth analysis
+            const wordCounts = [];
+
             questionFields.forEach(field => {
-                if (interview[field] && interview[field].trim() !== '') {
+                const answer = interview[field] || '';
+                if (answer.trim() !== '') {
                     answeredCount++;
+                    wordCounts.push(answer.split(/\s+/).filter(w => w).length);
+                } else {
+                    wordCounts.push(0);
                 }
             });
 
@@ -2396,10 +2663,55 @@ body::before {
 
             const totalPossible = 22; // 16 main + 3 pain points + 3 topics
             const percentage = (answeredCount / totalPossible) * 100;
+
+            // AI-driven quality analysis
+            // 1. Depth Score (word count per answer)
+            const avgWordCount = wordCounts.length > 0 ? wordCounts.reduce((a, b) => a + b, 0) / wordCounts.length : 0;
+            const depthScore = Math.min(avgWordCount / 50, 1) * 100; // 50+ words = 100%
+
+            // 2. Completeness Score (answers with substance)
+            const substantiveAnswers = wordCounts.filter(w => w >= 10).length;
+            const completenessScore = (substantiveAnswers / questionFields.length) * 100;
+
+            // 3. Keyword/Relevance Score (expected terms per question)
+            const keywordTemplates = {
+                'q1_primary_avatar': ['customer', 'client', 'audience', 'target', 'demographic', 'persona', 'avatar'],
+                'q2_customer_need': ['need', 'want', 'require', 'demand', 'problem', 'solution'],
+                'q4_pain_point_1': ['pain', 'problem', 'issue', 'challenge', 'struggle', 'frustration'],
+                'q7_cost_of_inaction': ['cost', 'money', 'time', 'loss', 'revenue', 'opportunity'],
+                'q13_success_story': ['result', 'outcome', 'achieve', 'success', 'improve', 'growth'],
+                'q17_recommended_solution': ['solution', 'recommend', 'suggest', 'approach', 'strategy'],
+                'q18_results_achieved': ['result', 'achieve', 'outcome', 'ROI', 'growth', 'increase', 'improve']
+            };
+
+            let keywordMatches = 0;
+            let keywordTotal = 0;
+            Object.entries(keywordTemplates).forEach(([field, keywords]) => {
+                const answer = (interview[field] || '').toLowerCase();
+                if (answer) {
+                    const found = keywords.filter(k => answer.includes(k)).length;
+                    keywordMatches += Math.min(found, 2); // Max 2 matches per field
+                    keywordTotal += 2;
+                }
+            });
+            const relevanceScore = keywordTotal > 0 ? (keywordMatches / keywordTotal) * 100 : 0;
+
+            // Composite AI Score (0-10)
+            const depthWeight = 0.35;
+            const completenessWeight = 0.40;
+            const relevanceWeight = 0.25;
+            const compositeScore = ((depthScore * depthWeight) + (completenessScore * completenessWeight) + (relevanceScore * relevanceWeight)) / 10;
+
             return {
                 answered: answeredCount,
                 total: totalPossible,
-                stars: Math.round((percentage / 100) * 5)
+                stars: Math.round((percentage / 100) * 5),
+                // AI Quality Metrics
+                depthScore: Math.round(depthScore),
+                completenessScore: Math.round(completenessScore),
+                relevanceScore: Math.round(relevanceScore),
+                aiScore: Math.round(compositeScore * 10) / 10, // 0-10 scale with 1 decimal
+                avgWordCount: Math.round(avgWordCount)
             };
         }
 
@@ -2629,6 +2941,75 @@ body::before {
                     </ul>
                 </div>
 
+                <!-- AI Quality Breakdown -->
+                <div class="quality-breakdown">
+                    <div class="quality-breakdown-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 20V10"/>
+                            <path d="M18 20V4"/>
+                            <path d="M6 20v-4"/>
+                        </svg>
+                        AI Quality Analysis
+                    </div>
+                    <div class="quality-metric">
+                        <div class="quality-metric-header">
+                            <span class="quality-metric-label">Depth (avg ${quality.avgWordCount} words/answer)</span>
+                            <span class="quality-metric-value">${quality.depthScore}%</span>
+                        </div>
+                        <div class="quality-bar">
+                            <div class="quality-bar-fill depth" style="width: ${quality.depthScore}%"></div>
+                        </div>
+                    </div>
+                    <div class="quality-metric">
+                        <div class="quality-metric-header">
+                            <span class="quality-metric-label">Completeness (substantive answers)</span>
+                            <span class="quality-metric-value">${quality.completenessScore}%</span>
+                        </div>
+                        <div class="quality-bar">
+                            <div class="quality-bar-fill completeness" style="width: ${quality.completenessScore}%"></div>
+                        </div>
+                    </div>
+                    <div class="quality-metric">
+                        <div class="quality-metric-header">
+                            <span class="quality-metric-label">Relevance (keyword matching)</span>
+                            <span class="quality-metric-value">${quality.relevanceScore}%</span>
+                        </div>
+                        <div class="quality-bar">
+                            <div class="quality-bar-fill relevance" style="width: ${quality.relevanceScore}%"></div>
+                        </div>
+                    </div>
+                    <div class="quality-score-total">
+                        <span class="quality-score-number">${quality.aiScore}</span>
+                        <span class="quality-score-label">/ 10 AI Score</span>
+                    </div>
+
+                    <!-- Review Actions (only show for awaiting_approval, in_review statuses) -->
+                    ${['awaiting_approval', 'in_review', 'submitted'].includes(interview.status) ? `
+                    <div class="review-actions">
+                        <button class="review-btn approve" onclick="approveInterview('${interview.id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Approve
+                        </button>
+                        <button class="review-btn revision" onclick="requestRevision('${interview.id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Request Revision
+                        </button>
+                        <button class="review-btn reject" onclick="rejectInterview('${interview.id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            Reject
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+
                 <!-- Content Grid -->
                 <div class="content-grid">
                     <!-- Q&A Section -->
@@ -2824,6 +3205,230 @@ body::before {
             }).catch(() => {
                 alert('Failed to copy to clipboard');
             });
+        }
+
+        // ========================================
+        // REVIEW WORKFLOW ACTIONS
+        // ========================================
+        let currentReviewInterviewId = null;
+
+        async function updateInterviewStatus(interviewId, newStatus, additionalData = {}) {
+            try {
+                const updatePayload = {
+                    status: newStatus,
+                    updated_at: new Date().toISOString(),
+                    ...additionalData
+                };
+
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?id=eq.${interviewId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(updatePayload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update interview status');
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Error updating interview status:', error);
+                return false;
+            }
+        }
+
+        async function approveInterview(interviewId) {
+            if (!confirm('Are you sure you want to approve this interview?')) return;
+
+            const success = await updateInterviewStatus(interviewId, 'complete', {
+                reviewed_at: new Date().toISOString()
+            });
+
+            if (success) {
+                // Update local state
+                const interview = interviews.find(i => i.id === interviewId);
+                if (interview) {
+                    interview.status = 'complete';
+                    interview.reviewed_at = new Date().toISOString();
+                }
+
+                // Refresh the view
+                closeInterview();
+                applyFilters();
+                renderInterviewCards();
+
+                // Show success message
+                showToast('Interview approved successfully!', 'success');
+
+                // Trigger n8n notification webhook (optional)
+                triggerNotificationWebhook(interviewId, 'approved');
+            } else {
+                showToast('Failed to approve interview. Please try again.', 'error');
+            }
+        }
+
+        function requestRevision(interviewId) {
+            currentReviewInterviewId = interviewId;
+            showRevisionModal();
+        }
+
+        function showRevisionModal() {
+            const modal = document.getElementById('revisionModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.getElementById('revisionComment').value = '';
+                document.getElementById('revisionComment').focus();
+            }
+        }
+
+        function hideRevisionModal() {
+            const modal = document.getElementById('revisionModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+            currentReviewInterviewId = null;
+        }
+
+        async function submitRevision() {
+            const comment = document.getElementById('revisionComment').value.trim();
+            if (!comment) {
+                showToast('Please provide revision feedback', 'warning');
+                return;
+            }
+
+            const success = await updateInterviewStatus(currentReviewInterviewId, 'in_revision', {
+                revision_comment: comment,
+                reviewed_at: new Date().toISOString()
+            });
+
+            if (success) {
+                // Update local state
+                const interview = interviews.find(i => i.id === currentReviewInterviewId);
+                if (interview) {
+                    interview.status = 'in_revision';
+                    interview.revision_comment = comment;
+                    interview.reviewed_at = new Date().toISOString();
+                }
+
+                hideRevisionModal();
+                closeInterview();
+                applyFilters();
+                renderInterviewCards();
+
+                showToast('Revision request sent successfully!', 'success');
+
+                // Trigger n8n notification webhook
+                triggerNotificationWebhook(currentReviewInterviewId, 'revision_requested', comment);
+            } else {
+                showToast('Failed to request revision. Please try again.', 'error');
+            }
+        }
+
+        async function rejectInterview(interviewId) {
+            const reason = prompt('Please provide a reason for rejection:');
+            if (!reason) return;
+
+            const success = await updateInterviewStatus(interviewId, 'archived', {
+                revision_comment: `Rejected: ${reason}`,
+                reviewed_at: new Date().toISOString()
+            });
+
+            if (success) {
+                // Update local state
+                const interview = interviews.find(i => i.id === interviewId);
+                if (interview) {
+                    interview.status = 'archived';
+                    interview.revision_comment = `Rejected: ${reason}`;
+                    interview.reviewed_at = new Date().toISOString();
+                }
+
+                closeInterview();
+                applyFilters();
+                renderInterviewCards();
+
+                showToast('Interview rejected and archived', 'success');
+
+                // Trigger n8n notification webhook
+                triggerNotificationWebhook(interviewId, 'rejected', reason);
+            } else {
+                showToast('Failed to reject interview. Please try again.', 'error');
+            }
+        }
+
+        // Toast notification helper
+        function showToast(message, type = 'info') {
+            // Create toast element if it doesn't exist
+            let toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toastContainer';
+                toastContainer.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 9999;';
+                document.body.appendChild(toastContainer);
+            }
+
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'rgba(34, 197, 94, 0.95)',
+                error: 'rgba(239, 68, 68, 0.95)',
+                warning: 'rgba(245, 158, 11, 0.95)',
+                info: 'rgba(59, 130, 246, 0.95)'
+            };
+            toast.style.cssText = `
+                background: ${bgColors[type]};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                margin-top: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add toast animations to head
+        if (!document.getElementById('toastStyles')) {
+            const style = document.createElement('style');
+            style.id = 'toastStyles';
+            style.textContent = `
+                @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+                @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Trigger n8n notification webhook
+        async function triggerNotificationWebhook(interviewId, action, comment = '') {
+            try {
+                const interview = interviews.find(i => i.id === interviewId);
+                await fetch('https://www.n8n.fairintech.com/webhook/kyber-review-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        interviewId,
+                        action,
+                        comment,
+                        companyName: interview?.company_name,
+                        clientName: interview?.client_name,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.log('Notification webhook not configured or failed:', error);
+            }
         }
 
         // ========================================
@@ -3038,6 +3643,21 @@ body::before {
                 <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
             </svg>
             Mark as unread
+        </div>
+    </div>
+
+    <!-- Revision Comment Modal -->
+    <div class="modal-overlay" id="revisionModal" onclick="hideRevisionModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 class="modal-title">Request Revision</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">
+                Please provide feedback on what needs to be revised. This will be sent to the client.
+            </p>
+            <textarea class="modal-textarea" id="revisionComment" placeholder="Enter your revision feedback here..."></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="hideRevisionModal()">Cancel</button>
+                <button class="modal-btn submit" onclick="submitRevision()">Send Revision Request</button>
+            </div>
         </div>
     </div>
 </body>
