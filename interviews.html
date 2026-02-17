@@ -2402,12 +2402,12 @@ body::before {
                         </button>
 
                         <!-- Active Workflow Dropdown -->
-                        <div class="filter-dropdown">
+                        <div class="filter-dropdown" data-default-text="Active Workflow">
                             <button class="filter-btn dropdown-trigger" id="activeWorkflowBtn">
-                                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <svg class="trigger-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                                     <circle cx="12" cy="12" r="6"/>
                                 </svg>
-                                Active Workflow
+                                <span class="trigger-text">Active Workflow</span>
                                 <span class="filter-count" id="countActiveWorkflow">0</span>
                                 <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"/>
@@ -2448,13 +2448,13 @@ body::before {
                         </div>
 
                         <!-- Completed Dropdown -->
-                        <div class="filter-dropdown">
+                        <div class="filter-dropdown" data-default-text="Completed">
                             <button class="filter-btn dropdown-trigger" id="completedBtn">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg class="trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                                     <polyline points="22 4 12 14.01 9 11.01"/>
                                 </svg>
-                                Completed
+                                <span class="trigger-text">Completed</span>
                                 <span class="filter-count" id="countCompletedGroup">0</span>
                                 <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"/>
@@ -2694,11 +2694,36 @@ body::before {
         // Handle "All" button
         document.querySelector('.filter-btn[data-filter="all"]').addEventListener('click', function() {
             clearAllActiveStates();
+            resetDropdownTexts();
             this.classList.add('active');
             currentFilter = 'all';
             applyFilters();
             closeAllDropdowns();
         });
+
+        // Reset dropdown trigger texts to defaults
+        function resetDropdownTexts() {
+            document.querySelectorAll('.filter-dropdown').forEach(dropdown => {
+                const defaultText = dropdown.dataset.defaultText;
+                const triggerText = dropdown.querySelector('.trigger-text');
+                if (triggerText && defaultText) {
+                    triggerText.textContent = defaultText;
+                }
+                // Reset icon to default circle for Active Workflow
+                const trigger = dropdown.querySelector('.dropdown-trigger');
+                const triggerIcon = trigger.querySelector('.trigger-icon');
+                if (trigger.id === 'activeWorkflowBtn') {
+                    triggerIcon.innerHTML = '<circle cx="12" cy="12" r="6"/>';
+                    triggerIcon.setAttribute('fill', 'currentColor');
+                    triggerIcon.removeAttribute('stroke');
+                } else if (trigger.id === 'completedBtn') {
+                    triggerIcon.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
+                    triggerIcon.setAttribute('fill', 'none');
+                    triggerIcon.setAttribute('stroke', 'currentColor');
+                    triggerIcon.setAttribute('stroke-width', '2');
+                }
+            });
+        }
 
         // Dropdown toggle handlers
         document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
@@ -2719,12 +2744,23 @@ body::before {
                 const filter = this.dataset.filter;
                 const dropdown = this.closest('.filter-dropdown');
                 const trigger = dropdown.querySelector('.dropdown-trigger');
+                const triggerText = trigger.querySelector('.trigger-text');
+                const triggerIcon = trigger.querySelector('.trigger-icon');
+
+                // Get the selected item's text (excluding the count span)
+                const itemText = this.childNodes[2].textContent.trim();
+                const itemIcon = this.querySelector('svg').cloneNode(true);
 
                 // Clear all active states
                 clearAllActiveStates();
 
                 // Mark this item as active
                 this.classList.add('active');
+
+                // Update trigger text and icon to show selected item
+                triggerText.textContent = itemText;
+                triggerIcon.replaceWith(itemIcon);
+                itemIcon.classList.add('trigger-icon');
 
                 // Update trigger styling
                 if (this.classList.contains('danger')) {
