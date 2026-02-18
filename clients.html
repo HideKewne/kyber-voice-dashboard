@@ -398,6 +398,43 @@ body::before {
     height: 16px;
 }
 
+/* Company Filter Dropdown */
+.company-filter {
+    margin-left: 24px;
+}
+
+.company-filter select {
+    padding: 10px 36px 10px 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    min-width: 180px;
+    transition: all 0.2s;
+}
+
+.company-filter select:hover {
+    border-color: var(--primary-500);
+}
+
+.company-filter select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+[data-theme="dark"] .company-filter select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A3A3A3' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
 /* Header Actions */
 .header-actions {
     display: flex;
@@ -1225,6 +1262,63 @@ body::before {
     height: 16px;
 }
 
+/* More Actions Dropdown */
+.more-actions-wrapper {
+    position: relative;
+}
+
+.more-actions-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 140px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+}
+
+.more-actions-wrapper.open .more-actions-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.more-actions-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.more-actions-item:hover {
+    background: var(--nav-hover-bg);
+    color: var(--text-primary);
+}
+
+.more-actions-item.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+.more-actions-item svg {
+    width: 14px;
+    height: 14px;
+}
+
 /* Tooltip */
 [data-tooltip] {
     position: relative;
@@ -1559,6 +1653,334 @@ body::before {
         min-width: 800px;
     }
 }
+
+/* ========================================
+   COMPANY PROFILE VIEW
+   ======================================== */
+.company-profile-view {
+    padding: 0;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-lg);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 24px;
+}
+
+.profile-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.company-icon {
+    font-size: 36px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    border-radius: var(--radius-md);
+    color: white;
+}
+
+.company-info h2 {
+    margin: 0 0 8px 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.company-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.stat-divider {
+    color: var(--border-color);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: var(--primary-500);
+    border-color: var(--primary-500);
+    color: white;
+}
+
+/* Profile Content Layout */
+.profile-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.profile-timeline,
+.profile-clients {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-lg);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 24px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.profile-timeline h3,
+.profile-clients h3 {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 46px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 0;
+    position: relative;
+}
+
+.timeline-date {
+    width: 48px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    flex-shrink: 0;
+    line-height: 20px;
+    padding-right: 6px;
+}
+
+.timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-500);
+    flex-shrink: 0;
+    z-index: 1;
+    margin-top: 5px;
+}
+
+/* Event-specific dot colors */
+.timeline-item.completed .timeline-dot { background: var(--success); }
+.timeline-item.ai_analysis .timeline-dot { background: var(--primary-500); }
+.timeline-item.call_failed .timeline-dot { background: var(--error); }
+.timeline-item.note_added .timeline-dot { background: var(--warning); }
+.timeline-item.archived .timeline-dot { background: var(--text-muted); }
+.timeline-item.started .timeline-dot { background: var(--info); }
+.timeline-item.created .timeline-dot { background: var(--gray-400); }
+
+.timeline-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 20px;
+}
+
+.timeline-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.no-events {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Client Cards */
+.client-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.client-card {
+    padding: 16px;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s;
+}
+
+.client-card:hover {
+    box-shadow: var(--glass-shadow-hover);
+    border-color: var(--primary-500);
+}
+
+.client-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.client-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.client-card-info .client-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.client-card-info .client-email {
+    font-size: 12px;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.client-card-stats {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 12px;
+}
+
+.client-card-stats .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.client-card-stats .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.client-card-stats .stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.client-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.client-card-actions .btn-secondary {
+    flex: 1;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.client-card-actions .btn-secondary:hover {
+    background: var(--primary-500);
+    border-color: var(--primary-500);
+    color: white;
+}
+
+.client-card-actions .btn-icon {
+    padding: 8px 10px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.client-card-actions .btn-icon:hover {
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .profile-header-left {
+        flex-direction: column;
+    }
+
+    .company-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .back-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
     </style>
 </head>
 <body>
@@ -1658,6 +2080,13 @@ body::before {
                         <polyline points="9 18 15 12 9 6"/>
                     </svg>
                     <span class="current">Clients</span>
+                </div>
+
+                <!-- Company Filter Dropdown -->
+                <div class="company-filter">
+                    <select id="companyFilter" onchange="filterByCompany()">
+                        <option value="all">All Companies</option>
+                    </select>
                 </div>
 
                 <div class="header-actions">
@@ -1866,6 +2295,69 @@ body::before {
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Company Profile View (shown when specific company selected) -->
+                <div id="companyProfileView" class="company-profile-view" style="display: none;">
+                    <div class="profile-header">
+                        <div class="profile-header-left">
+                            <div class="company-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                                    <path d="M3 21h18"/>
+                                    <path d="M5 21V7l8-4v18"/>
+                                    <path d="M19 21V11l-6-4"/>
+                                    <path d="M9 9v.01"/>
+                                    <path d="M9 12v.01"/>
+                                    <path d="M9 15v.01"/>
+                                    <path d="M9 18v.01"/>
+                                </svg>
+                            </div>
+                            <div class="company-info">
+                                <h2 id="profileCompanyName">Company Name</h2>
+                                <div class="company-stats">
+                                    <span id="profileInterviewCount">0 interviews</span>
+                                    <span class="stat-divider">·</span>
+                                    <span id="profileAvgScore">Avg: 0/100</span>
+                                    <span class="stat-divider">·</span>
+                                    <span id="profileStars" class="quality-stars"></span>
+                                    <span class="stat-divider">·</span>
+                                    <span id="profileCompletion">0% complete</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="back-btn" onclick="backToTableView()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            Back to All
+                        </button>
+                    </div>
+
+                    <div class="profile-content">
+                        <div class="profile-timeline">
+                            <h3>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Timeline
+                            </h3>
+                            <div id="timelineContainer" class="timeline"></div>
+                        </div>
+
+                        <div class="profile-clients">
+                            <h3>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                Clients
+                            </h3>
+                            <div id="clientCardsContainer" class="client-cards"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -1916,7 +2408,13 @@ body::before {
         let filteredClients = [];
         let currentFilter = 'all';
         let searchQuery = '';
+        let companyFilter = 'all';
         let deleteClientId = null;
+        let companyFilterPopulated = false;
+
+        // View state for Company Profile
+        let currentView = 'table';  // 'table' or 'company-profile'
+        let selectedCompany = null;
 
         // ========================================
         // THEME TOGGLE
@@ -1961,6 +2459,7 @@ body::before {
                 }
 
                 clients = await response.json();
+                populateCompanyFilter();
                 updateStats();
                 applyFilters();
                 document.getElementById('loadingState').style.display = 'none';
@@ -2042,7 +2541,13 @@ body::before {
                     searchMatch = companyName.includes(query) || clientName.includes(query) || clientEmail.includes(query);
                 }
 
-                return statusMatch && searchMatch;
+                // Company filter
+                let companyMatch = true;
+                if (companyFilter !== 'all') {
+                    companyMatch = (client.company_name === companyFilter) || (client.client_name === companyFilter);
+                }
+
+                return statusMatch && searchMatch && companyMatch;
             });
 
             renderClientsTable();
@@ -2063,6 +2568,316 @@ body::before {
             searchQuery = e.target.value;
             applyFilters();
         });
+
+        // Populate company filter dropdown
+        function populateCompanyFilter() {
+            if (companyFilterPopulated) return;
+            const select = document.getElementById('companyFilter');
+            const companies = [...new Set(clients.map(c => c.company_name || c.client_name).filter(Boolean))];
+            companies.sort().forEach(company => {
+                const option = document.createElement('option');
+                option.value = company;
+                option.textContent = company;
+                select.appendChild(option);
+            });
+            companyFilterPopulated = true;
+        }
+
+        // Filter by company
+        function filterByCompany() {
+            const company = document.getElementById('companyFilter').value;
+            companyFilter = company;
+
+            if (company && company !== 'all') {
+                // Switch to company profile view
+                selectedCompany = company;
+                currentView = 'company-profile';
+                renderCompanyProfile(company);
+            } else {
+                // Switch back to table view
+                selectedCompany = null;
+                currentView = 'table';
+                backToTableView();
+            }
+        }
+
+        function backToTableView() {
+            document.getElementById('companyProfileView').style.display = 'none';
+            document.getElementById('tableContainer').style.display = 'block';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('companyFilter').value = 'all';
+            companyFilter = 'all';
+            currentView = 'table';
+            selectedCompany = null;
+            applyFilters();
+        }
+
+        // ========================================
+        // COMPANY PROFILE VIEW
+        // ========================================
+
+        function renderCompanyProfile(companyName) {
+            // Hide table, show profile
+            document.getElementById('tableContainer').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('companyProfileView').style.display = 'block';
+
+            // Filter clients for this company
+            const companyClients = clients.filter(c =>
+                c.company_name === companyName || c.client_name === companyName
+            );
+
+            // Calculate stats
+            const totalInterviews = companyClients.length;
+            const completedCount = companyClients.filter(c => c.status === 'complete' || c.status === 'completed').length;
+            const completionRate = totalInterviews > 0 ? Math.round((completedCount / totalInterviews) * 100) : 0;
+
+            const clientsWithAI = companyClients.filter(c => c.ai_analysis?.overall);
+            const avgScore = clientsWithAI.length > 0
+                ? Math.round(clientsWithAI.reduce((sum, c) => sum + (c.ai_analysis?.overall || 0), 0) / clientsWithAI.length)
+                : 0;
+            const avgStars = avgScore / 20;
+
+            // Update header
+            document.getElementById('profileCompanyName').textContent = companyName;
+            document.getElementById('profileInterviewCount').textContent = `${totalInterviews} interview${totalInterviews !== 1 ? 's' : ''}`;
+            document.getElementById('profileAvgScore').textContent = clientsWithAI.length > 0 ? `Avg: ${avgScore}/100` : 'No AI scores';
+            document.getElementById('profileStars').innerHTML = clientsWithAI.length > 0 ? renderStars(avgStars) : '—';
+            document.getElementById('profileCompletion').textContent = `${completionRate}% complete`;
+
+            // Render timeline
+            renderTimeline(companyClients);
+
+            // Render client cards
+            renderClientCards(companyClients);
+        }
+
+        function renderTimeline(companyClients) {
+            // Collect all events from all clients
+            const allEvents = [];
+
+            companyClients.forEach(client => {
+                const history = client.status_history || [];
+
+                // Add events from status_history
+                history.forEach(event => {
+                    allEvents.push({
+                        ...event,
+                        clientName: client.client_name,
+                        clientId: client.id
+                    });
+                });
+
+                // Fallback: If no history, create events from available data
+                if (history.length === 0) {
+                    // Created event
+                    if (client.created_at || client.scheduled_at) {
+                        allEvents.push({
+                            event: 'created',
+                            at: client.created_at || client.scheduled_at,
+                            clientName: client.client_name,
+                            clientId: client.id
+                        });
+                    }
+
+                    // AI analysis event
+                    if (client.ai_analysis?.analyzed_at) {
+                        allEvents.push({
+                            event: 'ai_analysis',
+                            at: client.ai_analysis.analyzed_at,
+                            score: client.ai_analysis.overall,
+                            clientName: client.client_name,
+                            clientId: client.id
+                        });
+                    }
+
+                    // Completed event
+                    if ((client.status === 'complete' || client.status === 'completed') && client.updated_at) {
+                        allEvents.push({
+                            event: 'completed',
+                            at: client.updated_at,
+                            clientName: client.client_name,
+                            clientId: client.id
+                        });
+                    }
+                }
+            });
+
+            // Sort by date descending (newest first)
+            allEvents.sort((a, b) => new Date(b.at) - new Date(a.at));
+
+            // Render timeline
+            const container = document.getElementById('timelineContainer');
+
+            if (allEvents.length === 0) {
+                container.innerHTML = '<p class="no-events">No events recorded yet</p>';
+                return;
+            }
+
+            container.innerHTML = allEvents.map(event => `
+                <div class="timeline-item ${event.event}">
+                    <div class="timeline-date">${formatTimelineDate(event.at)}</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">${getEventTitle(event)}</div>
+                        ${getEventDetail(event) ? `<div class="timeline-detail">${getEventDetail(event)}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatTimelineDate(dateString) {
+            if (!dateString) return '—';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function getEventTitle(event) {
+            const titles = {
+                'created': `${event.clientName}: Added to System`,
+                'scheduled': `${event.clientName}: Interview Scheduled`,
+                'call_failed': `${event.clientName}: Call Attempt Failed`,
+                'started': `${event.clientName}: Interview Started`,
+                'completed': `${event.clientName}: Interview Completed`,
+                'ai_analysis': `${event.clientName}: AI Analysis Run`,
+                'reviewed': `${event.clientName}: Interview Reviewed`,
+                'note_added': `${event.clientName}: Note Added`,
+                'rescheduled': `${event.clientName}: Interview Rescheduled`,
+                'archived': `${event.clientName}: Archived`
+            };
+            return titles[event.event] || `${event.clientName}: ${event.event}`;
+        }
+
+        function getEventDetail(event) {
+            switch (event.event) {
+                case 'started':
+                    return event.duration_min ? `Duration: ${event.duration_min} min` : '';
+                case 'ai_analysis':
+                    return event.score ? `Score: ${event.score}/100` : '';
+                case 'call_failed':
+                    return event.reason === 'no_answer' ? 'No answer' : (event.reason || '');
+                case 'note_added':
+                    return event.text ? `"${event.text.substring(0, 50)}${event.text.length > 50 ? '...' : ''}"` : '';
+                case 'rescheduled':
+                    return event.new_date ? `New date: ${formatTimelineDate(event.new_date)}` : '';
+                default:
+                    return '';
+            }
+        }
+
+        function renderClientCards(companyClients) {
+            const container = document.getElementById('clientCardsContainer');
+
+            container.innerHTML = companyClients.map(client => {
+                const quality = calculateQualityScore(client);
+                const questionsAnswered = countAnsweredQuestions(client);
+
+                return `
+                    <div class="client-card">
+                        <div class="client-card-header">
+                            <div class="client-avatar">${getInitials(client.client_name)}</div>
+                            <div class="client-card-info">
+                                <span class="client-name">${client.client_name || 'Unknown'}</span>
+                                <span class="client-email">${client.client_email || 'No email'}</span>
+                            </div>
+                            ${getStatusBadge(client.status)}
+                        </div>
+                        <div class="client-card-stats">
+                            <div class="stat">
+                                <span class="stat-label">Score</span>
+                                <span class="stat-value">${quality.hasAI ? quality.aiScore + '/100' : '—'}</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Questions</span>
+                                <span class="stat-value">${questionsAnswered}/22</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value quality-stars">${renderStars(quality.stars)}</span>
+                            </div>
+                        </div>
+                        <div class="client-card-actions">
+                            <button class="btn-secondary" onclick="viewInterview('${client.id}')">View Interview</button>
+                            <button class="btn-icon" onclick="addNote('${client.id}')" title="Add Note">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function countAnsweredQuestions(client) {
+            // 16 main questions
+            const mainFields = [
+                'q1_primary_avatar', 'q2_customer_need', 'q3_biggest_mistake',
+                'q5_trigger_to_seek', 'q7_cost_of_inaction', 'q8_complaints_to_friends',
+                'q9_roles_responsibilities', 'q10_biggest_headache', 'q11_reports_to',
+                'q12_decision_influencers', 'q13_success_story', 'q14_why_couldnt_solve_alone',
+                'q15_what_already_tried', 'q16_initial_findings', 'q17_recommended_solution',
+                'q18_results_achieved'
+            ];
+
+            let count = mainFields.filter(field => client[field] && String(client[field]).trim()).length;
+
+            // 3 pain point subfields
+            if (client.q4_pain_point_1) count++;
+            if (client.q4_pain_point_2) count++;
+            if (client.q4_pain_point_3) count++;
+
+            // 3 topic subfields
+            if (client.q6_topic_1) count++;
+            if (client.q6_topic_2) count++;
+            if (client.q6_topic_3) count++;
+
+            return count;  // Out of 22 total
+        }
+
+        async function addNote(clientId) {
+            const note = prompt('Add a note for this client:');
+            if (!note || !note.trim()) return;
+
+            const client = clients.find(c => c.id === clientId);
+            if (!client) return;
+
+            const currentHistory = client.status_history || [];
+            const newEvent = {
+                event: 'note_added',
+                at: new Date().toISOString(),
+                text: note.trim()
+            };
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?id=eq.${clientId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        status_history: [...currentHistory, newEvent]
+                    })
+                });
+
+                if (response.ok) {
+                    client.status_history = [...currentHistory, newEvent];
+                    showToast('Note added successfully', 'success');
+                    if (currentView === 'company-profile' && selectedCompany) {
+                        renderCompanyProfile(selectedCompany);
+                    }
+                } else {
+                    showToast('Failed to add note', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding note:', error);
+                showToast('Failed to add note', 'error');
+            }
+        }
 
         // ========================================
         // RENDERING (Jay's 9 Status Labels)
@@ -2092,38 +2907,29 @@ body::before {
         }
 
         function calculateQualityScore(client) {
-            let answeredCount = 0;
-            const questionFields = [
-                'q1_primary_avatar', 'q2_customer_need', 'q3_biggest_mistake',
-                'q5_trigger_to_seek', 'q7_cost_of_inaction', 'q8_complaints_to_friends',
-                'q9_roles_responsibilities', 'q10_biggest_headache', 'q11_reports_to',
-                'q12_decision_influencers', 'q13_success_story', 'q14_why_couldnt_solve_alone',
-                'q15_what_already_tried', 'q16_initial_findings', 'q17_recommended_solution',
-                'q18_results_achieved'
-            ];
+            // If AI analysis exists, use that score (divided by 20 for 5-star scale)
+            // AI score is 0-100, so 100/20 = 5 stars, 43/20 = 2.15 stars
+            if (client.ai_analysis) {
+                const analysis = typeof client.ai_analysis === 'string'
+                    ? JSON.parse(client.ai_analysis)
+                    : client.ai_analysis;
 
-            questionFields.forEach(field => {
-                if (client[field] && client[field].trim() !== '') {
-                    answeredCount++;
+                if (analysis.overall !== undefined) {
+                    const aiScore = parseFloat(analysis.overall);
+                    const stars = aiScore / 20; // 100-point scale to 5-star scale
+                    return {
+                        aiScore: aiScore,
+                        stars: stars,
+                        hasAI: true
+                    };
                 }
-            });
+            }
 
-            // Check Q4 pain points
-            if (client.q4_pain_point_1) answeredCount++;
-            if (client.q4_pain_point_2) answeredCount++;
-            if (client.q4_pain_point_3) answeredCount++;
-
-            // Check Q6 topics
-            if (client.q6_topic_1) answeredCount++;
-            if (client.q6_topic_2) answeredCount++;
-            if (client.q6_topic_3) answeredCount++;
-
-            const totalPossible = 22;
-            const percentage = (answeredCount / totalPossible) * 100;
+            // No AI analysis = show 0 stars (needs analysis to be run)
             return {
-                answered: answeredCount,
-                total: totalPossible,
-                stars: Math.round((percentage / 100) * 5)
+                aiScore: null,
+                stars: 0,
+                hasAI: false
             };
         }
 
@@ -2138,8 +2944,21 @@ body::before {
 
         function renderStars(count) {
             let html = '';
+            const fullStars = Math.floor(count);
+            const partialFill = count - fullStars;
+
             for (let i = 0; i < 5; i++) {
-                html += `<span class="star ${i < count ? 'filled' : ''}">&#9733;</span>`;
+                if (i < fullStars) {
+                    // Full star
+                    html += `<span class="star filled">&#9733;</span>`;
+                } else if (i === fullStars && partialFill > 0) {
+                    // Partial star using gradient
+                    const percentage = Math.round(partialFill * 100);
+                    html += `<span class="star partial" style="background: linear-gradient(90deg, var(--primary-500) ${percentage}%, var(--text-muted) ${percentage}%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">&#9733;</span>`;
+                } else {
+                    // Empty star
+                    html += `<span class="star">&#9733;</span>`;
+                }
             }
             return html;
         }
@@ -2187,7 +3006,7 @@ body::before {
                         <td>${client.company_name || '-'}</td>
                         <td>${getStatusBadge(client.status)}</td>
                         <td>
-                            <div class="quality-stars">${renderStars(quality.stars)}</div>
+                            <div class="quality-stars" title="${quality.hasAI ? `AI Score: ${quality.aiScore}/100 = ${quality.stars.toFixed(2)} stars` : 'No AI analysis'}">${renderStars(quality.stars)}</div>
                         </td>
                         <td>
                             <div class="interview-date">${dateInfo.date}</div>
@@ -2201,11 +3020,10 @@ body::before {
                                         <circle cx="12" cy="12" r="3"/>
                                     </svg>
                                 </button>
-                                <button class="action-icon-btn" data-tooltip="Export PDF" onclick="exportPDF('${client.id}')">
+                                <button class="action-icon-btn" data-tooltip="Contact Client" onclick="contactClient('${client.client_email}', '${client.client_name}')">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                        <polyline points="7 10 12 15 17 10"/>
-                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
                                     </svg>
                                 </button>
                                 ${canReschedule ? `
@@ -2219,14 +3037,32 @@ body::before {
                                         </svg>
                                     </button>
                                 ` : ''}
-                                <button class="action-icon-btn danger" data-tooltip="Delete" onclick="confirmDelete('${client.id}')">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="3 6 5 6 21 6"/>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                        <line x1="10" y1="11" x2="10" y2="17"/>
-                                        <line x1="14" y1="11" x2="14" y2="17"/>
-                                    </svg>
-                                </button>
+                                <div class="more-actions-wrapper" id="more-${client.id}">
+                                    <button class="action-icon-btn" data-tooltip="More" onclick="event.stopPropagation(); toggleMoreActions('${client.id}')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="1"/>
+                                            <circle cx="12" cy="5" r="1"/>
+                                            <circle cx="12" cy="19" r="1"/>
+                                        </svg>
+                                    </button>
+                                    <div class="more-actions-dropdown">
+                                        <button class="more-actions-item" onclick="archiveClient('${client.id}')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="21 8 21 21 3 21 3 8"/>
+                                                <rect x="1" y="3" width="22" height="5"/>
+                                                <line x1="10" y1="12" x2="14" y2="12"/>
+                                            </svg>
+                                            Archive
+                                        </button>
+                                        <button class="more-actions-item danger" onclick="confirmDelete('${client.id}')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="3 6 5 6 21 6"/>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                            </svg>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -2239,6 +3075,72 @@ body::before {
         // ========================================
         function viewInterview(id) {
             window.location.href = `interviews.html?id=${id}`;
+        }
+
+        function contactClient(email, name) {
+            if (!email) {
+                showToast('No email address available for this client', 'error');
+                return;
+            }
+            const subject = encodeURIComponent(`Follow-up: Your Interview with Kyber`);
+            const body = encodeURIComponent(`Hi ${name || 'there'},\n\nI wanted to follow up regarding your recent interview.\n\nBest regards`);
+            window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
+        }
+
+        function toggleMoreActions(id) {
+            // Close all other dropdowns first
+            document.querySelectorAll('.more-actions-wrapper.open').forEach(wrapper => {
+                if (wrapper.id !== `more-${id}`) {
+                    wrapper.classList.remove('open');
+                }
+            });
+            // Toggle this dropdown
+            const wrapper = document.getElementById(`more-${id}`);
+            if (wrapper) {
+                wrapper.classList.toggle('open');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.more-actions-wrapper')) {
+                document.querySelectorAll('.more-actions-wrapper.open').forEach(wrapper => {
+                    wrapper.classList.remove('open');
+                });
+            }
+        });
+
+        async function archiveClient(id) {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?id=eq.${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        status: 'archived',
+                        updated_at: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to archive client');
+
+                // Update local data
+                const client = clients.find(c => c.id === id);
+                if (client) {
+                    client.status = 'archived';
+                }
+
+                showToast('Client archived successfully', 'success');
+                renderClients();
+
+            } catch (error) {
+                console.error('Error archiving client:', error);
+                showToast('Failed to archive client', 'error');
+            }
         }
 
         function exportPDF(id) {

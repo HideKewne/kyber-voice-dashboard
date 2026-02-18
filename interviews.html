@@ -1165,6 +1165,19 @@ body::before {
     color: #4B5563;
 }
 
+.status-with-explanation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.status-explanation {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 4px;
+}
+
 /* Legacy status support (for backward compatibility) */
 .status-badge.scheduled {
     background: rgba(59, 130, 246, 0.15);
@@ -1247,11 +1260,17 @@ body::before {
     margin-top: 20px;
 }
 
+.quality-breakdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
 .quality-breakdown-title {
     font-size: 16px;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 16px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1347,8 +1366,8 @@ body::before {
 
 .ai-suggestion-item {
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: baseline;
+    gap: 6px;
     font-size: 13px;
     color: var(--text-secondary);
     margin-bottom: 8px;
@@ -1365,6 +1384,29 @@ body::before {
     flex-shrink: 0;
 }
 
+.impact-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--success);
+    background: rgba(34, 197, 94, 0.12);
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.suggestion-category {
+    color: var(--primary);
+    font-weight: 500;
+    opacity: 0.85;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-left: 4px;
+}
+
 .ai-feedback {
     font-size: 13px;
     color: var(--text-secondary);
@@ -1377,6 +1419,36 @@ body::before {
 
 [data-theme="dark"] .ai-feedback {
     background: rgba(212, 175, 55, 0.08);
+}
+
+.ai-feedback-list {
+    margin-bottom: 16px;
+}
+
+.ai-feedback-item {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding: 10px 12px;
+    background: rgba(59, 130, 246, 0.08);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    border-left: 3px solid var(--primary);
+}
+
+.ai-feedback-item:last-child {
+    margin-bottom: 0;
+}
+
+[data-theme="dark"] .ai-feedback-item {
+    background: rgba(212, 175, 55, 0.08);
+    border-left-color: var(--accent);
+}
+
+.ai-pending {
+    padding: 24px;
+    text-align: center;
+    color: var(--text-secondary);
 }
 
 .ai-loading {
@@ -1396,6 +1468,15 @@ body::before {
     border-top-color: var(--primary-500);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+}
+
+.ai-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
 }
 
 .refresh-ai-btn {
@@ -1829,6 +1910,7 @@ body::before {
     border-radius: var(--radius-lg);
     padding: 24px;
     box-shadow: var(--glass-shadow);
+    margin-top: 24px;
     margin-bottom: 24px;
 }
 
@@ -1870,7 +1952,7 @@ body::before {
 
 .ai-summary-list li {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     font-size: 15px;
     color: var(--text-secondary);
@@ -1883,7 +1965,6 @@ body::before {
     height: 6px;
     background: var(--primary-500);
     border-radius: 50%;
-    margin-top: 8px;
     flex-shrink: 0;
 }
 
@@ -1998,6 +2079,107 @@ body::before {
 .no-answer {
     color: var(--text-muted);
     font-style: italic;
+}
+
+/* Answer Edit Functionality */
+.accordion-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.answer-text {
+    flex: 1;
+}
+
+.edit-answer-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.edit-answer-btn:hover {
+    background: var(--glass-bg);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.edit-answer-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
+.answer-edit-container {
+    width: 100%;
+}
+
+.answer-edit-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.answer-edit-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.answer-edit-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    justify-content: flex-end;
+}
+
+.answer-save-btn, .answer-cancel-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.answer-save-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+}
+
+.answer-save-btn:hover {
+    background: var(--primary-hover);
+}
+
+.answer-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.answer-cancel-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+.answer-cancel-btn:hover {
+    background: var(--glass-bg);
 }
 
 /* Right Sidebar */
@@ -2624,6 +2806,7 @@ body::before {
                 </div>
             </div>
         </main>
+
     </div>
 
     <script>
@@ -2974,6 +3157,88 @@ body::before {
             return `<span class="status-badge ${s.class}">${s.icon} ${s.text}</span>`;
         }
 
+        function getStatusExplanation(interview) {
+            const rawStatus = interview.status;
+            const scheduledDate = interview.scheduled_at ? new Date(interview.scheduled_at) : null;
+            const deadlineDate = interview.deadline_at ? new Date(interview.deadline_at) : scheduledDate;
+            const now = new Date();
+
+            // Map legacy statuses to their visual equivalents
+            const legacyMap = {
+                'cancelled': 'archived',
+                'completed': 'complete',
+                'scheduled': 'active',
+                'failed': 'overdue',
+                'rescheduled': 'active'
+            };
+            const mappedStatus = legacyMap[rawStatus] || rawStatus;
+
+            // Check for overdue override (same as getDisplayStatus)
+            const displayStatus = (deadlineDate && deadlineDate < now && ['active', 'in_progress', 'in_revision', 'scheduled'].includes(rawStatus))
+                ? 'overdue'
+                : mappedStatus;
+
+            const formatDate = (date) => date ? date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : null;
+
+            // Helper for "X days ago" text with Today/Yesterday handling
+            const getDaysAgoText = (days) => {
+                if (days === 0) return 'earlier today';
+                if (days === 1) return 'yesterday';
+                return `${days} days ago`;
+            };
+
+            switch (displayStatus) {
+                case 'overdue':
+                    if (deadlineDate) {
+                        const daysOverdue = Math.floor((now - deadlineDate) / (1000 * 60 * 60 * 24));
+                        return { text: `Deadline was ${formatDate(deadlineDate)} (${getDaysAgoText(daysOverdue)})`, color: 'var(--error)' };
+                    }
+                    return { text: 'This interview is past its deadline', color: 'var(--error)' };
+
+                case 'archived':
+                    if (interview.revision_comment?.startsWith('Rejected:')) {
+                        return { text: interview.revision_comment, color: 'var(--text-muted)' };
+                    }
+                    return { text: 'This interview has been archived and is no longer active', color: 'var(--text-muted)' };
+
+                case 'complete':
+                    if (interview.reviewed_at) {
+                        return { text: `Approved and completed on ${formatDate(new Date(interview.reviewed_at))}`, color: 'var(--success)' };
+                    }
+                    return { text: 'This interview has been completed successfully', color: 'var(--success)' };
+
+                case 'in_revision':
+                    if (interview.revision_comment && !interview.revision_comment.startsWith('Rejected:')) {
+                        return { text: `Revision requested: ${interview.revision_comment}`, color: 'var(--warning)' };
+                    }
+                    return { text: 'Revisions have been requested for this interview', color: 'var(--warning)' };
+
+                case 'awaiting_approval':
+                    return { text: 'Waiting for review and approval', color: 'var(--primary)' };
+
+                case 'in_review':
+                    return { text: 'Currently being reviewed', color: 'var(--primary)' };
+
+                case 'in_progress':
+                    return { text: 'Interview is currently in progress', color: 'var(--primary)' };
+
+                case 'active':
+                    if (deadlineDate) {
+                        const daysUntil = Math.floor((deadlineDate - now) / (1000 * 60 * 60 * 24));
+                        if (daysUntil > 0) {
+                            return { text: `Due in ${daysUntil} day${daysUntil !== 1 ? 's' : ''} (${formatDate(deadlineDate)})`, color: 'var(--primary)' };
+                        }
+                    }
+                    return { text: 'Interview is active and awaiting completion', color: 'var(--primary)' };
+
+                case 'draft':
+                    return { text: 'Draft - not yet submitted', color: 'var(--text-muted)' };
+
+                default:
+                    return null;
+            }
+        }
+
         function calculateQualityScore(interview) {
             let answeredCount = 0;
             const questionFields = [
@@ -3062,21 +3327,31 @@ body::before {
             };
         }
 
-        // AI Quality Scoring via Gemini 3 Flash
-        const AI_SCORE_WEBHOOK = 'https://www.n8n.fairintech.com/webhook/c41832c5-4824-46fd-923d-41fd6cfc053c';
-        const aiScoreCache = new Map(); // Cache AI scores by interview ID
+        // AI Quality Scoring - reads from Supabase ai_analysis column (5x averaged)
+        // Uses Otto Interview System workflow's AI Score Webhook
+        const AI_ANALYSIS_WEBHOOK = 'https://www.n8n.fairintech.com/webhook/c41832c5-4824-46fd-923d-41fd6cfc053c';
 
-        async function fetchAIScore(interview) {
-            // Check cache first
-            if (aiScoreCache.has(interview.id)) {
-                return aiScoreCache.get(interview.id);
+        function getAIAnalysis(interview) {
+            // Check if ai_analysis already exists in Supabase
+            if (interview.ai_analysis) {
+                return { success: true, ...interview.ai_analysis };
             }
+            return null;
+        }
 
+        async function triggerAIAnalysis(interview) {
+            // Trigger AI analysis and store in Supabase
             try {
-                const response = await fetch(AI_SCORE_WEBHOOK, {
+                console.log('Starting AI analysis for interview:', interview.id);
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s timeout
+
+                const response = await fetch(AI_ANALYSIS_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        interview_id: interview.id,
                         interview: {
                             q1_primary_avatar: interview.q1_primary_avatar,
                             q2_customer_need: interview.q2_customer_need,
@@ -3098,42 +3373,110 @@ body::before {
                             q17_recommended_solution: interview.q17_recommended_solution,
                             q18_results_achieved: interview.q18_results_achieved
                         }
-                    })
+                    }),
+                    signal: controller.signal
                 });
 
-                const data = await response.json();
-                if (data.success) {
-                    aiScoreCache.set(interview.id, data);
-                    return data;
+                clearTimeout(timeoutId);
+                console.log('AI analysis response status:', response.status);
+
+                if (!response.ok) {
+                    console.error('AI analysis failed with status:', response.status);
+                    return { error: `Server error: ${response.status}` };
                 }
-                return null;
+
+                const data = await response.json();
+                console.log('AI analysis result:', data);
+
+                if (data.success) {
+                    // Update local interview object with new analysis
+                    interview.ai_analysis = data.analysis;
+                    return { success: true, ...data.analysis };
+                }
+                return { error: data.error || 'Analysis failed' };
             } catch (error) {
-                console.error('AI Score fetch error:', error);
-                return null;
+                console.error('AI Analysis trigger error:', error);
+                if (error.name === 'AbortError') {
+                    return { error: 'Analysis timed out (>90s). Please try again.' };
+                }
+                return { error: error.message || 'Network error' };
             }
         }
 
-        function renderAIQualityBreakdown(aiScore, interviewId) {
-            if (!aiScore || !aiScore.success) {
+        function renderAIQualityBreakdown(aiScore, interviewId, hasAnalysis = true) {
+            // Handle error state
+            if (aiScore && aiScore.error) {
                 return `
-                    <div class="ai-loading">
-                        <div class="spinner"></div>
-                        Analyzing with Gemini 3 Flash...
+                    <div class="ai-error">
+                        <p style="color: var(--error); margin-bottom: 12px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            ${aiScore.error}
+                        </p>
+                        <button class="refresh-ai-btn" onclick="refreshAIScore('${interviewId}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                            </svg>
+                            Try Again
+                        </button>
                     </div>
                 `;
             }
 
-            const { scores, overall, feedback, suggestions } = aiScore;
+            if (!aiScore || !aiScore.success) {
+                if (!hasAnalysis) {
+                    // No analysis yet - show trigger button
+                    return `
+                        <div class="ai-pending">
+                            <p style="margin-bottom: 12px; color: var(--text-muted);">No AI analysis yet for this interview.</p>
+                            <button class="refresh-ai-btn" onclick="refreshAIScore('${interviewId}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                                </svg>
+                                Run AI Analysis
+                            </button>
+                        </div>
+                    `;
+                }
+                return `
+                    <div class="ai-loading">
+                        <div class="spinner"></div>
+                        Analyzing interview...
+                    </div>
+                `;
+            }
+
+            const { scores, overall, suggestions } = aiScore;
+
+            // Validate we have actual score data
+            if (!scores || typeof scores !== 'object' || Object.keys(scores).length === 0) {
+                return `
+                    <div class="ai-pending">
+                        <p style="margin-bottom: 12px; color: var(--text-muted);">
+                            No AI analysis available yet. Click the button below to generate insights.
+                        </p>
+                        <button class="refresh-ai-btn" onclick="refreshAIScore('${interviewId}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                            </svg>
+                            Run AI Analysis
+                        </button>
+                    </div>
+                `;
+            }
 
             return `
-                <div class="ai-feedback">${feedback}</div>
                 <div class="quality-metric">
                     <div class="quality-metric-header">
                         <span class="quality-metric-label">Avatar Clarity</span>
                         <span class="quality-metric-value">${scores.avatar_clarity}%</span>
                     </div>
                     <div class="quality-bar">
-                        <div class="quality-bar-fill avatar" style="width: ${scores.avatar_clarity}%"></div>
+                        <div class="quality-bar-fill" style="width: ${scores.avatar_clarity}%; background: ${getScoreColor(scores.avatar_clarity)}"></div>
                     </div>
                 </div>
                 <div class="quality-metric">
@@ -3142,7 +3485,7 @@ body::before {
                         <span class="quality-metric-value">${scores.problem_depth}%</span>
                     </div>
                     <div class="quality-bar">
-                        <div class="quality-bar-fill problem" style="width: ${scores.problem_depth}%"></div>
+                        <div class="quality-bar-fill" style="width: ${scores.problem_depth}%; background: ${getScoreColor(scores.problem_depth)}"></div>
                     </div>
                 </div>
                 <div class="quality-metric">
@@ -3151,7 +3494,7 @@ body::before {
                         <span class="quality-metric-value">${scores.stakes_clarity}%</span>
                     </div>
                     <div class="quality-bar">
-                        <div class="quality-bar-fill stakes" style="width: ${scores.stakes_clarity}%"></div>
+                        <div class="quality-bar-fill" style="width: ${scores.stakes_clarity}%; background: ${getScoreColor(scores.stakes_clarity)}"></div>
                     </div>
                 </div>
                 <div class="quality-metric">
@@ -3160,7 +3503,7 @@ body::before {
                         <span class="quality-metric-value">${scores.proof_quality}%</span>
                     </div>
                     <div class="quality-bar">
-                        <div class="quality-bar-fill proof" style="width: ${scores.proof_quality}%"></div>
+                        <div class="quality-bar-fill" style="width: ${scores.proof_quality}%; background: ${getScoreColor(scores.proof_quality)}"></div>
                     </div>
                 </div>
                 <div class="quality-metric">
@@ -3169,14 +3512,14 @@ body::before {
                         <span class="quality-metric-value">${scores.specificity}%</span>
                     </div>
                     <div class="quality-bar">
-                        <div class="quality-bar-fill specificity" style="width: ${scores.specificity}%"></div>
+                        <div class="quality-bar-fill" style="width: ${scores.specificity}%; background: ${getScoreColor(scores.specificity)}"></div>
                     </div>
                 </div>
                 <div class="quality-score-total">
                     <span class="quality-score-number">${(overall / 10).toFixed(1)}</span>
                     <span class="quality-score-label">/ 10 AI Score</span>
                 </div>
-                ${suggestions && suggestions.length > 0 ? `
+                ${overall < 91 && suggestions && suggestions.length > 0 ? `
                 <div class="ai-suggestions">
                     <div class="ai-suggestions-title">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -3186,34 +3529,72 @@ body::before {
                         </svg>
                         Suggestions to Improve Score
                     </div>
-                    ${suggestions.map(s => `<div class="ai-suggestion-item">${s}</div>`).join('')}
+                    ${suggestions.map(s => {
+                        const text = typeof s === 'object' ? s.text : s;
+                        const impact = typeof s === 'object' && s.impact ? s.impact : null;
+                        const metric = typeof s === 'object' && s.metric ? s.metric : null;
+
+                        // Convert metric to display name
+                        const metricNames = {
+                            'avatar_clarity': 'Avatar Clarity',
+                            'problem_depth': 'Problem Depth',
+                            'stakes_clarity': 'Stakes Clarity',
+                            'proof_quality': 'Proof Quality',
+                            'specificity': 'Specificity',
+                            'general': 'General'
+                        };
+                        const displayMetric = metric ? (metricNames[metric] || metric.replace(/_/g, ' ')) : '';
+
+                        return `<div class="ai-suggestion-item">${text}${displayMetric ? ` <span class="suggestion-category">(${displayMetric})</span>` : ''}${impact ? `<span class="impact-badge">+${impact}</span>` : ''}</div>`;
+                    }).join('')}
                 </div>
                 ` : ''}
-                <button class="refresh-ai-btn" onclick="refreshAIScore('${interviewId}')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 4 23 10 17 10"/>
-                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-                    </svg>
-                    Refresh AI Analysis
-                </button>
             `;
         }
 
         async function refreshAIScore(interviewId) {
-            aiScoreCache.delete(interviewId);
             const interview = interviews.find(i => i.id === interviewId);
             if (interview) {
                 // Show loading state
                 const container = document.getElementById('aiQualityContainer');
+                const feedbackList = document.getElementById('aiFeedbackList');
                 if (container) {
-                    container.innerHTML = renderAIQualityBreakdown(null, interviewId);
+                    container.innerHTML = renderAIQualityBreakdown(null, interviewId, true);
                 }
-                // Fetch new score
-                const aiScore = await fetchAIScore(interview);
+                if (feedbackList) {
+                    feedbackList.innerHTML = '<li style="color: var(--text-muted);">Analyzing interview...</li>';
+                }
+                // Trigger new analysis (stores in Supabase)
+                const aiScore = await triggerAIAnalysis(interview);
                 if (container) {
-                    container.innerHTML = renderAIQualityBreakdown(aiScore, interviewId);
+                    if (aiScore && aiScore.success) {
+                        // Re-fetch the updated interview to get fresh ai_analysis from Supabase
+                        const updatedInterview = interviews.find(i => i.id === interviewId);
+                        const freshAnalysis = getAIAnalysis(updatedInterview);
+                        container.innerHTML = renderAIQualityBreakdown(freshAnalysis || aiScore, interviewId, true);
+                        // Also update the feedback list
+                        if (feedbackList) {
+                            const feedback = freshAnalysis?.feedback || aiScore?.feedback || generateAISummary(interview);
+                            feedbackList.innerHTML = feedback.map(point => `<li>${point}</li>`).join('');
+                        }
+                    } else {
+                        container.innerHTML = renderAIQualityBreakdown(aiScore, interviewId, true);
+                        // Show fallback feedback
+                        if (feedbackList) {
+                            const feedback = generateAISummary(interview);
+                            feedbackList.innerHTML = feedback.map(point => `<li>${point}</li>`).join('');
+                        }
+                    }
                 }
             }
+        }
+
+        // Dynamic color based on score percentage
+        function getScoreColor(score) {
+            if (score <= 40) return '#ef4444';      // Red (0-40%)
+            if (score <= 60) return '#eab308';      // Yellow (41-60%)
+            if (score <= 80) return '#84cc16';      // Lime (61-80%)
+            return '#10b981';                        // Green (81-100%)
         }
 
         function formatDate(dateString) {
@@ -3315,6 +3696,9 @@ body::before {
             const interview = interviews.find(i => i.id === id);
             if (!interview) return;
 
+            // Set current interview ID for editing
+            currentEditInterviewId = id;
+
             const quality = calculateQualityScore(interview);
             const cardGrid = document.getElementById('cardGridView');
             const expandedView = document.getElementById('expandedView');
@@ -3355,8 +3739,11 @@ body::before {
             if (interview.q6_topic_2) topics.push({ name: interview.q6_topic_2, reason: interview.q6_reason_2 });
             if (interview.q6_topic_3) topics.push({ name: interview.q6_topic_3, reason: interview.q6_reason_3 });
 
-            // Generate AI Summary (simplified - in production this would come from backend)
-            const aiSummary = generateAISummary(interview);
+            // Get AI feedback from analysis (fallback to old method if no analysis)
+            const aiAnalysis = getAIAnalysis(interview);
+            const aiSummary = aiAnalysis?.feedback?.length > 0
+                ? aiAnalysis.feedback
+                : generateAISummary(interview);
 
             expandedView.innerHTML = `
                 <button class="back-btn" onclick="closeInterview()">
@@ -3427,39 +3814,37 @@ body::before {
                             </button>
                         </div>
                     </div>
-                    ${getStatusBadge(interview.status, interview)}
-                </div>
-
-                <!-- AI Summary Card -->
-                <div class="ai-summary-card">
-                    <div class="ai-summary-header">
-                        <div class="ai-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A1.5 1.5 0 0 0 6 14.5 1.5 1.5 0 0 0 7.5 16 1.5 1.5 0 0 0 9 14.5 1.5 1.5 0 0 0 7.5 13m9 0a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5"/>
-                            </svg>
-                        </div>
-                        <h2 class="ai-summary-title">AI Summary</h2>
+                    <div class="status-with-explanation">
+                        ${getStatusBadge(interview.status, interview)}
+                        ${(() => {
+                            const explanation = getStatusExplanation(interview);
+                            return explanation ? `<span class="status-explanation" style="color: ${explanation.color}">${explanation.text}</span>` : '';
+                        })()}
                     </div>
-                    <ul class="ai-summary-list">
-                        ${aiSummary.map(point => `<li>${point}</li>`).join('')}
-                    </ul>
                 </div>
 
-                <!-- AI Quality Breakdown (Gemini 3 Flash) -->
+                <!-- AI Quality Analysis -->
                 <div class="quality-breakdown">
-                    <div class="quality-breakdown-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 20V10"/>
-                            <path d="M18 20V4"/>
-                            <path d="M6 20v-4"/>
-                        </svg>
-                        AI Quality Analysis
-                        <span style="font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: auto;">Powered by Gemini 3 Flash</span>
+                    <div class="quality-breakdown-header">
+                        <div class="quality-breakdown-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20V10"/>
+                                <path d="M18 20V4"/>
+                                <path d="M6 20v-4"/>
+                            </svg>
+                            AI Quality Analysis
+                        </div>
+                        <button class="refresh-ai-btn" onclick="refreshAIScore('${interview.id}')" title="Refresh AI Analysis">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                            </svg>
+                            Refresh AI Analysis
+                        </button>
                     </div>
                     <div id="aiQualityContainer">
                         <div class="ai-loading">
                             <div class="spinner"></div>
-                            Analyzing with Gemini 3 Flash...
+                            Analyzing interview...
                         </div>
                     </div>
 
@@ -3488,6 +3873,21 @@ body::before {
                         </button>
                     </div>
                     ` : ''}
+                </div>
+
+                <!-- AI Quality Breakdown -->
+                <div class="ai-summary-card">
+                    <div class="ai-summary-header">
+                        <div class="ai-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A1.5 1.5 0 0 0 6 14.5 1.5 1.5 0 0 0 7.5 16 1.5 1.5 0 0 0 9 14.5 1.5 1.5 0 0 0 7.5 13m9 0a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5"/>
+                            </svg>
+                        </div>
+                        <h2 class="ai-summary-title">AI Quality Breakdown</h2>
+                    </div>
+                    <ul class="ai-summary-list" id="aiFeedbackList">
+                        ${aiSummary.map(point => `<li>${point}</li>`).join('')}
+                    </ul>
                 </div>
 
                 <!-- Content Grid -->
@@ -3570,13 +3970,13 @@ body::before {
             // Initialize accordion functionality
             initAccordion();
 
-            // Fetch and display AI Quality Score (async)
-            fetchAIScore(interview).then(aiScore => {
-                const container = document.getElementById('aiQualityContainer');
-                if (container) {
-                    container.innerHTML = renderAIQualityBreakdown(aiScore, interview.id);
-                }
-            });
+            // Display AI Quality Score (from Supabase ai_analysis column)
+            const container = document.getElementById('aiQualityContainer');
+            if (container) {
+                const aiScore = getAIAnalysis(interview);
+                const hasAnalysis = !!interview.ai_analysis;
+                container.innerHTML = renderAIQualityBreakdown(aiScore, interview.id, hasAnalysis);
+            }
         }
 
         function closeInterview() {
@@ -3588,10 +3988,34 @@ body::before {
             expandedView.innerHTML = '';
         }
 
+        // Mapping of question numbers to Supabase field names
+        const questionFieldMap = {
+            1: 'q1_primary_avatar',
+            2: 'q2_customer_need',
+            3: 'q3_biggest_mistake',
+            5: 'q5_trigger_to_seek',
+            7: 'q7_cost_of_inaction',
+            8: 'q8_complaints_to_friends',
+            9: 'q9_roles_responsibilities',
+            10: 'q10_biggest_headache',
+            11: 'q11_reports_to',
+            12: 'q12_decision_influencers',
+            13: 'q13_success_story',
+            14: 'q14_why_couldnt_solve_alone',
+            15: 'q15_what_already_tried',
+            16: 'q16_initial_findings',
+            17: 'q17_recommended_solution',
+            18: 'q18_results_achieved'
+        };
+
         function renderAccordionItem(number, question, answer, isHTML = false) {
             const hasAnswer = answer && (typeof answer === 'string' ? answer.trim() !== '' : true);
+            const fieldName = questionFieldMap[number];
+            const canEdit = fieldName && !isHTML; // Can't edit HTML composite fields (Q4, Q6)
+            const answerText = hasAnswer ? (isHTML ? answer : escapeHTML(answer)) : '<span class="no-answer">No answer provided</span>';
+
             return `
-                <div class="accordion-item">
+                <div class="accordion-item" data-question="${number}" data-field="${fieldName || ''}">
                     <div class="accordion-header" onclick="toggleAccordion(this)">
                         <div class="accordion-question">
                             <span class="question-number">Q${number}</span>
@@ -3602,7 +4026,18 @@ body::before {
                         </svg>
                     </div>
                     <div class="accordion-content">
-                        ${hasAnswer ? (isHTML ? answer : escapeHTML(answer)) : '<span class="no-answer">No answer provided</span>'}
+                        <div class="accordion-content-wrapper">
+                            <div class="answer-text" id="answer-${number}">${answerText}</div>
+                            ${canEdit ? `
+                            <button class="edit-answer-btn" onclick="event.stopPropagation(); editAnswer(${number}, '${fieldName}')" title="Edit answer">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                                Edit
+                            </button>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
             `;
@@ -3611,6 +4046,120 @@ body::before {
         function toggleAccordion(header) {
             const item = header.parentElement;
             item.classList.toggle('open');
+        }
+
+        // Store the current interview ID for editing
+        let currentEditInterviewId = null;
+
+        function editAnswer(questionNumber, fieldName) {
+            const answerContainer = document.getElementById(`answer-${questionNumber}`);
+            const editBtn = answerContainer.parentElement.querySelector('.edit-answer-btn');
+
+            // Get current interview
+            const interview = interviews.find(i => i.id === currentEditInterviewId);
+            if (!interview) return;
+
+            // Get current value
+            const currentValue = interview[fieldName] || '';
+
+            // Store original HTML for cancel
+            answerContainer.dataset.originalHtml = answerContainer.innerHTML;
+
+            // Replace with textarea
+            answerContainer.innerHTML = `
+                <div class="answer-edit-container">
+                    <textarea class="answer-edit-textarea" id="edit-textarea-${questionNumber}">${escapeHTML(currentValue)}</textarea>
+                    <div class="answer-edit-actions">
+                        <button class="answer-cancel-btn" onclick="cancelEdit(${questionNumber})">Cancel</button>
+                        <button class="answer-save-btn" onclick="saveAnswer(${questionNumber}, '${fieldName}')">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Hide edit button
+            if (editBtn) editBtn.style.display = 'none';
+
+            // Focus textarea
+            const textarea = document.getElementById(`edit-textarea-${questionNumber}`);
+            if (textarea) {
+                textarea.focus();
+                textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+            }
+        }
+
+        function cancelEdit(questionNumber) {
+            const answerContainer = document.getElementById(`answer-${questionNumber}`);
+            const editBtn = answerContainer.parentElement.querySelector('.edit-answer-btn');
+
+            // Restore original HTML
+            if (answerContainer.dataset.originalHtml) {
+                answerContainer.innerHTML = answerContainer.dataset.originalHtml;
+            }
+
+            // Show edit button again
+            if (editBtn) editBtn.style.display = 'flex';
+        }
+
+        async function saveAnswer(questionNumber, fieldName) {
+            const textarea = document.getElementById(`edit-textarea-${questionNumber}`);
+            const saveBtn = textarea.parentElement.querySelector('.answer-save-btn');
+            const newValue = textarea.value.trim();
+
+            if (!currentEditInterviewId) {
+                showToast('Error: No interview selected', 'error');
+                return;
+            }
+
+            // Disable save button while saving
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            try {
+                // Update Supabase
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?id=eq.${currentEditInterviewId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        [fieldName]: newValue,
+                        updated_at: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save answer');
+                }
+
+                // Update local interview object
+                const interview = interviews.find(i => i.id === currentEditInterviewId);
+                if (interview) {
+                    interview[fieldName] = newValue;
+                    interview.updated_at = new Date().toISOString();
+                }
+
+                // Update the display
+                const answerContainer = document.getElementById(`answer-${questionNumber}`);
+                const editBtn = answerContainer.parentElement.querySelector('.edit-answer-btn');
+
+                answerContainer.innerHTML = newValue ? escapeHTML(newValue) : '<span class="no-answer">No answer provided</span>';
+
+                // Show edit button again
+                if (editBtn) editBtn.style.display = 'flex';
+
+                showToast('Answer saved! Click "Refresh AI Analysis" to update scores.', 'success');
+
+            } catch (error) {
+                console.error('Error saving answer:', error);
+                showToast('Failed to save answer', 'error');
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save';
+            }
         }
 
         function initAccordion() {
@@ -3702,9 +4251,23 @@ body::before {
 
         async function updateInterviewStatus(interviewId, newStatus, additionalData = {}) {
             try {
+                // Find interview to get current status for history
+                const interview = interviews.find(i => i.id === interviewId);
+                const currentHistory = interview?.status_history || [];
+                const oldStatus = interview?.status || null;
+
+                // Create history entry
+                const historyEntry = {
+                    from: oldStatus,
+                    to: newStatus,
+                    changed_at: new Date().toISOString(),
+                    changed_by: 'agency_user'
+                };
+
                 const updatePayload = {
                     status: newStatus,
                     updated_at: new Date().toISOString(),
+                    status_history: [...currentHistory, historyEntry],
                     ...additionalData
                 };
 
@@ -3721,6 +4284,17 @@ body::before {
 
                 if (!response.ok) {
                     throw new Error('Failed to update interview status');
+                }
+
+                // Update local interview status_history
+                if (interview) {
+                    interview.status_history = [...currentHistory, historyEntry];
+                }
+
+                // Auto-trigger AI analysis when marking complete (if not already analyzed)
+                if (newStatus === 'complete' && interview && !interview.ai_analysis) {
+                    console.log('Auto-triggering AI analysis for completed interview');
+                    triggerAIAnalysis(interview);  // Fire and forget
                 }
 
                 return true;
@@ -4053,7 +4627,9 @@ body::before {
                 if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
                 if (seconds < 86400) return Math.floor(seconds / 3600) + ' hour' + (Math.floor(seconds / 3600) > 1 ? 's' : '') + ' ago';
                 if (seconds < 172800) return 'Yesterday';
-                return Math.floor(seconds / 86400) + ' days ago';
+                const days = Math.floor(seconds / 86400);
+                if (days === 0) return 'Today';
+                return days + ' days ago';
             }
 
             async function fetchNotifications() {
