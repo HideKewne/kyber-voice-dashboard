@@ -2162,10 +2162,18 @@ body::before {
         // ========================================
         // SEARCH FUNCTIONALITY (Gemini AI Powered)
         // ========================================
-        document.getElementById('searchBtn').addEventListener('click', performSearch);
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') performSearch();
-        });
+        function initSearchListeners() {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInput = document.getElementById('searchInput');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', performSearch);
+            }
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') performSearch();
+                });
+            }
+        }
 
         async function performSearch() {
             const query = document.getElementById('searchInput').value.trim();
@@ -3947,6 +3955,7 @@ body::before {
             // Initialize UI components
             window.NotifDropdown.init();
             initUploadZone();
+            initSearchListeners();  // Initialize search button and input listeners
 
             // Handle OAuth callback if returning from Google
             handleOAuthCallback();
