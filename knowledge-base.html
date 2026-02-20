@@ -359,6 +359,46 @@ body::before {
 .page-title { font-size: 32px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
 .page-subtitle { font-size: 16px; color: var(--text-secondary); margin-bottom: 32px; }
 
+/* Company Selector (Superadmin) */
+.company-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+.company-selector label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.company-selector select {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    min-width: 200px;
+    cursor: pointer;
+}
+.company-selector select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+}
+.company-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: white;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
 /* Search Section */
 .search-section {
     background: var(--glass-bg-strong);
@@ -1518,6 +1558,14 @@ body::before {
                 <h1 class="page-title">Knowledge Base</h1>
                 <p class="page-subtitle">Ask questions about company direction and get AI-powered answers from CEO interviews.</p>
 
+                <!-- Company Selector (Superadmin Only) -->
+                <div id="companySelector" class="company-selector" style="display: none;">
+                    <label>Viewing as:</label>
+                    <select id="companyDropdown" onchange="switchCompany(this.value)">
+                        <option value="all">All Companies</option>
+                    </select>
+                </div>
+
                 <!-- Document Upload & Integrations -->
                 <div class="upload-integrations-section">
                     <!-- Document Upload -->
@@ -1863,6 +1911,119 @@ body::before {
 
         let interviews = [];
         let currentTopic = 'all';
+
+        // ========================================
+        // MULTI-TENANT STATE
+        // ========================================
+        let CURRENT_COMPANY_ID = null;
+        let IS_SUPERADMIN = false;
+        let ALL_COMPANIES = [];
+
+        // Detect user role and company on page load
+        async function detectUserRole() {
+            try {
+                // Check if superadmin
+                const roleResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/rpc/is_superadmin`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ user_id: KYBER_USER_ID })
+                    }
+                );
+                IS_SUPERADMIN = await roleResponse.json();
+
+                if (IS_SUPERADMIN) {
+                    // Superadmin: Load all companies, show selector
+                    const companiesResponse = await fetch(
+                        `${SUPABASE_URL}/rest/v1/rpc/get_all_companies`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    );
+                    ALL_COMPANIES = await companiesResponse.json() || [];
+                    CURRENT_COMPANY_ID = localStorage.getItem('selected_company') || (ALL_COMPANIES[0]?.id || null);
+                    showCompanySelector();
+                } else {
+                    // Regular user: Get their company
+                    const companyResponse = await fetch(
+                        `${SUPABASE_URL}/rest/v1/rpc/get_user_company`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ user_id: KYBER_USER_ID })
+                        }
+                    );
+                    CURRENT_COMPANY_ID = await companyResponse.json();
+                    hideCompanySelector();
+                }
+
+                console.log(`Role: ${IS_SUPERADMIN ? 'Superadmin' : 'Member'}, Company: ${CURRENT_COMPANY_ID}`);
+            } catch (error) {
+                console.error('Error detecting user role:', error);
+                // Default to no company filter if detection fails
+                CURRENT_COMPANY_ID = null;
+            }
+        }
+
+        function showCompanySelector() {
+            const selector = document.getElementById('companySelector');
+            const dropdown = document.getElementById('companyDropdown');
+
+            if (!selector || !dropdown) return;
+
+            selector.style.display = 'flex';
+
+            // Populate dropdown
+            dropdown.innerHTML = '<option value="all">All Companies</option>' +
+                ALL_COMPANIES.map(c =>
+                    `<option value="${c.id}" ${c.id === CURRENT_COMPANY_ID ? 'selected' : ''}>${c.name}</option>`
+                ).join('');
+        }
+
+        function hideCompanySelector() {
+            const selector = document.getElementById('companySelector');
+            if (selector) selector.style.display = 'none';
+        }
+
+        async function switchCompany(companyId) {
+            CURRENT_COMPANY_ID = companyId === 'all' ? null : companyId;
+            localStorage.setItem('selected_company', companyId);
+
+            const companyName = companyId === 'all' ? 'All Companies' : ALL_COMPANIES.find(c => c.id === companyId)?.name || companyId;
+            showToast(`Switched to: ${companyName}`, 'info');
+
+            // Reload all data with new company filter
+            await Promise.all([
+                loadUploadedDocuments(),
+                loadImportedFiles(),
+                loadActivityFeed()
+            ]);
+        }
+
+        // Helper to get company filter query param
+        function getCompanyFilter() {
+            if (IS_SUPERADMIN && !CURRENT_COMPANY_ID) {
+                // Superadmin viewing all companies - no filter
+                return '';
+            } else if (CURRENT_COMPANY_ID) {
+                return `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+            }
+            return '';
+        }
 
         // ========================================
         // MOBILE SIDEBAR TOGGLE
@@ -2623,6 +2784,7 @@ body::before {
                             },
                             body: JSON.stringify({
                                 user_identifier: KYBER_USER_ID,
+                                company_id: CURRENT_COMPANY_ID,
                                 original_filename: file.name,
                                 display_name: file.name,
                                 storage_path: storagePath,
@@ -2688,15 +2850,28 @@ body::before {
 
         async function loadUploadedDocuments() {
             try {
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}&order=uploaded_at.desc`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${SUPABASE_KEY}`
-                        }
+                let url = `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?order=uploaded_at.desc`;
+
+                // Apply company filter based on user role
+                if (IS_SUPERADMIN && CURRENT_COMPANY_ID) {
+                    // Superadmin viewing specific company
+                    url += `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+                } else if (IS_SUPERADMIN && !CURRENT_COMPANY_ID) {
+                    // Superadmin viewing all companies - no filter
+                } else if (CURRENT_COMPANY_ID) {
+                    // Regular user - filter by their company
+                    url += `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+                } else {
+                    // Fallback: filter by user
+                    url += `&user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}`;
+                }
+
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
                     }
-                );
+                });
                 const documents = await response.json();
                 renderDocuments(documents);
             } catch (error) {
@@ -3269,6 +3444,7 @@ body::before {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             user_id: KYBER_USER_ID,
+                            company_id: CURRENT_COMPANY_ID,
                             file_id: fileId,
                             file_name: fileNameWithExt,
                             mime_type: mimeType,
@@ -3298,15 +3474,25 @@ body::before {
 
         async function loadImportedFiles() {
             try {
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/kyber_imported_files?user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}&order=imported_at.desc`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${SUPABASE_KEY}`
-                        }
+                let url = `${SUPABASE_URL}/rest/v1/kyber_imported_files?order=imported_at.desc`;
+
+                // Apply company filter based on user role
+                if (IS_SUPERADMIN && CURRENT_COMPANY_ID) {
+                    url += `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+                } else if (IS_SUPERADMIN && !CURRENT_COMPANY_ID) {
+                    // Superadmin viewing all - no filter
+                } else if (CURRENT_COMPANY_ID) {
+                    url += `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+                } else {
+                    url += `&user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}`;
+                }
+
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
                     }
-                );
+                });
 
                 const files = await response.json();
                 renderImportedFiles(files);
@@ -3631,6 +3817,7 @@ body::before {
                     },
                     body: JSON.stringify({
                         user_identifier: KYBER_USER_ID,
+                        company_id: CURRENT_COMPANY_ID,
                         file_id: fileId,
                         file_name: fileName,
                         activity_type: activityType,
@@ -3666,15 +3853,25 @@ body::before {
             const feed = document.getElementById('activityFeed');
 
             try {
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/kyber_file_activity?user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}&order=activity_time.desc&limit=20`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${SUPABASE_KEY}`
-                        }
+                let url = `${SUPABASE_URL}/rest/v1/kyber_file_activity?order=activity_time.desc&limit=20`;
+
+                // Apply company filter based on user role
+                if (IS_SUPERADMIN && CURRENT_COMPANY_ID) {
+                    url += `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+                } else if (IS_SUPERADMIN && !CURRENT_COMPANY_ID) {
+                    // Superadmin viewing all - no filter
+                } else if (CURRENT_COMPANY_ID) {
+                    url += `&company_id=eq.${encodeURIComponent(CURRENT_COMPANY_ID)}`;
+                } else {
+                    url += `&user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}`;
+                }
+
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
                     }
-                );
+                });
 
                 const activities = await response.json();
                 if (activities && activities.length > 0) {
@@ -3688,8 +3885,11 @@ body::before {
         // ========================================
         // INITIALIZE
         // ========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchInterviews();
+        document.addEventListener('DOMContentLoaded', async () => {
+            // FIRST: Detect user role and company (required for proper data filtering)
+            await detectUserRole();
+
+            // Initialize UI components
             window.NotifDropdown.init();
             initUploadZone();
 
@@ -3699,13 +3899,10 @@ body::before {
             // Check Google Drive connection status
             checkIntegrationStatus('google-drive');
 
-            // Load imported files from Google Drive
+            // Load data (now properly filtered by company)
+            fetchInterviews();
             loadImportedFiles();
-
-            // Load existing activity feed (without triggering activity check)
             loadActivityFeed();
-
-            // Load uploaded documents from Supabase Storage
             loadUploadedDocuments();
         });
     </script>
