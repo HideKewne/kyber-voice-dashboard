@@ -2066,7 +2066,7 @@ body::before {
         // ========================================
         async function fetchInterviews() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?select=*&status=eq.completed&order=scheduled_at.desc`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Kyber%20-%20Interviews?select=*&status=eq.complete&order=scheduled_at.desc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`
@@ -2334,17 +2334,47 @@ body::before {
             const results = [];
 
             const fields = [
+                // Q1-Q3: Customer Understanding
                 { key: 'q1_primary_avatar', label: 'Primary Avatar', topic: 'marketing' },
                 { key: 'q2_customer_need', label: 'Customer Need', topic: 'sales' },
                 { key: 'q3_biggest_mistake', label: 'Biggest Mistake', topic: 'product' },
+                // Q4: Pain Points (individual fields)
+                { key: 'q4_pain_point_1', label: 'Pain Point 1', topic: 'product' },
+                { key: 'q4_severity_1', label: 'Pain Severity 1', topic: 'product' },
+                { key: 'q4_root_cause_1', label: 'Root Cause 1', topic: 'product' },
+                { key: 'q4_pain_point_2', label: 'Pain Point 2', topic: 'product' },
+                { key: 'q4_severity_2', label: 'Pain Severity 2', topic: 'product' },
+                { key: 'q4_root_cause_2', label: 'Root Cause 2', topic: 'product' },
+                { key: 'q4_pain_point_3', label: 'Pain Point 3', topic: 'product' },
+                { key: 'q4_severity_3', label: 'Pain Severity 3', topic: 'product' },
+                { key: 'q4_root_cause_3', label: 'Root Cause 3', topic: 'product' },
+                // Q5: Triggers
                 { key: 'q5_trigger_to_seek', label: 'Trigger to Seek', topic: 'sales' },
+                // Q6: Content Topics
+                { key: 'q6_topic_1', label: 'Content Topic 1', topic: 'marketing' },
+                { key: 'q6_reason_1', label: 'Topic Reason 1', topic: 'marketing' },
+                { key: 'q6_topic_2', label: 'Content Topic 2', topic: 'marketing' },
+                { key: 'q6_reason_2', label: 'Topic Reason 2', topic: 'marketing' },
+                { key: 'q6_topic_3', label: 'Content Topic 3', topic: 'marketing' },
+                { key: 'q6_reason_3', label: 'Topic Reason 3', topic: 'marketing' },
+                // Q7-Q10: Business Impact & Culture
                 { key: 'q7_cost_of_inaction', label: 'Cost of Inaction', topic: 'sales' },
                 { key: 'q8_complaints_to_friends', label: 'Complaints', topic: 'culture' },
                 { key: 'q9_roles_responsibilities', label: 'Roles & Responsibilities', topic: 'culture' },
                 { key: 'q10_biggest_headache', label: 'Biggest Headache', topic: 'culture' },
+                // Q11-Q12: Org Structure
+                { key: 'q11_reports_to', label: 'Reports To', topic: 'culture' },
+                { key: 'q12_decision_influencers', label: 'Decision Influencers', topic: 'sales' },
+                // Q13-Q18: Solutions & Results
                 { key: 'q13_success_story', label: 'Success Story', topic: 'marketing' },
+                { key: 'q14_why_couldnt_solve_alone', label: 'Why Couldn\'t Solve Alone', topic: 'product' },
+                { key: 'q15_what_already_tried', label: 'What Already Tried', topic: 'product' },
+                { key: 'q16_initial_findings', label: 'Initial Findings', topic: 'product' },
                 { key: 'q17_recommended_solution', label: 'Recommended Solution', topic: 'product' },
-                { key: 'q18_results_achieved', label: 'Results Achieved', topic: 'finance' }
+                { key: 'q18_results_achieved', label: 'Results Achieved', topic: 'finance' },
+                // Full transcript & AI analysis
+                { key: 'full_transcript', label: 'Full Transcript', topic: 'all' },
+                { key: 'ai_analysis', label: 'AI Analysis', topic: 'all' }
             ];
 
             interviews.forEach(interview => {
@@ -3454,6 +3484,31 @@ body::before {
                     imported++;
                     // Log import activity
                     await logFileActivity(fileId, fileNameWithExt, 'import', 'from Google Drive');
+
+                    // Trigger RAG processing for imported file (Bug #2 fix)
+                    // Only process supported document types for RAG
+                    const supportedTypes = ['application/pdf', 'application/vnd.google-apps.document',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'text/plain', 'application/msword'];
+                    if (supportedTypes.some(t => mimeType.includes(t) || t.includes(mimeType))) {
+                        try {
+                            await fetch(RAG_PROCESS_DOC, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    user_id: KYBER_USER_ID,
+                                    company_id: CURRENT_COMPANY_ID,
+                                    source_type: 'imported',
+                                    source_file_id: fileId,
+                                    file_name: fileNameWithExt,
+                                    mime_type: mimeType
+                                })
+                            });
+                            console.log(`RAG processing triggered for: ${fileNameWithExt}`);
+                        } catch (ragError) {
+                            console.warn('RAG processing failed (non-critical):', ragError);
+                        }
+                    }
                 } catch (error) {
                     console.error('Error importing file:', error);
                 }
