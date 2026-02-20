@@ -534,6 +534,8 @@ body::before {
     background: var(--activity-hover);
 }
 .source-item:last-child { margin-bottom: 0; }
+.source-item.document-source { cursor: default; }
+.source-item.document-source:hover { border-color: var(--border-color); background: transparent; }
 .source-avatar {
     width: 36px; height: 36px;
     background: var(--primary-100);
@@ -940,6 +942,143 @@ body::before {
     background: rgba(239, 68, 68, 0.1);
 }
 .doc-action-btn svg { width: 14px; height: 14px; }
+
+/* Imported Files Section */
+.imported-files-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.imported-files-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.imported-files-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.imported-files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.imported-file-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(66, 133, 244, 0.08);
+    border: 1px solid rgba(66, 133, 244, 0.2);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.imported-file-item:hover {
+    background: rgba(66, 133, 244, 0.12);
+    border-color: rgba(66, 133, 244, 0.3);
+}
+
+.imported-file-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+}
+
+.imported-file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.imported-file-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.imported-file-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.imported-file-source {
+    color: #4285f4;
+    font-weight: 500;
+}
+
+.imported-file-remove {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.imported-file-remove:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+}
+
+.imported-file-remove svg {
+    width: 14px;
+    height: 14px;
+}
+
+.imported-file-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.imported-file-action {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.imported-file-action:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-500);
+}
+
+.imported-file-action svg {
+    width: 14px;
+    height: 14px;
+}
 
 /* Integrations Section */
 .integrations-section {
@@ -1406,6 +1545,26 @@ body::before {
                         <div class="documents-list" id="documentsList">
                             <!-- Documents will be populated here -->
                         </div>
+
+                        <!-- Imported Files from Google Drive -->
+                        <div class="imported-files-section" id="importedFilesSection" style="display: none;">
+                            <div class="imported-files-header">
+                                <span class="imported-files-title">
+                                    <svg viewBox="0 0 87.3 78" width="16" height="16" style="margin-right: 8px;">
+                                        <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+                                        <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/>
+                                        <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+                                        <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+                                        <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+                                        <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+                                    </svg>
+                                    Imported from Google Drive
+                                </span>
+                            </div>
+                            <div class="imported-files-list" id="importedFilesList">
+                                <!-- Imported files will be populated here -->
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Integrations -->
@@ -1691,6 +1850,10 @@ body::before {
         const GDRIVE_DISCONNECT = 'https://www.n8n.fairintech.com/webhook/ae3c7863-3ff7-492a-9d8f-a5a8fd8b6e9a';
         const GDRIVE_CHECK_ACTIVITY = 'https://www.n8n.fairintech.com/webhook/f91a3199-a3ef-46d0-9cbf-b3fe17adf5ce';
 
+        // RAG Knowledge Base Webhooks
+        const RAG_PROCESS_DOC = 'https://www.n8n.fairintech.com/webhook/0901349c-395b-4c47-80f3-805053c831ab';
+        const RAG_SEARCH = 'https://www.n8n.fairintech.com/webhook/8f8d2dfc-919e-41cc-9f87-f82371f56e7d';
+
         // User ID for OAuth (persisted in localStorage)
         const KYBER_USER_ID = localStorage.getItem('kyber_user_id') || (() => {
             const id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -1765,7 +1928,7 @@ body::before {
             const feed = document.getElementById('insightsFeed');
 
             if (interviews.length === 0) {
-                feed.innerHTML = '<p style="color: var(--text-muted); padding: 20px; text-align: center;">No interviews yet</p>';
+                feed.innerHTML = '<p style="color: var(--text-muted); padding: 20px; text-align: center;">No insights yet</p>';
                 return;
             }
 
@@ -1854,42 +2017,58 @@ body::before {
             document.getElementById('loadingState').style.display = 'flex';
 
             try {
-                // First, find relevant interviews locally
-                const relevantInterviews = findRelevantInterviews(query);
+                // Search in parallel: local interviews + RAG document search
+                const [relevantInterviews, ragResult] = await Promise.all([
+                    Promise.resolve(findRelevantInterviews(query)),
+                    searchRAGDocuments(query)
+                ]);
 
-                if (relevantInterviews.length === 0) {
+                const hasInterviewResults = relevantInterviews.length > 0;
+                const hasRAGResults = ragResult && ragResult.sources && ragResult.sources.length > 0;
+
+                // If no results from either source
+                if (!hasInterviewResults && !hasRAGResults) {
                     document.getElementById('loadingState').style.display = 'none';
                     document.getElementById('notFoundState').style.display = 'flex';
                     return;
                 }
 
-                // Call Gemini AI webhook to synthesize an answer
-                const response = await fetch(AI_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        query: query,
-                        topic: currentTopic,
-                        interviews: relevantInterviews.map(r => ({
-                            client_name: r.interview.client_name,
-                            field: r.field,
-                            content: r.content,
-                            interview_id: r.interview.id,
-                            date: r.interview.scheduled_at
-                        }))
-                    })
-                });
+                // If we have RAG results, use that answer (it includes document context)
+                if (hasRAGResults && ragResult.answer) {
+                    document.getElementById('loadingState').style.display = 'none';
+                    displayRAGAnswer(query, ragResult, relevantInterviews);
+                    return;
+                }
 
-                document.getElementById('loadingState').style.display = 'none';
+                // Fall back to interview-only search with AI
+                if (hasInterviewResults) {
+                    const response = await fetch(AI_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            query: query,
+                            topic: currentTopic,
+                            interviews: relevantInterviews.map(r => ({
+                                client_name: r.interview.client_name,
+                                field: r.field,
+                                content: r.content,
+                                interview_id: r.interview.id,
+                                date: r.interview.scheduled_at
+                            }))
+                        })
+                    });
 
-                if (response.ok) {
-                    const aiResponse = await response.json();
-                    displayAIAnswer(query, aiResponse, relevantInterviews);
+                    document.getElementById('loadingState').style.display = 'none';
+
+                    if (response.ok) {
+                        const aiResponse = await response.json();
+                        displayAIAnswer(query, aiResponse, relevantInterviews);
+                    } else {
+                        displayLocalAnswer(query, relevantInterviews);
+                    }
                 } else {
-                    // Fallback to local display if webhook fails
-                    displayLocalAnswer(query, relevantInterviews);
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('notFoundState').style.display = 'flex';
                 }
             } catch (error) {
                 console.error('AI search error:', error);
@@ -1902,6 +2081,90 @@ body::before {
                     document.getElementById('notFoundState').style.display = 'flex';
                 }
             }
+        }
+
+        // Search uploaded/imported documents via RAG
+        async function searchRAGDocuments(query) {
+            try {
+                const response = await fetch(RAG_SEARCH, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: KYBER_USER_ID,
+                        question: query,
+                        topic_filter: currentTopic
+                    })
+                });
+
+                if (response.ok) {
+                    return await response.json();
+                }
+                return null;
+            } catch (error) {
+                console.warn('RAG search error (non-critical):', error);
+                return null;
+            }
+        }
+
+        // Display RAG answer with document sources
+        function displayRAGAnswer(query, ragResult, interviewResults) {
+            const answer = ragResult.answer || 'No answer generated.';
+            const sources = ragResult.sources || [];
+
+            document.getElementById('aiAnswerContent').innerHTML = `<p>${answer}</p>`;
+
+            // Combine document sources with interview sources
+            const allSources = [];
+
+            // Add document sources
+            sources.forEach(src => {
+                allSources.push({
+                    type: 'document',
+                    name: src.source_name || src.name,
+                    sourceType: src.source_type,
+                    similarity: src.similarity,
+                    chunk: src.chunk_text || src.chunk
+                });
+            });
+
+            // Add top interview results
+            interviewResults.slice(0, 2).forEach(r => {
+                allSources.push({
+                    type: 'interview',
+                    name: r.interview.client_name,
+                    field: r.field,
+                    interviewId: r.interview.id
+                });
+            });
+
+            // Populate sources section
+            const sourcesHtml = allSources.slice(0, 5).map(src => {
+                if (src.type === 'document') {
+                    const icon = src.sourceType === 'imported' ? '☁️' : '📄';
+                    return `
+                        <div class="source-item document-source">
+                            <div class="source-avatar">${icon}</div>
+                            <div class="source-info">
+                                <span class="source-name">${escapeHtml(src.name)}</span>
+                                <span class="source-field">${src.sourceType || 'uploaded'} document</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="source-item" onclick="viewInterview('${src.interviewId}')">
+                            <div class="source-avatar">${getInitials(src.name)}</div>
+                            <div class="source-info">
+                                <span class="source-name">${escapeHtml(src.name)}</span>
+                                <span class="source-field">${src.field}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+
+            document.getElementById('sourcesList').innerHTML = sourcesHtml;
+            document.getElementById('aiAnswerSection').classList.add('active');
         }
 
         function findRelevantInterviews(query) {
@@ -2276,7 +2539,6 @@ body::before {
         // ========================================
         // DOCUMENT UPLOAD
         // ========================================
-        let uploadedDocuments = [];
 
         function initUploadZone() {
             const uploadZone = document.getElementById('uploadZone');
@@ -2305,35 +2567,141 @@ body::before {
             });
         }
 
-        function handleFiles(files) {
+        async function handleFiles(files) {
             const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
             const maxSize = 10 * 1024 * 1024; // 10MB
 
-            Array.from(files).forEach(file => {
+            for (const file of Array.from(files)) {
+                // Validate file type
                 if (!allowedTypes.includes(file.type) && !file.name.match(/\.(pdf|doc|docx|txt)$/i)) {
                     showToast(`File type not allowed: ${file.name}`, 'error');
-                    return;
+                    continue;
                 }
 
+                // Validate file size
                 if (file.size > maxSize) {
                     showToast(`File too large: ${file.name} (max 10MB)`, 'error');
-                    return;
+                    continue;
                 }
 
-                // Simulate upload (in production, upload to Supabase Storage)
-                const doc = {
-                    id: Date.now() + Math.random().toString(36).substr(2, 9),
-                    name: file.name,
-                    size: formatFileSize(file.size),
-                    type: getFileType(file.name),
-                    uploadedAt: new Date().toISOString()
-                };
+                try {
+                    showToast(`Uploading: ${file.name}...`, 'info');
 
-                uploadedDocuments.push(doc);
-                showToast(`Uploaded: ${file.name}`, 'success');
-            });
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    const uniqueId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    const storagePath = `${KYBER_USER_ID}/${uniqueId}.${fileExt}`;
 
-            renderDocuments();
+                    // Upload to Supabase Storage
+                    const uploadResponse = await fetch(
+                        `${SUPABASE_URL}/storage/v1/object/kyber-documents/${storagePath}`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': file.type,
+                                'x-upsert': 'true'
+                            },
+                            body: file
+                        }
+                    );
+
+                    if (!uploadResponse.ok) {
+                        throw new Error('Storage upload failed');
+                    }
+
+                    // Save metadata to database
+                    const metadataResponse = await fetch(
+                        `${SUPABASE_URL}/rest/v1/kyber_uploaded_files`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify({
+                                user_identifier: KYBER_USER_ID,
+                                original_filename: file.name,
+                                display_name: file.name,
+                                storage_path: storagePath,
+                                file_size_bytes: file.size,
+                                mime_type: file.type,
+                                file_extension: fileExt
+                            })
+                        }
+                    );
+
+                    if (!metadataResponse.ok) {
+                        throw new Error('Failed to save file metadata');
+                    }
+
+                    // Log upload activity
+                    const savedFile = await metadataResponse.json();
+                    if (savedFile && savedFile[0]) {
+                        await logFileActivity(savedFile[0].id, file.name, 'upload');
+
+                        // Trigger RAG document processing in background
+                        processDocumentForRAG(savedFile[0].id, storagePath, file.name, file.type);
+                    }
+
+                    showToast(`Uploaded: ${file.name}`, 'success');
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showToast(`Failed to upload: ${file.name}`, 'error');
+                }
+            }
+
+            // Refresh the documents list and activity feed
+            loadUploadedDocuments();
+            loadActivityFeed();
+        }
+
+        // Process uploaded document for RAG search (text extraction + embeddings)
+        async function processDocumentForRAG(fileId, storagePath, fileName, mimeType) {
+            try {
+                console.log(`Processing document for RAG: ${fileName}`);
+                const response = await fetch(RAG_PROCESS_DOC, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: KYBER_USER_ID,
+                        file_id: fileId,
+                        storage_path: storagePath,
+                        file_name: fileName,
+                        mime_type: mimeType,
+                        source_type: 'uploaded'
+                    })
+                });
+
+                if (response.ok) {
+                    console.log(`RAG processing completed for: ${fileName}`);
+                } else {
+                    console.warn(`RAG processing may have failed for: ${fileName}`);
+                }
+            } catch (error) {
+                // Don't show error to user - RAG processing is a background enhancement
+                console.warn('RAG processing error (non-critical):', error);
+            }
+        }
+
+        async function loadUploadedDocuments() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}&order=uploaded_at.desc`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    }
+                );
+                const documents = await response.json();
+                renderDocuments(documents);
+            } catch (error) {
+                console.error('Error loading documents:', error);
+            }
         }
 
         function formatFileSize(bytes) {
@@ -2349,35 +2717,42 @@ body::before {
             return ext;
         }
 
-        function renderDocuments() {
+        function renderDocuments(documents) {
             const container = document.getElementById('documentsList');
             if (!container) return;
 
-            if (uploadedDocuments.length === 0) {
-                container.innerHTML = '';
+            if (!documents || documents.length === 0) {
+                container.innerHTML = '<p class="no-docs" style="color: var(--text-muted); text-align: center; padding: 20px;">No documents uploaded yet</p>';
                 return;
             }
 
-            container.innerHTML = uploadedDocuments.map(doc => `
+            container.innerHTML = documents.map(doc => `
                 <div class="document-item" data-id="${doc.id}">
-                    <div class="document-icon ${doc.type}">
+                    <div class="document-icon ${doc.file_extension || 'pdf'}">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
                         </svg>
                     </div>
                     <div class="document-info">
-                        <div class="document-name">${doc.name}</div>
-                        <div class="document-meta">${doc.size} &bull; ${doc.type.toUpperCase()}</div>
+                        <div class="document-name">${escapeHtml(doc.display_name)}</div>
+                        <div class="document-meta">${formatFileSize(doc.file_size_bytes)} &bull; ${(doc.file_extension || 'file').toUpperCase()}</div>
                     </div>
                     <div class="document-actions">
-                        <button class="doc-action-btn" onclick="viewDocument('${doc.id}')" title="View">
+                        <button class="doc-action-btn" onclick="downloadDocument('${doc.id}')" title="Download">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
                             </svg>
                         </button>
-                        <button class="doc-action-btn delete" onclick="deleteDocument('${doc.id}')" title="Delete">
+                        <button class="doc-action-btn" onclick="openRenameModal('${doc.id}', '${escapeHtml(doc.display_name).replace(/'/g, "\\'")}')" title="Rename">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button class="doc-action-btn delete" onclick="deleteDocument('${doc.id}', '${doc.storage_path}')" title="Delete">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"/>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -2388,18 +2763,243 @@ body::before {
             `).join('');
         }
 
-        function viewDocument(id) {
-            const doc = uploadedDocuments.find(d => d.id === id);
-            if (doc) {
-                showToast(`Opening: ${doc.name}`, 'info');
+        async function downloadDocument(id) {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?id=eq.${id}&select=*`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                const [doc] = await response.json();
+                if (!doc) { showToast('Document not found', 'error'); return; }
+
+                showToast(`Preparing download...`, 'info');
+
+                // Create signed URL for download
+                const signedUrlResponse = await fetch(
+                    `${SUPABASE_URL}/storage/v1/object/sign/kyber-documents/${doc.storage_path}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ expiresIn: 60 })
+                    }
+                );
+                const { signedURL } = await signedUrlResponse.json();
+
+                if (!signedURL) throw new Error('Failed to generate download URL');
+
+                // Trigger download
+                const link = document.createElement('a');
+                link.href = `${SUPABASE_URL}/storage/v1${signedURL}`;
+                link.download = doc.display_name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showToast(`Downloaded: ${doc.display_name}`, 'success');
+            } catch (error) {
+                console.error('Download error:', error);
+                showToast('Failed to download', 'error');
             }
         }
 
-        function deleteDocument(id) {
+        let currentRenameDocId = null;
+        let currentImportedRenameId = null;
+
+        function openRenameModal(id, currentName) {
+            currentRenameDocId = id;
+            currentImportedRenameId = null;
+            const input = document.getElementById('newFileName');
+            const nameParts = currentName.split('.');
+            const extension = nameParts.pop();
+            input.value = nameParts.join('.');
+            input.dataset.extension = extension;
+            input.dataset.oldName = currentName;
+            input.dataset.isImported = 'false';
+            document.getElementById('renameModal').style.display = 'flex';
+            input.focus();
+            input.select();
+        }
+
+        function openImportedRenameModal(id, currentName) {
+            currentImportedRenameId = id;
+            currentRenameDocId = null;
+            const input = document.getElementById('newFileName');
+            const nameParts = currentName.split('.');
+            const extension = nameParts.pop();
+            input.value = nameParts.join('.');
+            input.dataset.extension = extension;
+            input.dataset.oldName = currentName;
+            input.dataset.isImported = 'true';
+            document.getElementById('renameModal').style.display = 'flex';
+            input.focus();
+            input.select();
+        }
+
+        function closeRenameModal() {
+            document.getElementById('renameModal').style.display = 'none';
+            currentRenameDocId = null;
+            currentImportedRenameId = null;
+            const input = document.getElementById('newFileName');
+            if (input) input.dataset.isImported = 'false';
+        }
+
+        async function submitRename() {
+            const input = document.getElementById('newFileName');
+            const isImported = input.dataset.isImported === 'true';
+
+            if (isImported) {
+                await submitImportedRename();
+            } else {
+                await submitUploadedRename();
+            }
+        }
+
+        async function submitUploadedRename() {
+            if (!currentRenameDocId) return;
+            const input = document.getElementById('newFileName');
+            const newName = input.value.trim();
+            const extension = input.dataset.extension;
+            const oldName = input.dataset.oldName;
+
+            if (!newName) { showToast('Please enter a filename', 'error'); return; }
+
+            const fullNewName = `${newName}.${extension}`;
+            const btn = document.getElementById('renameSubmitBtn');
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Saving...';
+
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?id=eq.${currentRenameDocId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ display_name: fullNewName, updated_at: new Date().toISOString() })
+                    }
+                );
+
+                if (!response.ok) throw new Error('Failed to rename');
+
+                // Log rename activity
+                await logFileActivity(currentRenameDocId, fullNewName, 'rename', `from ${oldName}`);
+                loadActivityFeed();
+
+                showToast(`Renamed to: ${fullNewName}`, 'success');
+                closeRenameModal();
+                loadUploadedDocuments();
+            } catch (error) {
+                console.error('Rename error:', error);
+                showToast('Failed to rename', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Rename';
+            }
+        }
+
+        async function submitImportedRename() {
+            if (!currentImportedRenameId) return;
+            const input = document.getElementById('newFileName');
+            const newName = input.value.trim();
+            const extension = input.dataset.extension;
+            const oldName = input.dataset.oldName;
+
+            if (!newName) { showToast('Please enter a filename', 'error'); return; }
+
+            const fullNewName = `${newName}.${extension}`;
+            const btn = document.getElementById('renameSubmitBtn');
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Saving...';
+
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_imported_files?id=eq.${currentImportedRenameId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ source_file_name: fullNewName })
+                    }
+                );
+
+                if (!response.ok) throw new Error('Failed to rename');
+
+                // Log rename activity
+                await logFileActivity(currentImportedRenameId, fullNewName, 'rename', `from ${oldName}`);
+                loadActivityFeed();
+
+                showToast(`Renamed to: ${fullNewName}`, 'success');
+                closeRenameModal();
+                loadImportedFiles();
+            } catch (error) {
+                console.error('Rename error:', error);
+                showToast('Failed to rename', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Rename';
+            }
+        }
+
+        // Handle Enter/Escape keys in rename modal
+        document.addEventListener('keydown', (e) => {
+            const renameModal = document.getElementById('renameModal');
+            if (renameModal && renameModal.style.display === 'flex') {
+                if (e.key === 'Enter') submitRename();
+                if (e.key === 'Escape') closeRenameModal();
+            }
+        });
+
+        async function deleteDocument(id, storagePath) {
             if (!confirm('Are you sure you want to delete this document?')) return;
-            uploadedDocuments = uploadedDocuments.filter(d => d.id !== id);
-            renderDocuments();
-            showToast('Document deleted', 'success');
+
+            try {
+                // Get file name before deleting (for activity log)
+                const fileResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?id=eq.${id}&select=display_name`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                const [fileData] = await fileResponse.json();
+                const fileName = fileData?.display_name || 'Unknown file';
+
+                // Delete from Supabase Storage
+                await fetch(`${SUPABASE_URL}/storage/v1/object/kyber-documents/${storagePath}`, {
+                    method: 'DELETE',
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+
+                // Delete metadata from database
+                const dbResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_uploaded_files?id=eq.${id}`,
+                    {
+                        method: 'DELETE',
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }
+                );
+
+                if (!dbResponse.ok) throw new Error('Failed to delete');
+
+                // Log delete activity
+                await logFileActivity(id, fileName, 'delete');
+                loadActivityFeed();
+
+                showToast('Document deleted', 'success');
+                loadUploadedDocuments();
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('Failed to delete document', 'error');
+            }
         }
 
         // ========================================
@@ -2660,6 +3260,9 @@ body::before {
                 const mimeType = item.dataset.type;
                 const size = item.dataset.size;
 
+                // Add extension to filename if not present
+                const fileNameWithExt = addExtensionIfMissing(fileName, mimeType);
+
                 try {
                     await fetch(GDRIVE_IMPORT_FILE, {
                         method: 'POST',
@@ -2667,12 +3270,14 @@ body::before {
                         body: JSON.stringify({
                             user_id: KYBER_USER_ID,
                             file_id: fileId,
-                            file_name: fileName,
+                            file_name: fileNameWithExt,
                             mime_type: mimeType,
                             size: parseInt(size) || null
                         })
                     });
                     imported++;
+                    // Log import activity
+                    await logFileActivity(fileId, fileNameWithExt, 'import', 'from Google Drive');
                 } catch (error) {
                     console.error('Error importing file:', error);
                 }
@@ -2681,6 +3286,120 @@ body::before {
             showToast(`Imported ${imported} file${imported !== 1 ? 's' : ''} from Google Drive`, 'success');
             closeDrivePicker();
             btn.textContent = 'Import Selected';
+
+            // Refresh the imported files list and activity feed
+            loadImportedFiles();
+            loadActivityFeed();
+        }
+
+        // ========================================
+        // IMPORTED FILES DISPLAY
+        // ========================================
+
+        async function loadImportedFiles() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_imported_files?user_identifier=eq.${encodeURIComponent(KYBER_USER_ID)}&order=imported_at.desc`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    }
+                );
+
+                const files = await response.json();
+                renderImportedFiles(files);
+            } catch (error) {
+                console.error('Error loading imported files:', error);
+            }
+        }
+
+        function renderImportedFiles(files) {
+            const section = document.getElementById('importedFilesSection');
+            const list = document.getElementById('importedFilesList');
+
+            if (!files || files.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            list.innerHTML = files.map(file => `
+                <div class="imported-file-item" data-id="${file.id}" data-file-id="${file.source_file_id}">
+                    <div class="imported-file-icon">${getFileIcon(file.source_mime_type || '')}</div>
+                    <div class="imported-file-info">
+                        <div class="imported-file-name">${escapeHtml(file.source_file_name)}</div>
+                        <div class="imported-file-meta">
+                            <span class="imported-file-source">Google Drive</span>
+                            <span>${formatImportDate(file.imported_at)}</span>
+                            ${file.file_size_bytes ? `<span>${formatFileSize(file.file_size_bytes)}</span>` : ''}
+                            <span>${getFileExtension(file.source_file_name, file.source_mime_type)}</span>
+                        </div>
+                    </div>
+                    <div class="imported-file-actions">
+                        <button class="imported-file-action" onclick="openImportedRenameModal('${file.id}', '${escapeHtml(file.source_file_name).replace(/'/g, "\\'")}')" title="Rename">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button class="imported-file-remove" onclick="removeImportedFile('${file.id}')" title="Remove">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatImportDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
+            return date.toLocaleDateString();
+        }
+
+        async function removeImportedFile(id) {
+            if (!confirm('Remove this imported file?')) return;
+
+            try {
+                // Get file name BEFORE deleting (for activity log)
+                const fileResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_imported_files?id=eq.${id}&select=source_file_name`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                const [fileData] = await fileResponse.json();
+                const fileName = fileData?.source_file_name || 'Unknown file';
+
+                await fetch(
+                    `${SUPABASE_URL}/rest/v1/kyber_imported_files?id=eq.${id}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    }
+                );
+
+                // Log activity for imported file deletion
+                await logFileActivity(id, fileName, 'delete', 'imported from Google Drive');
+                loadActivityFeed();
+
+                showToast('File removed', 'success');
+                loadImportedFiles();
+            } catch (error) {
+                console.error('Error removing file:', error);
+                showToast('Failed to remove file', 'error');
+            }
         }
 
         function getFileIcon(mimeType) {
@@ -2692,6 +3411,40 @@ body::before {
             if (mimeType.includes('video')) return '🎬';
             if (mimeType.includes('audio')) return '🎵';
             return '📎';
+        }
+
+        function getFileExtension(fileName, mimeType) {
+            // Try to get extension from filename first
+            if (fileName && fileName.includes('.')) {
+                const ext = fileName.split('.').pop().toUpperCase();
+                if (ext && ext.length <= 5) return ext;
+            }
+            // Fallback to mime type mapping
+            if (mimeType) {
+                if (mimeType.includes('pdf')) return 'PDF';
+                if (mimeType.includes('word') || mimeType.includes('document')) return 'DOCX';
+                if (mimeType.includes('spreadsheet') || mimeType.includes('excel')) return 'XLSX';
+                if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return 'PPTX';
+                if (mimeType.includes('text/plain')) return 'TXT';
+            }
+            return '';
+        }
+
+        function addExtensionIfMissing(fileName, mimeType) {
+            // If filename already has an extension, return as-is
+            if (fileName && fileName.includes('.')) {
+                const ext = fileName.split('.').pop();
+                if (ext && ext.length <= 5 && ext.length >= 2) return fileName;
+            }
+            // Add extension based on mime type
+            if (mimeType) {
+                if (mimeType.includes('pdf')) return fileName + '.pdf';
+                if (mimeType.includes('word') || mimeType.includes('document')) return fileName + '.docx';
+                if (mimeType.includes('spreadsheet') || mimeType.includes('excel')) return fileName + '.xlsx';
+                if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return fileName + '.pptx';
+                if (mimeType.includes('text/plain')) return fileName + '.txt';
+            }
+            return fileName;
         }
 
         function formatFileSize(bytes) {
@@ -2843,6 +3596,8 @@ body::before {
                 'move': '📂',
                 'delete': '🗑️',
                 'create': '📄',
+                'upload': '📤',
+                'import': '📥',
                 'permissionChange': '🔐'
             };
             return icons[type] || '📁';
@@ -2857,9 +3612,36 @@ body::before {
                 'move': 'was moved',
                 'delete': 'was deleted',
                 'create': 'was created',
+                'upload': 'was uploaded',
+                'import': 'was imported',
                 'permissionChange': 'permissions were changed'
             };
             return verbs[type] || 'was modified';
+        }
+
+        // Log local file activity (upload, rename, delete)
+        async function logFileActivity(fileId, fileName, activityType, activityDetail = null) {
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/kyber_file_activity`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_identifier: KYBER_USER_ID,
+                        file_id: fileId,
+                        file_name: fileName,
+                        activity_type: activityType,
+                        activity_detail: activityDetail,
+                        actor_email: null,
+                        activity_time: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.error('Error logging activity:', error);
+            }
         }
 
         function timeAgo(dateString) {
@@ -2917,8 +3699,14 @@ body::before {
             // Check Google Drive connection status
             checkIntegrationStatus('google-drive');
 
+            // Load imported files from Google Drive
+            loadImportedFiles();
+
             // Load existing activity feed (without triggering activity check)
             loadActivityFeed();
+
+            // Load uploaded documents from Supabase Storage
+            loadUploadedDocuments();
         });
     </script>
 
@@ -2940,6 +3728,25 @@ body::before {
             <div class="drive-picker-footer">
                 <span id="selectedCount">0 files selected</span>
                 <button id="importSelectedBtn" onclick="importSelectedFiles()" disabled>Import Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rename Document Modal -->
+    <div id="renameModal" class="modal-overlay" style="display:none;">
+        <div class="rename-modal">
+            <div class="rename-modal-header">
+                <h3>Rename Document</h3>
+                <button class="close-modal" onclick="closeRenameModal()">&times;</button>
+            </div>
+            <div class="rename-modal-body">
+                <label for="newFileName">New name:</label>
+                <input type="text" id="newFileName" class="rename-input" placeholder="Enter new filename">
+                <p class="rename-hint">File extension will be preserved.</p>
+            </div>
+            <div class="rename-modal-footer">
+                <button class="rename-cancel-btn" onclick="closeRenameModal()">Cancel</button>
+                <button class="rename-save-btn" id="renameSubmitBtn" onclick="submitRename()">Rename</button>
             </div>
         </div>
     </div>
@@ -3078,6 +3885,98 @@ body::before {
             text-align: center;
             padding: 40px;
             color: var(--text-secondary);
+        }
+
+        /* Rename Modal */
+        .rename-modal {
+            background: var(--card-bg);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 420px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .rename-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .rename-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .rename-modal-body {
+            padding: 24px;
+        }
+        .rename-modal-body label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .rename-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: var(--font-family);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .rename-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        .rename-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+        .rename-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        .rename-cancel-btn, .rename-save-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: all 0.2s;
+        }
+        .rename-cancel-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .rename-cancel-btn:hover {
+            background: var(--card-hover);
+            color: var(--text-primary);
+        }
+        .rename-save-btn {
+            background: var(--accent-primary);
+            border: none;
+            color: #fff;
+        }
+        .rename-save-btn:hover {
+            opacity: 0.9;
+        }
+        .rename-save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
     </style>
 
